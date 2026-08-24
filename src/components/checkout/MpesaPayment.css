@@ -1,0 +1,152 @@
+.mpesa-payment {
+  margin-top: 32px;
+  padding: 28px 0 0;
+  background-color: transparent;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.mpesa-payment__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.mpesa-payment__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  color: #ffffff;
+  background-color: #2f9e44;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.mpesa-payment__header h2 {
+  margin-bottom: 4px;
+  color: var(--color-text);
+  font-size: 1.25rem;
+}
+
+.mpesa-payment__header p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.mpesa-payment__amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 18px;
+  background-color: var(--color-surface-warm);
+  border-radius: var(--radius-md);
+}
+
+.mpesa-payment__amount span {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.mpesa-payment__amount strong {
+  color: var(--color-primary-dark);
+  font-size: 1.35rem;
+}
+
+.mpesa-payment__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.mpesa-payment__field label {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mpesa-payment__field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background-color: var(--color-surface-warm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mpesa-payment__field input:focus {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 3px rgba(214, 158, 46, 0.2);
+}
+
+.mpesa-payment__field input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mpesa-payment__field small {
+  color: #b42318;
+  font-size: 0.8rem;
+}
+
+.mpesa-payment__button {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 24px;
+  color: #ffffff;
+  background-color: #2f9e44;
+  border: 0;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mpesa-payment__button:hover:not(:disabled) {
+  background-color: #27843a;
+  transform: translateY(-2px);
+}
+
+.mpesa-payment__button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mpesa-payment__notice {
+  margin-top: 16px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .mpesa-payment {
+    padding: 24px;
+  }
+
+  .mpesa-payment__amount {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}

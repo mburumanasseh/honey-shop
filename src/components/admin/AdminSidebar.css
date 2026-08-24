@@ -1,0 +1,139 @@
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  min-height: 100vh;
+  padding: 28px 18px;
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 12px;
+  margin-bottom: 40px;
+}
+
+.admin-sidebar__brand a {
+  color: var(--color-primary-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.admin-sidebar__brand span {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.admin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 14px;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-sidebar__link span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  font-size: 1rem;
+}
+
+.admin-sidebar__link:hover {
+  color: var(--color-primary-dark);
+  background-color: var(--color-surface-warm);
+  transform: translateX(2px);
+}
+
+.admin-sidebar__link.active {
+  color: var(--color-primary-dark);
+  background-color: rgba(214, 158, 46, 0.14);
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    width: 210px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-sidebar {
+    position: fixed;
+    z-index: 10;
+    width: 72px;
+    padding: 20px 10px;
+  }
+
+  .admin-sidebar__brand {
+    align-items: center;
+    padding: 0;
+    margin-bottom: 28px;
+  }
+
+  .admin-sidebar__brand a {
+    font-size: 0;
+  }
+
+  .admin-sidebar__brand a::first-letter {
+    font-size: 1.4rem;
+  }
+
+  .admin-sidebar__brand span {
+    display: none;
+  }
+
+  .admin-sidebar__link {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .admin-sidebar__link span {
+    width: auto;
+  }
+
+  .admin-sidebar__link {
+    font-size: 0;
+  }
+
+  .admin-sidebar__bottom {
+    padding-top: 20px;
+  }
+
+  .admin-layout__main {
+    margin-left: 72px;
+  }
+}
