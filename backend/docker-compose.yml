@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: honey-shop-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: honey
+      POSTGRES_PASSWORD: honey
+      POSTGRES_DB: honey_shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - honey_shop_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U honey -d honey_shop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  honey_shop_pgdata:
