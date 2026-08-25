@@ -1,27 +1,18 @@
 # Current Task
 
 ## Task name
-User authentication with httpOnly cookies
+Frontend auth integration
 
 ## Goal
-Implement registration, login, logout, refresh and /me using JWT stored in httpOnly cookies.
+Replace localStorage auth with real FastAPI endpoints using httpOnly cookies.
 
 ## Completed in this PR
-- User SQLAlchemy model
-- Pydantic schemas (Register, Login, UserResponse)
-- Auth routes:
-  - POST /api/v1/auth/register
-  - POST /api/v1/auth/login
-  - POST /api/v1/auth/logout
-  - POST /api/v1/auth/refresh
-  - GET  /api/v1/auth/me
-- Dependencies: get_current_user, get_current_active_user, get_current_admin_user
-- Cookie helpers (httpOnly, Secure in prod, SameSite=Lax)
-- Alembic migration for users table
-- Updated README
+- Created `src/services/authService.js` (register, login, logout, refresh, getMe)
+- Rewrote AuthProvider to call the API and restore session via /me + refresh
+- Made Login, Register, and Navbar async-compatible
+- Added frontend `.env.example` with VITE_API_URL
 
 ## Out of scope
-- Frontend integration
-- Product models
-- M-Pesa / Cloudinary
-- Email verification / password reset
+- Product CRUD
+- Protected admin routes
+- UI redesign
