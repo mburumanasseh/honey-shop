@@ -1,19 +1,16 @@
 # Current Task
 
 ## Task name
-Convert to honey-shop monorepo (Phase 1)
-
-## Goal
-Restructure into monorepo with frontend/ + backend/
+Convert to honey-shop monorepo (Phase 1) + fix Vercel deployment
 
 ## Completed
-- Topic branch created
-- Code moved to frontend/
-- backend/ scaffold added
-- useAuth.js fixed
-- Naming + README updated
-- Build verified previously
+- Monorepo structure
+- useAuth.js fix
+- PR opened (#1)
 
-## Remaining
-- Push branch
-- Open PR
+## In progress
+- Fix Vercel build failure (exit 127)
+
+## Changes in this commit
+- Added vercel.json that explicitly builds from frontend/
+- Ensures correct install + build + outputDirectory
