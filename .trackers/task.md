@@ -1,35 +1,27 @@
 # Current Task
 
 ## Task name
-Backend foundation (Phase 2)
+User authentication with httpOnly cookies
 
 ## Goal
-Scaffold a clean FastAPI + PostgreSQL + SQLAlchemy backend with httpOnly cookie auth preparation.
-
-## Approved decisions
-- Backend: Python + FastAPI
-- Database: PostgreSQL
-- ORM: SQLAlchemy + Alembic
-- Auth: JWT in httpOnly cookies (access + refresh)
-- Payments: M-Pesa Daraja (later)
-- Images: Cloudinary (later)
+Implement registration, login, logout, refresh and /me using JWT stored in httpOnly cookies.
 
 ## Completed in this PR
-- FastAPI application skeleton
-- Config via pydantic-settings
-- SQLAlchemy session + Base
-- Security helpers (password hashing, access/refresh token creation)
-- CORS with credentials support
-- Health check endpoint
-- Alembic setup
-- Docker Compose for local PostgreSQL
-- Clear README + Makefile
+- User SQLAlchemy model
+- Pydantic schemas (Register, Login, UserResponse)
+- Auth routes:
+  - POST /api/v1/auth/register
+  - POST /api/v1/auth/login
+  - POST /api/v1/auth/logout
+  - POST /api/v1/auth/refresh
+  - GET  /api/v1/auth/me
+- Dependencies: get_current_user, get_current_active_user, get_current_admin_user
+- Cookie helpers (httpOnly, Secure in prod, SameSite=Lax)
+- Alembic migration for users table
+- Updated README
 
-## Out of scope (next PRs)
-- User model & registration/login endpoints
-- Product models & CRUD
-- Connecting the frontend
+## Out of scope
+- Frontend integration
+- Product models
 - M-Pesa / Cloudinary
-
-## Verification
-- Structure is clean and runnable once Postgres is up
+- Email verification / password reset

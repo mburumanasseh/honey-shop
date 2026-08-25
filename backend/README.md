@@ -34,7 +34,13 @@ cp .env.example .env
 # Edit .env if needed (defaults work with the docker-compose above)
 ```
 
-### 4. Run the API
+### 4. Run migrations
+
+```bash
+alembic upgrade head
+```
+
+### 5. Run the API
 
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -44,18 +50,32 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - Interactive docs: http://localhost:8000/api/v1/docs
 - Health: http://localhost:8000/api/v1/health
 
+## Auth Endpoints
+
+| Method | Path                        | Description                          | Auth required |
+|--------|-----------------------------|--------------------------------------|---------------|
+| POST   | `/api/v1/auth/register`     | Create account + set cookies         | No            |
+| POST   | `/api/v1/auth/login`        | Login + set cookies                  | No            |
+| POST   | `/api/v1/auth/logout`       | Clear cookies                        | No            |
+| POST   | `/api/v1/auth/refresh`      | Refresh access token                 | Refresh cookie|
+| GET    | `/api/v1/auth/me`           | Current user                         | Access cookie |
+
+Cookies used:
+- `access_token` (httpOnly, short-lived)
+- `refresh_token` (httpOnly, longer-lived, path-scoped)
+
 ## Project Structure
 
 ```text
 backend/
 ├── app/
-│   ├── api/          # Route modules
+│   ├── api/          # Route modules (auth, health, ...)
 │   ├── core/         # Config, security
 │   ├── db/           # Database session & base
-│   ├── models/       # SQLAlchemy models (coming)
-│   ├── schemas/      # Pydantic schemas (coming)
-│   ├── services/     # Business logic (coming)
-│   └── main.py       # FastAPI application
+│   ├── models/       # SQLAlchemy models
+│   ├── schemas/      # Pydantic schemas
+│   ├── services/     # Business logic (future)
+│   └── main.py
 ├── alembic/          # Database migrations
 ├── docker-compose.yml
 ├── requirements.txt
@@ -64,8 +84,8 @@ backend/
 
 ## Next Steps
 
-- User model + registration / login with httpOnly cookies
 - Product model + CRUD
-- Connect frontend to the new API
+- Connect frontend to the new auth API
 - M-Pesa integration
 - Cloudinary image uploads
+- Admin user seeding
