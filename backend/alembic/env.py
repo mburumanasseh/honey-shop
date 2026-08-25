@@ -8,8 +8,8 @@ from alembic import context
 from app.core.config import settings
 from app.db.session import Base
 
-# Import models here later so Alembic can detect them
-# from app.models import user, product, order
+# Import all models so Alembic can detect them
+from app.models import User  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
