@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.health import router as health_router
 from app.api.auth import router as auth_router
+from app.api.products import router as products_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -13,7 +14,6 @@ app = FastAPI(
     redoc_url=f"{settings.API_V1_PREFIX}/redoc",
 )
 
-# CORS – credentials required for httpOnly cookies
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -22,9 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routes
 app.include_router(health_router, prefix=settings.API_V1_PREFIX, tags=["Health"])
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
+app.include_router(products_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")
