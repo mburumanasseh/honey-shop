@@ -82,6 +82,24 @@ backend/
 └── .env.example
 ```
 
+
+## Product Endpoints
+
+| Method | Path | Description | Auth |
+|--------|------|-------------|------|
+| GET | `/api/v1/products` | List active products | Public |
+| GET | `/api/v1/products/{id}` | Get one product | Public |
+| POST | `/api/v1/products` | Create product | Admin |
+| PATCH | `/api/v1/products/{id}` | Update product | Admin |
+| DELETE | `/api/v1/products/{id}` | Soft-delete product | Admin |
+
+### Seed sample products
+
+```bash
+alembic upgrade head
+python seed_products.py
+```
+
 ## Next Steps
 
 - Product model + CRUD

@@ -1,4 +1,4 @@
 # Rollback Information
 
-- Previous known-good on main: auth PR merge
-- To discard: git checkout main && git branch -D feat/frontend-auth-integration
+- Previous known-good on main: frontend auth merge
+- Migration 002 can be rolled back with `alembic downgrade -1`

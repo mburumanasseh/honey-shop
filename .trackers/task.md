@@ -1,18 +1,21 @@
 # Current Task
 
 ## Task name
-Frontend auth integration
+Product model + CRUD
 
 ## Goal
-Replace localStorage auth with real FastAPI endpoints using httpOnly cookies.
+Add Product model and full CRUD API (public read, admin write).
 
 ## Completed in this PR
-- Created `src/services/authService.js` (register, login, logout, refresh, getMe)
-- Rewrote AuthProvider to call the API and restore session via /me + refresh
-- Made Login, Register, and Navbar async-compatible
-- Added frontend `.env.example` with VITE_API_URL
+- Product SQLAlchemy model
+- Pydantic schemas (Create, Update, Response)
+- Endpoints: list, get, create, update, soft-delete
+- Admin protection on write endpoints
+- Alembic migration 002
+- Seed script for the 3 original honey products
+- README updated
 
 ## Out of scope
-- Product CRUD
-- Protected admin routes
-- UI redesign
+- Frontend shop pages consuming the API
+- Image upload (Cloudinary)
+- Categories
