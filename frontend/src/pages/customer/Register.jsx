@@ -29,7 +29,7 @@ function Register() {
     setError('')
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     setError('')
@@ -69,7 +69,7 @@ function Register() {
       return
     }
 
-    const result = register({
+    const result = await register({
       name: formData.name,
       email: formData.email,
       phone: formData.phone,

@@ -27,7 +27,7 @@ function Login() {
     setError('')
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     setError('')
@@ -45,7 +45,7 @@ function Login() {
       return
     }
 
-    const result = login(
+    const result = await login(
       formData.email,
       formData.password,
     )
