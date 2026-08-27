@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -14,10 +14,11 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    # bcrypt only uses the first 72 bytes
+    return pwd_context.hash(password[:72])
 
 
-def create_access_token(subject: str | int, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(subject: Union[str, int], expires_delta: Optional[timedelta] = None) -> str:
     if expires_delta is None:
         expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     expire = datetime.now(timezone.utc) + expires_delta
@@ -25,7 +26,7 @@ def create_access_token(subject: str | int, expires_delta: Optional[timedelta] =
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def create_refresh_token(subject: str | int, expires_delta: Optional[timedelta] = None) -> str:
+def create_refresh_token(subject: Union[str, int], expires_delta: Optional[timedelta] = None) -> str:
     if expires_delta is None:
         expires_delta = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     expire = datetime.now(timezone.utc) + expires_delta
@@ -33,7 +34,7 @@ def create_refresh_token(subject: str | int, expires_delta: Optional[timedelta] 
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def decode_token(token: str) -> dict[str, Any] | None:
+def decode_token(token: str) -> Optional[dict[str, Any]]:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
