@@ -21,6 +21,7 @@ from app.schemas.user import (
     UserRegister,
     UserResponse,
 )
+from app.schemas.order import BootstrapAdminRequest
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -162,3 +163,24 @@ def refresh(
 @router.get("/me", response_model=UserResponse)
 def me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
+
+
+@router.post("/bootstrap-admin", response_model=UserResponse)
+def bootstrap_admin(
+    payload: BootstrapAdminRequest,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """One-time promote a user to admin using BOOTSTRAP_SECRET env var."""
+    expected = getattr(settings, "BOOTSTRAP_SECRET", None) or ""
+    if not expected or payload.secret != expected:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid bootstrap secret")
+
+    user = db.query(User).filter(User.email == payload.email.lower().strip()).first()
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    user.is_admin = True
+    db.commit()
+    db.refresh(user)
+    return user
+

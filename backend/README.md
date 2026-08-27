@@ -100,6 +100,33 @@ alembic upgrade head
 python seed_products.py
 ```
 
+
+## Order Endpoints
+
+| Method | Path | Description | Auth |
+|--------|------|-------------|------|
+| POST | `/api/v1/orders` | Create order from cart items | User |
+| GET | `/api/v1/orders` | List my orders | User |
+| GET | `/api/v1/orders/{id}` | Get order detail | User/Admin |
+| GET | `/api/v1/admin/orders` | List all orders | Admin |
+| PATCH | `/api/v1/admin/orders/{id}` | Update order status | Admin |
+
+Statuses: `pending`, `paid`, `processing`, `shipped`, `delivered`, `cancelled`
+
+## Admin bootstrap
+
+1. Register a normal user
+2. Set env `BOOTSTRAP_SECRET` on the server
+3. Call:
+
+```bash
+curl -X POST https://your-api/api/v1/auth/bootstrap-admin \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","secret":"your-bootstrap-secret"}'
+```
+
+Then remove or rotate `BOOTSTRAP_SECRET`.
+
 ## Next Steps
 
 - Product model + CRUD

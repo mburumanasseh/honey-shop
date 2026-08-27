@@ -1,21 +1,21 @@
 # Current Task
 
 ## Task name
-Product model + CRUD
+Orders + admin bootstrap
 
 ## Goal
-Add Product model and full CRUD API (public read, admin write).
+Add order creation/listing and a secure way to promote the first admin user.
 
 ## Completed in this PR
-- Product SQLAlchemy model
-- Pydantic schemas (Create, Update, Response)
-- Endpoints: list, get, create, update, soft-delete
-- Admin protection on write endpoints
-- Alembic migration 002
-- Seed script for the 3 original honey products
-- README updated
+- Order + OrderItem models
+- Create order, list my orders, get order
+- Admin list orders + update status
+- Stock decrement on order create
+- POST /api/v1/auth/bootstrap-admin
+- BOOTSTRAP_SECRET config
+- Alembic migration 003
 
 ## Out of scope
-- Frontend shop pages consuming the API
-- Image upload (Cloudinary)
-- Categories
+- M-Pesa
+- Cloudinary
+- Frontend wiring

@@ -1,4 +1,4 @@
 # Rollback Information
 
-- Previous known-good on main: frontend auth merge
-- Migration 002 can be rolled back with `alembic downgrade -1`
+- Migration 003 can be rolled back with `alembic downgrade -1`
+- Previous main remains stable if PR is closed
