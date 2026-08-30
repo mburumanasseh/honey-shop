@@ -1,117 +1,115 @@
-import { useState } from 'react'
-import { useCart } from '../../context/useCart'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import products from '../../data'
+import { useCart } from '../../context/useCart'
+import { getProduct } from '../../services/productService'
 import './ProductDetails.css'
 
 function ProductDetails() {
   const { id } = useParams()
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const { addToCart } = useCart()
 
-  const product = products.find(
-    (item) => item.id === Number(id),
-  )
+  useEffect(() => {
+    let cancelled = false
 
-  if (!product) {
+    async function load() {
+      setLoading(true)
+      setError('')
+      try {
+        const data = await getProduct(id)
+        if (!cancelled) {
+          setProduct(data)
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Product not found')
+          setProduct(null)
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <main className="product-details">
+        <div className="container">
+          <p>Loading product…</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (error || !product) {
     return (
       <main className="product-details">
         <div className="container product-details__not-found">
           <h1>Product not found</h1>
-
-          <p>
-            The honey product you're looking for doesn't
-            exist.
-          </p>
-
-          <Link to="/shop">
-            Back to Shop
-          </Link>
+          <p>{error || "The honey product you're looking for doesn't exist."}</p>
+          <Link to="/shop">Back to Shop</Link>
         </div>
       </main>
     )
   }
 
   const decreaseQuantity = () => {
-    setQuantity((currentQuantity) =>
-      Math.max(1, currentQuantity - 1),
-    )
+    setQuantity((currentQuantity) => Math.max(1, currentQuantity - 1))
   }
 
   const increaseQuantity = () => {
-    setQuantity((currentQuantity) =>
-      currentQuantity + 1,
-    )
+    setQuantity((currentQuantity) => {
+      const max = product.stock > 0 ? product.stock : currentQuantity + 1
+      return Math.min(max, currentQuantity + 1)
+    })
   }
 
   const handleAddToCart = () => {
     addToCart(product, quantity)
-
     setAdded(true)
-
-    setTimeout(() => {
-      setAdded(false)
-    }, 2000)
+    setTimeout(() => setAdded(false), 2000)
   }
 
   return (
     <main className="product-details">
       <div className="container">
-        <Link
-          to="/shop"
-          className="product-details__back"
-        >
+        <Link to="/shop" className="product-details__back">
           ← Back to Shop
         </Link>
 
         <div className="product-details__content">
           <div className="product-details__image">
-            <img
-              src={product.image}
-              alt={product.name}
-            />
+            <img src={product.image} alt={product.name} />
           </div>
 
           <div className="product-details__info">
-            <span className="product-details__size">
-              {product.size}
-            </span>
-
+            <span className="product-details__size">{product.size}</span>
             <h1>{product.name}</h1>
-
             <p className="product-details__price">
-              KSh {product.price.toLocaleString()}
+              KSh {Number(product.price).toLocaleString()}
             </p>
-
-            <p className="product-details__description">
-              {product.description}
-            </p>
+            <p className="product-details__description">{product.description}</p>
 
             <div className="product-details__quantity">
-              <label htmlFor="quantity">
-                Quantity
-              </label>
-
+              <label htmlFor="quantity">Quantity</label>
               <div className="quantity-control">
-                <button
-                  type="button"
-                  onClick={decreaseQuantity}
-                  aria-label="Decrease quantity"
-                >
+                <button type="button" onClick={decreaseQuantity} aria-label="Decrease quantity">
                   −
                 </button>
-
-                <span id="quantity">
-                  {quantity}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={increaseQuantity}
-                  aria-label="Increase quantity"
-                >
+                <span id="quantity">{quantity}</span>
+                <button type="button" onClick={increaseQuantity} aria-label="Increase quantity">
                   +
                 </button>
               </div>
@@ -121,8 +119,13 @@ function ProductDetails() {
               type="button"
               className="product-details__cart"
               onClick={handleAddToCart}
+              disabled={product.stock === 0}
             >
-              {added ? '✓ Added to Cart' : 'Add to Cart'}
+              {product.stock === 0
+                ? 'Out of stock'
+                : added
+                  ? '✓ Added to Cart'
+                  : 'Add to Cart'}
             </button>
           </div>
         </div>

@@ -1,21 +1,19 @@
 # Current Task
 
 ## Task name
-Orders + admin bootstrap
+Frontend products + orders integration
 
 ## Goal
-Add order creation/listing and a secure way to promote the first admin user.
+Wire Shop/Home/Product details and Checkout to the live API.
 
-## Completed in this PR
-- Order + OrderItem models
-- Create order, list my orders, get order
-- Admin list orders + update status
-- Stock decrement on order create
-- POST /api/v1/auth/bootstrap-admin
-- BOOTSTRAP_SECRET config
-- Alembic migration 003
+## Completed
+- productService + orderService + shared api helper
+- Shop, FeaturedHoney, ProductDetails fetch from API
+- Checkout places real orders (auth required)
+- Normalize price/image_url for UI
 
-## Out of scope
-- M-Pesa
-- Cloudinary
-- Frontend wiring
+## Next in roadmap
+2. Admin user bootstrap verification
+3. Cloudinary
+4. Render cold starts
+5. M-Pesa (last)
