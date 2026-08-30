@@ -2,10 +2,15 @@ import { apiRequest } from './api'
 
 export function normalizeProduct(product) {
   if (!product) return product
+  let image = product.image_url || product.image || ''
+  // Legacy seed paths are not valid in production builds
+  if (image.startsWith('/src/')) {
+    image = '/honeyjar.jpg'
+  }
   return {
     ...product,
     price: Number(product.price),
-    image: product.image_url || product.image || '',
+    image,
     stock: product.stock ?? 0,
   }
 }

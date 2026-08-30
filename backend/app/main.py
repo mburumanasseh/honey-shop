@@ -6,6 +6,7 @@ from app.api.health import router as health_router
 from app.api.auth import router as auth_router
 from app.api.products import router as products_router
 from app.api.orders import router as orders_router
+from app.api.uploads import router as uploads_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -27,6 +28,7 @@ app.include_router(health_router, prefix=settings.API_V1_PREFIX, tags=["Health"]
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(products_router, prefix=settings.API_V1_PREFIX)
 app.include_router(orders_router, prefix=settings.API_V1_PREFIX)
+app.include_router(uploads_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")
