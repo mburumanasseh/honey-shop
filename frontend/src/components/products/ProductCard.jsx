@@ -16,7 +16,7 @@ function ProductCard({ product }) {
         className="product-card__image"
       >
         <img
-          src={product.image}
+          src={product.image || product.image_url || ""}
           alt={product.name}
         />
       </Link>
@@ -36,7 +36,7 @@ function ProductCard({ product }) {
 
         <div className="product-card__footer">
           <span className="product-card__price">
-            KSh {product.price.toLocaleString()}
+            KSh {Number(product.price).toLocaleString()}
           </span>
 
           <button
