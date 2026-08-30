@@ -127,6 +127,26 @@ curl -X POST https://your-api/api/v1/auth/bootstrap-admin \
 
 Then remove or rotate `BOOTSTRAP_SECRET`.
 
+
+## Image uploads (Cloudinary)
+
+Admin-only endpoint:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/v1/uploads/image` | Multipart file upload → returns `{ url, public_id, ... }` |
+
+Set on Render:
+
+```env
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+CLOUDINARY_FOLDER=honey-shop
+```
+
+Then set a product's `image_url` to the returned `url` via `PATCH /api/v1/products/{id}`.
+
 ## Next Steps
 
 - Product model + CRUD
