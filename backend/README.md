@@ -147,6 +147,18 @@ CLOUDINARY_FOLDER=honey-shop
 
 Then set a product's `image_url` to the returned `url` via `PATCH /api/v1/products/{id}`.
 
+
+## Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+# with coverage:
+pytest --cov=app --cov-report=term-missing
+```
+
+Tests use an in-memory SQLite database and do not need Postgres or Docker.
+
 ## Next Steps
 
 - Product model + CRUD
