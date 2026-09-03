@@ -4,7 +4,7 @@ function AdminHeader() {
   return (
     <header className="admin-header">
       <div className="admin-header__title">
-        <span>Honey Shop</span>
+        <span>Zabe Honey Shop</span>
 
         <h1>Admin Dashboard</h1>
       </div>

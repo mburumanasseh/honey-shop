@@ -34,7 +34,7 @@ app.include_router(uploads_router, prefix=settings.API_V1_PREFIX)
 @app.get("/")
 def root():
     return {
-        "message": "Honey Shop API",
+        "message": "Zabe Honey Shop API",
         "docs": f"{settings.API_V1_PREFIX}/docs",
         "health": f"{settings.API_V1_PREFIX}/health",
     }

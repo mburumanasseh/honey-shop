@@ -12,7 +12,7 @@ function Dashboard() {
           <h2>Welcome back 👋</h2>
 
           <p>
-            Here's what's happening with your honey shop.
+            Here's what's happening with Zabe Honey Shop.
           </p>
         </div>
       </div>

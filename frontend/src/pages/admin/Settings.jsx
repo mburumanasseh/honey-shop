@@ -3,7 +3,7 @@ import './Settings.css'
 
 function Settings() {
   const [storeSettings, setStoreSettings] = useState({
-    storeName: 'Honey Shop',
+    storeName: 'Zabe Honey Shop',
     email: 'info@honeyshop.com',
     phone: '+254 700 000 000',
     currency: 'KES',
