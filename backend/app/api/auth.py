@@ -29,17 +29,24 @@ COOKIE_ACCESS = "access_token"
 COOKIE_REFRESH = "refresh_token"
 
 
+def _cookie_samesite() -> str:
+    # Cross-site frontend (Vercel) + API (Render) needs None; local dev can use Lax
+    return "lax" if settings.DEBUG else "none"
+
+
 def _set_auth_cookies(response: Response, user_id: int) -> None:
     access_token = create_access_token(user_id)
     refresh_token = create_refresh_token(user_id)
+    samesite = _cookie_samesite()
+    secure = not settings.DEBUG  # Required when SameSite=None
 
     # Access token – short lived
     response.set_cookie(
         key=COOKIE_ACCESS,
         value=access_token,
         httponly=True,
-        secure=not settings.DEBUG,  # False in local dev, True in production
-        samesite="lax",
+        secure=secure,
+        samesite=samesite,
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
@@ -49,10 +56,10 @@ def _set_auth_cookies(response: Response, user_id: int) -> None:
         key=COOKIE_REFRESH,
         value=refresh_token,
         httponly=True,
-        secure=not settings.DEBUG,
-        samesite="lax",
+        secure=secure,
+        samesite=samesite,
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        path="/api/v1/auth",  # Only sent to auth endpoints
+        path="/api/v1/auth",
     )
 
 
@@ -153,7 +160,7 @@ def refresh(
         value=access_token,
         httponly=True,
         secure=not settings.DEBUG,
-        samesite="lax",
+        samesite=_cookie_samesite(),
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         path="/",
     )
