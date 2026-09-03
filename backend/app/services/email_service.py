@@ -53,15 +53,15 @@ def send_email(to: str, subject: str, text_body: str, html_body: Optional[str] =
 
 def send_welcome_email(to_email: str, name: str) -> bool:
     display_name = (name or "").strip() or "there"
-    subject = "Welcome to Honey Shop — thank you for joining us"
+    subject = "Welcome to Zabe Honey Shop — thank you for joining us"
     text_body = (
         f"Hi {display_name},\n\n"
-        "Thank you for creating an account with Honey Shop.\n\n"
+        "Thank you for creating an account with Zabe Honey Shop.\n\n"
         "We're glad you're here. Explore our pure, naturally harvested honey "
         "and enjoy shopping with us.\n\n"
         "If you did not create this account, you can ignore this email.\n\n"
         "Warm regards,\n"
-        "The Honey Shop team\n"
+        "The Zabe Honey Shop team\n"
     )
     html_body = f"""\
 <!DOCTYPE html>
@@ -69,15 +69,15 @@ def send_welcome_email(to_email: str, name: str) -> bool:
   <body style="font-family: Georgia, serif; color: #2c1a00; line-height: 1.5;">
     <div style="max-width: 560px; margin: 0 auto; padding: 24px;">
       <p style="color: #b8860b; letter-spacing: 0.08em; text-transform: uppercase; font-size: 12px;">
-        Honey Shop
+        Zabe Honey Shop
       </p>
       <h1 style="font-size: 24px; margin: 0 0 16px;">Welcome, {display_name}!</h1>
-      <p>Thank you for creating an account with <strong>Honey Shop</strong>.</p>
+      <p>Thank you for creating an account with <strong>Zabe Honey Shop</strong>.</p>
       <p>
         We're glad you're here. Explore our pure, naturally harvested honey
         and enjoy shopping with us.
       </p>
-      <p style="margin-top: 24px;">Warm regards,<br/>The Honey Shop team</p>
+      <p style="margin-top: 24px;">Warm regards,<br/>The Zabe Honey Shop team</p>
       <p style="margin-top: 32px; font-size: 12px; color: #777;">
         If you did not create this account, you can safely ignore this email.
       </p>
