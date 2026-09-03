@@ -159,6 +159,29 @@ pytest --cov=app --cov-report=term-missing
 
 Tests use an in-memory SQLite database and do not need Postgres or Docker.
 
+
+## Welcome email on register
+
+After a successful `POST /api/v1/auth/register`, the API queues a thank-you email.
+
+**Resend**
+```env
+RESEND_API_KEY=re_xxxx
+EMAIL_FROM=Honey Shop <onboarding@yourdomain.com>
+```
+
+**SMTP**
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=you@gmail.com
+SMTP_PASSWORD=app-password
+SMTP_USE_TLS=true
+EMAIL_FROM=Honey Shop <you@gmail.com>
+```
+
+Registration still succeeds if email is not configured or sending fails.
+
 ## Next Steps
 
 - Product model + CRUD

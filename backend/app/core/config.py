@@ -32,6 +32,17 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str = ""
     CLOUDINARY_FOLDER: str = "honey-shop"
 
+    # Email (welcome messages, etc.)
+    # Prefer Resend: set RESEND_API_KEY + EMAIL_FROM
+    # Or SMTP: set SMTP_HOST + EMAIL_FROM (+ user/password)
+    RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = ""
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_USE_TLS: bool = True
+
     @property
     def cors_origins_list(self) -> List[str]:
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
