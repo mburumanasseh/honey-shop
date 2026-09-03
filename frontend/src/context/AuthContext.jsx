@@ -90,6 +90,11 @@ function AuthProvider({ children }) {
     } catch {
       // Still clear local state even if the request fails
     } finally {
+      try {
+        sessionStorage.removeItem('honey_shop_admin_unlocked')
+      } catch {
+        // ignore
+      }
       clearUser()
     }
   }

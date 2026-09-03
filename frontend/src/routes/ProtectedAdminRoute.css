@@ -1,0 +1,110 @@
+.admin-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(160deg, #faf6ef 0%, #f3e6c8 100%);
+}
+
+.admin-gate__card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 12px 40px rgba(60, 40, 10, 0.12);
+}
+
+.admin-gate__eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b8860b;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.admin-gate__card h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+  color: #2c1a00;
+}
+
+.admin-gate__hint {
+  margin: 0 0 1.25rem;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.admin-gate__error {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #fdecea;
+  color: #a12622;
+  font-size: 0.9rem;
+}
+
+.admin-gate__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-gate__form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0.5rem;
+}
+
+.admin-gate__form input {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  font-size: 1rem;
+}
+
+.admin-gate__form input:focus {
+  outline: 2px solid #c4922a;
+  border-color: #c4922a;
+}
+
+.admin-gate__form button {
+  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background: #b8860b;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-gate__form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-gate__form button:hover:not(:disabled) {
+  background: #9a7209;
+}
+
+.admin-gate__footer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.admin-gate__footer a {
+  color: #7a5a10;
+  text-decoration: none;
+}
+
+.admin-gate__footer a:hover {
+  text-decoration: underline;
+}
