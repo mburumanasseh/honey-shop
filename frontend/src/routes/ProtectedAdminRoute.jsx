@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import './ProtectedAdminRoute.css'
@@ -37,6 +37,15 @@ function ProtectedAdminRoute({ children }) {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
+  const alreadyAdmin = isAuthenticated && Boolean(currentUser?.is_admin)
+
+  useEffect(() => {
+    if (unlocked && !loading && !alreadyAdmin) {
+      setAdminUnlocked(false)
+      setUnlocked(false)
+    }
+  }, [unlocked, loading, alreadyAdmin])
+
   if (loading) {
     return (
       <div className="admin-gate">
@@ -47,16 +56,8 @@ function ProtectedAdminRoute({ children }) {
     )
   }
 
-  const alreadyAdmin = isAuthenticated && currentUser?.is_admin
-
-  // Allow through only after password unlock this browser session
   if (unlocked && alreadyAdmin) {
     return children
-  }
-
-  // If unlocked flag is stale (not admin), clear it
-  if (unlocked && !alreadyAdmin) {
-    setAdminUnlocked(false)
   }
 
   const handleSubmit = async (event) => {
@@ -65,7 +66,6 @@ function ProtectedAdminRoute({ children }) {
     setSubmitting(true)
 
     try {
-      // Always verify password (step-up), even if already logged in as customer
       const result = await login(email.trim(), password)
 
       if (!result.success) {
@@ -76,7 +76,7 @@ function ProtectedAdminRoute({ children }) {
       if (!result.user?.is_admin) {
         setError('This account does not have admin access.')
         setAdminUnlocked(false)
-        // Do not leave a non-admin session looking like admin access
+        setUnlocked(false)
         await logout()
         return
       }
