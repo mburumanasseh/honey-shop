@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from fastapi import APIRouter, BackgroundTasks, Cookie, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_active_user
@@ -22,6 +22,7 @@ from app.schemas.user import (
     UserResponse,
 )
 from app.schemas.order import BootstrapAdminRequest
+from app.services.email_service import send_welcome_email
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -72,6 +73,7 @@ def _clear_auth_cookies(response: Response) -> None:
 def register(
     payload: UserRegister,
     response: Response,
+    background_tasks: BackgroundTasks,
     db: Annotated[Session, Depends(get_db)],
 ):
     existing = db.query(User).filter(User.email == payload.email.lower()).first()
@@ -92,6 +94,9 @@ def register(
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    # Thank-you email (does not block registration if mail fails)
+    background_tasks.add_task(send_welcome_email, user.email, user.name)
 
     _set_auth_cookies(response, user.id)
     return user
