@@ -97,6 +97,7 @@ function AuthProvider({ children }) {
   const value = {
     currentUser,
     isAuthenticated: Boolean(currentUser),
+    isAdmin: Boolean(currentUser?.is_admin),
     loading,
     register,
     login,

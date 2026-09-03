@@ -22,6 +22,7 @@ import Customers from '../pages/admin/Customers'
 import Inventory from '../pages/admin/Inventory'
 import Payments from '../pages/admin/Payments'
 import Settings from '../pages/admin/Settings'
+import ProtectedAdminRoute from './ProtectedAdminRoute'
 
 function AppRoutes() {
   return (
@@ -88,7 +89,11 @@ function AppRoutes() {
 
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={
+            <ProtectedAdminRoute>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }
         >
           {/* ------------------------------------------------
               Dashboard
