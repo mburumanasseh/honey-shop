@@ -1,323 +1,178 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { createProduct, uploadProductImage } from '../../services/productService'
 import './AddProduct.css'
 
 function AddProduct() {
   const navigate = useNavigate()
-
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     size: '',
     price: '',
     stock: '',
-    category: '',
-    image: '',
-    status: 'In Stock',
+    image_url: '',
+    is_active: true,
   })
-
+  const [file, setFile] = useState(null)
   const [errors, setErrors] = useState({})
+  const [submitError, setSubmitError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   const handleChange = (event) => {
-    const { name, value } = event.target
-
-    setFormData((currentData) => ({
-      ...currentData,
-      [name]: value,
+    const { name, value, type, checked } = event.target
+    setFormData((current) => ({
+      ...current,
+      [name]: type === 'checkbox' ? checked : value,
     }))
-
-    setErrors((currentErrors) => ({
-      ...currentErrors,
-      [name]: '',
-    }))
+    setErrors((current) => ({ ...current, [name]: '' }))
   }
 
-  const validateForm = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Please enter a product name.'
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description =
-        'Please enter a product description.'
-    }
-
-    if (!formData.size.trim()) {
-      newErrors.size = 'Please enter the product size.'
-    }
-
-    if (!formData.price || Number(formData.price) <= 0) {
-      newErrors.price = 'Please enter a valid price.'
-    }
-
-    if (
-      formData.stock === '' ||
-      Number(formData.stock) < 0
-    ) {
-      newErrors.stock =
-        'Please enter a valid stock quantity.'
-    }
-
-    if (!formData.category.trim()) {
-      newErrors.category =
-        'Please enter a product category.'
-    }
-
-    if (!formData.image.trim()) {
-      newErrors.image =
-        'Please enter an image URL.'
-    }
-
-    setErrors(newErrors)
-
-    return Object.keys(newErrors).length === 0
+  const validate = () => {
+    const next = {}
+    if (!formData.name.trim()) next.name = 'Name is required'
+    if (!formData.price || Number(formData.price) <= 0) next.price = 'Enter a valid price'
+    if (formData.stock === '' || Number(formData.stock) < 0) next.stock = 'Enter stock (0 or more)'
+    setErrors(next)
+    return Object.keys(next).length === 0
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    setSubmitError('')
+    if (!validate()) return
 
-    if (!validateForm()) {
-      return
+    setSubmitting(true)
+    try {
+      let imageUrl = formData.image_url.trim() || null
+      if (file) {
+        const uploaded = await uploadProductImage(file)
+        imageUrl = uploaded.url
+      }
+
+      await createProduct({
+        name: formData.name.trim(),
+        description: formData.description.trim() || null,
+        size: formData.size.trim() || null,
+        price: formData.price,
+        stock: Number(formData.stock),
+        image_url: imageUrl,
+        is_active: formData.is_active,
+      })
+      navigate('/admin/products')
+    } catch (err) {
+      setSubmitError(err.message || 'Could not create product')
+    } finally {
+      setSubmitting(false)
     }
-
-    const newProduct = {
-      id: Date.now(),
-      name: formData.name.trim(),
-      description: formData.description.trim(),
-      size: formData.size.trim(),
-      price: Number(formData.price),
-      stock: Number(formData.stock),
-      category: formData.category.trim(),
-      image: formData.image.trim(),
-      status: formData.status,
-    }
-
-    console.log('New product:', newProduct)
-
-    alert('Product created successfully.')
-
-    navigate('/admin/products')
   }
 
   return (
     <div className="admin-add-product">
       <div className="admin-add-product__header">
-        <div>
-          <span className="admin-add-product__eyebrow">
-            Store Management
-          </span>
-
-          <h1>Add Product</h1>
-
-          <p>
-            Add a new honey product to your store.
-          </p>
-        </div>
-
-        <Link
-          to="/admin/products"
-          className="admin-add-product__back"
-        >
-          ← Back to Products
-        </Link>
+        <Link to="/admin/products">← Back to products</Link>
+        <h1>Add product</h1>
+        <p>Create a new honey product for the storefront.</p>
       </div>
 
-      <form
-        className="admin-add-product__form"
-        onSubmit={handleSubmit}
-      >
-        <section className="admin-add-product__card">
-          <div className="admin-add-product__card-header">
-            <span>Product Information</span>
+      {submitError && (
+        <p className="admin-add-product__error" role="alert">
+          {submitError}
+        </p>
+      )}
 
-            <h2>Basic Details</h2>
-
-            <p>
-              Enter the information customers will see
-              when browsing your product.
-            </p>
-          </div>
-
-          <div className="admin-add-product__fields">
-            <div className="admin-add-product__field admin-add-product__field--full">
-              <label htmlFor="name">
-                Product Name
-              </label>
-
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="e.g. Pure Mountain Honey"
-              />
-
-              {errors.name && (
-                <small>{errors.name}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field admin-add-product__field--full">
-              <label htmlFor="description">
-                Description
-              </label>
-
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Describe your honey product..."
-                rows="5"
-              />
-
-              {errors.description && (
-                <small>{errors.description}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field">
-              <label htmlFor="size">
-                Size
-              </label>
-
-              <input
-                id="size"
-                name="size"
-                type="text"
-                value={formData.size}
-                onChange={handleChange}
-                placeholder="e.g. 500g"
-              />
-
-              {errors.size && (
-                <small>{errors.size}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field">
-              <label htmlFor="category">
-                Category
-              </label>
-
-              <input
-                id="category"
-                name="category"
-                type="text"
-                value={formData.category}
-                onChange={handleChange}
-                placeholder="e.g. Natural Honey"
-              />
-
-              {errors.category && (
-                <small>{errors.category}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field">
-              <label htmlFor="price">
-                Price (KSh)
-              </label>
-
-              <input
-                id="price"
-                name="price"
-                type="number"
-                min="0"
-                value={formData.price}
-                onChange={handleChange}
-                placeholder="e.g. 1500"
-              />
-
-              {errors.price && (
-                <small>{errors.price}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field">
-              <label htmlFor="stock">
-                Stock Quantity
-              </label>
-
-              <input
-                id="stock"
-                name="stock"
-                type="number"
-                min="0"
-                value={formData.stock}
-                onChange={handleChange}
-                placeholder="e.g. 25"
-              />
-
-              {errors.stock && (
-                <small>{errors.stock}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field admin-add-product__field--full">
-              <label htmlFor="image">
-                Product Image URL
-              </label>
-
-              <input
-                id="image"
-                name="image"
-                type="url"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="https://example.com/honey.jpg"
-              />
-
-              {errors.image && (
-                <small>{errors.image}</small>
-              )}
-            </div>
-
-            <div className="admin-add-product__field">
-              <label htmlFor="status">
-                Product Status
-              </label>
-
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <option value="In Stock">
-                  In Stock
-                </option>
-
-                <option value="Out of Stock">
-                  Out of Stock
-                </option>
-
-                <option value="Inactive">
-                  Inactive
-                </option>
-              </select>
-            </div>
-          </div>
-        </section>
-
-        <div className="admin-add-product__actions">
-          <Link
-            to="/admin/products"
-            className="admin-add-product__cancel"
-          >
-            Cancel
-          </Link>
-
-          <button
-            type="submit"
-            className="admin-add-product__submit"
-          >
-            Save Product
-          </button>
+      <form className="admin-add-product__form" onSubmit={handleSubmit}>
+        <div className="admin-add-product__field">
+          <label htmlFor="name">Name</label>
+          <input id="name" name="name" value={formData.name} onChange={handleChange} />
+          {errors.name && <small>{errors.name}</small>}
         </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="3"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="size">Size</label>
+          <input
+            id="size"
+            name="size"
+            placeholder="e.g. 500g"
+            value={formData.size}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="price">Price (KSh)</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            min="0"
+            step="0.01"
+            value={formData.price}
+            onChange={handleChange}
+          />
+          {errors.price && <small>{errors.price}</small>}
+        </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="stock">Stock</label>
+          <input
+            id="stock"
+            name="stock"
+            type="number"
+            min="0"
+            value={formData.stock}
+            onChange={handleChange}
+          />
+          {errors.stock && <small>{errors.stock}</small>}
+        </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="image_file">Image upload (Cloudinary)</label>
+          <input
+            id="image_file"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+          />
+        </div>
+
+        <div className="admin-add-product__field">
+          <label htmlFor="image_url">Or image URL</label>
+          <input
+            id="image_url"
+            name="image_url"
+            value={formData.image_url}
+            onChange={handleChange}
+            placeholder="https://res.cloudinary.com/..."
+          />
+        </div>
+
+        <div className="admin-add-product__field">
+          <label>
+            <input
+              type="checkbox"
+              name="is_active"
+              checked={formData.is_active}
+              onChange={handleChange}
+            />{' '}
+            Active on storefront
+          </label>
+        </div>
+
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Saving…' : 'Save product'}
+        </button>
       </form>
     </div>
   )

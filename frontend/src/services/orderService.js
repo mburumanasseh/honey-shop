@@ -26,3 +26,18 @@ export async function listMyOrders() {
 export async function getOrder(id) {
   return apiRequest(`/api/v1/orders/${id}`)
 }
+
+export async function adminListOrders(options = {}) {
+  const params = new URLSearchParams()
+  if (options.skip != null) params.set('skip', String(options.skip))
+  if (options.limit != null) params.set('limit', String(options.limit))
+  const qs = params.toString()
+  return apiRequest(`/api/v1/admin/orders${qs ? `?${qs}` : ''}`)
+}
+
+export async function adminUpdateOrderStatus(id, status) {
+  return apiRequest(`/api/v1/admin/orders/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  })
+}
