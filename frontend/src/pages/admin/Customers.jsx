@@ -1,161 +1,116 @@
-import { useMemo, useState } from "react";
-import "./Customers.css";
-
-const customers = [
-  {
-    id: 1,
-    name: "Amina Wanjiku",
-    phone: "+254 712 345 678",
-    email: "amina@example.com",
-    orders: 8,
-    totalSpent: 12500,
-    registered: "12 Jan 2026",
-  },
-  {
-    id: 2,
-    name: "Brian Mwangi",
-    phone: "+254 723 456 789",
-    email: "brian@example.com",
-    orders: 5,
-    totalSpent: 7800,
-    registered: "28 Jan 2026",
-  },
-  {
-    id: 3,
-    name: "Grace Njeri",
-    phone: "+254 734 567 890",
-    email: "grace@example.com",
-    orders: 12,
-    totalSpent: 18600,
-    registered: "03 Feb 2026",
-  },
-  {
-    id: 4,
-    name: "Kevin Otieno",
-    phone: "+254 745 678 901",
-    email: "kevin@example.com",
-    orders: 3,
-    totalSpent: 4200,
-    registered: "17 Feb 2026",
-  },
-  {
-    id: 5,
-    name: "Mary Atieno",
-    phone: "+254 756 789 012",
-    email: "mary@example.com",
-    orders: 6,
-    totalSpent: 9400,
-    registered: "25 Feb 2026",
-  },
-];
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { listCustomers } from '../../services/adminService'
+import './Customers.css'
 
 function Customers() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [customers, setCustomers] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const data = await listCustomers({ limit: 200 })
+      setCustomers(data || [])
+    } catch (err) {
+      setError(err.message || 'Failed to load customers')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    load()
+  }, [load])
 
   const filteredCustomers = useMemo(() => {
-    const search = searchTerm.toLowerCase().trim();
-
-    if (!search) return customers;
-
+    const search = searchTerm.toLowerCase().trim()
+    if (!search) return customers
     return customers.filter(
-      (customer) =>
-        customer.name.toLowerCase().includes(search) ||
-        customer.email.toLowerCase().includes(search) ||
-        customer.phone.toLowerCase().includes(search)
-    );
-  }, [searchTerm]);
+      (c) =>
+        c.name?.toLowerCase().includes(search) ||
+        c.email?.toLowerCase().includes(search) ||
+        (c.phone || '').toLowerCase().includes(search),
+    )
+  }, [customers, searchTerm])
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-KE", {
-      style: "currency",
-      currency: "KES",
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat('en-KE', {
+      style: 'currency',
+      currency: 'KES',
       maximumFractionDigits: 0,
-    }).format(amount);
-  };
+    }).format(amount || 0)
 
   return (
     <div className="customers-page">
       <div className="customers-header">
         <div>
           <h1>Customers</h1>
-          <p>Manage and view your registered customers.</p>
-        </div>
-
-        <div className="customer-count">
-          <span>{customers.length}</span>
-          <small>Total Customers</small>
+          <p>Registered accounts on Zabe Honey Shop.</p>
         </div>
       </div>
 
       <div className="customers-toolbar">
-        <div className="customer-search">
-          <span className="search-icon">⌕</span>
-
-          <input
-            type="text"
-            placeholder="Search customers..."
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-        </div>
+        <input
+          type="search"
+          placeholder="Search name, email, phone…"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <span>
+          {loading
+            ? 'Loading…'
+            : `${filteredCustomers.length} customer${filteredCustomers.length === 1 ? '' : 's'}`}
+        </span>
       </div>
 
-      <div className="customers-table-container">
-        <table className="customers-table">
-          <thead>
-            <tr>
-              <th>Customer</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Orders</th>
-              <th>Total Spent</th>
-              <th>Registered</th>
-            </tr>
-          </thead>
+      {error && <p role="alert">{error}</p>}
 
-          <tbody>
-            {filteredCustomers.length > 0 ? (
-              filteredCustomers.map((customer) => (
-                <tr key={customer.id}>
-                  <td>
-                    <div className="customer-info">
-                      <div className="customer-avatar">
-                        {customer.name.charAt(0)}
-                      </div>
-
-                      <span>{customer.name}</span>
-                    </div>
-                  </td>
-
-                  <td>{customer.phone}</td>
-
-                  <td>{customer.email}</td>
-
-                  <td>
-                    <span className="orders-count">
-                      {customer.orders}
-                    </span>
-                  </td>
-
-                  <td className="total-spent">
-                    {formatCurrency(customer.totalSpent)}
-                  </td>
-
-                  <td>{customer.registered}</td>
-                </tr>
-              ))
-            ) : (
+      {loading ? (
+        <p>Loading customers…</p>
+      ) : filteredCustomers.length === 0 ? (
+        <p>No customers found.</p>
+      ) : (
+        <div className="customers-table-wrapper">
+          <table className="customers-table">
+            <thead>
               <tr>
-                <td colSpan="6" className="no-customers">
-                  No customers found.
-                </td>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Orders</th>
+                <th>Total spent</th>
+                <th>Role</th>
+                <th>Joined</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {filteredCustomers.map((c) => (
+                <tr key={c.id}>
+                  <td>
+                    <strong>{c.name}</strong>
+                    {!c.is_active && <span> (inactive)</span>}
+                  </td>
+                  <td>{c.email}</td>
+                  <td>{c.phone || '—'}</td>
+                  <td>{c.orders_count}</td>
+                  <td>{formatCurrency(c.total_spent)}</td>
+                  <td>{c.is_admin ? 'Admin' : 'Customer'}</td>
+                  <td>
+                    {c.created_at
+                      ? new Date(c.created_at).toLocaleDateString()
+                      : '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
-  );
+  )
 }
 
-export default Customers;
+export default Customers

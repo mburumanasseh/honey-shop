@@ -1,241 +1,126 @@
-import { useMemo, useState } from "react";
-import "./Inventory.css";
-
-const inventory = [
-  {
-    id: 1,
-    name: "Pure Forest Honey",
-    sku: "HNY-001",
-    stock: 42,
-    sold: 58,
-    reorderLevel: 15,
-    price: 850,
-  },
-  {
-    id: 2,
-    name: "Acacia Honey",
-    sku: "HNY-002",
-    stock: 18,
-    sold: 37,
-    reorderLevel: 20,
-    price: 1200,
-  },
-  {
-    id: 3,
-    name: "Wildflower Honey",
-    sku: "HNY-003",
-    stock: 7,
-    sold: 73,
-    reorderLevel: 15,
-    price: 950,
-  },
-  {
-    id: 4,
-    name: "Raw Organic Honey",
-    sku: "HNY-004",
-    stock: 0,
-    sold: 45,
-    reorderLevel: 10,
-    price: 1500,
-  },
-  {
-    id: 5,
-    name: "Mountain Honey",
-    sku: "HNY-005",
-    stock: 31,
-    sold: 29,
-    reorderLevel: 10,
-    price: 1100,
-  },
-  {
-    id: 6,
-    name: "Eucalyptus Honey",
-    sku: "HNY-006",
-    stock: 12,
-    sold: 41,
-    reorderLevel: 15,
-    price: 900,
-  },
-];
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { listProducts, updateProduct } from '../../services/productService'
+import './Inventory.css'
 
 function Inventory() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [savingId, setSavingId] = useState(null)
 
-  const filteredInventory = useMemo(() => {
-    const search = searchTerm.toLowerCase().trim();
-
-    if (!search) {
-      return inventory;
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const data = await listProducts({ includeInactive: true, limit: 100 })
+      setItems(data || [])
+    } catch (err) {
+      setError(err.message || 'Failed to load inventory')
+    } finally {
+      setLoading(false)
     }
+  }, [])
 
-    return inventory.filter(
-      (product) =>
-        product.name.toLowerCase().includes(search) ||
-        product.sku.toLowerCase().includes(search)
-    );
-  }, [searchTerm]);
+  useEffect(() => {
+    load()
+  }, [load])
 
-  const getStockStatus = (stock, reorderLevel) => {
-    if (stock === 0) {
-      return {
-        label: "Out of Stock",
-        className: "out-of-stock",
-      };
+  const lowStock = useMemo(
+    () => items.filter((p) => p.is_active && p.stock <= 10).length,
+    [items],
+  )
+
+  const handleStockChange = async (product, raw) => {
+    const stock = Number(raw)
+    if (Number.isNaN(stock) || stock < 0) return
+    setSavingId(product.id)
+    setError('')
+    try {
+      const updated = await updateProduct(product.id, { stock })
+      setItems((prev) => prev.map((p) => (p.id === product.id ? updated : p)))
+    } catch (err) {
+      setError(err.message || 'Could not update stock')
+    } finally {
+      setSavingId(null)
     }
-
-    if (stock <= reorderLevel) {
-      return {
-        label: "Low Stock",
-        className: "low-stock",
-      };
-    }
-
-    return {
-      label: "In Stock",
-      className: "in-stock",
-    };
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-KE", {
-      style: "currency",
-      currency: "KES",
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  const totalProducts = inventory.length;
-
-  const lowStockProducts = inventory.filter(
-    (product) =>
-      product.stock > 0 && product.stock <= product.reorderLevel
-  ).length;
-
-  const outOfStockProducts = inventory.filter(
-    (product) => product.stock === 0
-  ).length;
-
-  const totalUnits = inventory.reduce(
-    (total, product) => total + product.stock,
-    0
-  );
+  }
 
   return (
     <div className="inventory-page">
-      {/* Header */}
       <div className="inventory-header">
         <div>
           <h1>Inventory</h1>
-          <p>Monitor your honey stock and inventory levels.</p>
+          <p>Stock levels for all products.</p>
+        </div>
+        <div className="inventory-summary">
+          <span>{items.length} products</span>
+          <span>{lowStock} low stock (≤10)</span>
         </div>
       </div>
 
-      {/* Summary cards */}
-      <div className="inventory-summary">
-        <div className="inventory-summary-card">
-          <span className="summary-label">Products</span>
-          <strong>{totalProducts}</strong>
-        </div>
+      {error && <p role="alert">{error}</p>}
 
-        <div className="inventory-summary-card">
-          <span className="summary-label">Total Units</span>
-          <strong>{totalUnits}</strong>
-        </div>
-
-        <div className="inventory-summary-card warning">
-          <span className="summary-label">Low Stock</span>
-          <strong>{lowStockProducts}</strong>
-        </div>
-
-        <div className="inventory-summary-card danger">
-          <span className="summary-label">Out of Stock</span>
-          <strong>{outOfStockProducts}</strong>
-        </div>
-      </div>
-
-      {/* Search */}
-      <div className="inventory-toolbar">
-        <div className="inventory-search">
-          <span className="search-icon">⌕</span>
-
-          <input
-            type="text"
-            placeholder="Search products or SKU..."
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Inventory table */}
-      <div className="inventory-table-container">
-        <table className="inventory-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>SKU</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Units Sold</th>
-              <th>Reorder Level</th>
-              <th>Stock Value</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredInventory.length > 0 ? (
-              filteredInventory.map((product) => {
-                const status = getStockStatus(
-                  product.stock,
-                  product.reorderLevel
-                );
-
-                return (
-                  <tr key={product.id}>
-                    <td>
-                      <div className="inventory-product">
-                        <div className="inventory-product-icon">🍯</div>
-
-                        <span>{product.name}</span>
-                      </div>
-                    </td>
-
-                    <td className="sku">{product.sku}</td>
-
-                    <td>
-                      <strong>{product.stock}</strong>
-                    </td>
-
-                    <td>
-                      <span
-                        className={`stock-status ${status.className}`}
-                      >
-                        {status.label}
-                      </span>
-                    </td>
-
-                    <td>{product.sold}</td>
-
-                    <td>{product.reorderLevel}</td>
-
-                    <td className="stock-value">
-                      {formatCurrency(product.stock * product.price)}
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
+      {loading ? (
+        <p>Loading inventory…</p>
+      ) : items.length === 0 ? (
+        <p>No products yet. Add products first.</p>
+      ) : (
+        <div className="inventory-table-wrapper">
+          <table className="inventory-table">
+            <thead>
               <tr>
-                <td colSpan="7" className="no-inventory">
-                  No products found.
-                </td>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {items.map((product) => (
+                <tr key={product.id}>
+                  <td>
+                    <strong>{product.name}</strong>
+                    <div>#{product.id}</div>
+                  </td>
+                  <td>{product.size || '—'}</td>
+                  <td>KSh {Number(product.price).toLocaleString()}</td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0"
+                      defaultValue={product.stock}
+                      key={`${product.id}-${product.stock}`}
+                      disabled={savingId === product.id}
+                      onBlur={(e) => {
+                        if (Number(e.target.value) !== product.stock) {
+                          handleStockChange(product, e.target.value)
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.target.blur()
+                        }
+                      }}
+                      style={{ width: '5rem' }}
+                    />
+                    {savingId === product.id && <span> saving…</span>}
+                  </td>
+                  <td>
+                    {product.is_active
+                      ? product.stock <= 10
+                        ? 'Low stock'
+                        : 'In stock'
+                      : 'Inactive'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
-  );
+  )
 }
 
-export default Inventory;
+export default Inventory
