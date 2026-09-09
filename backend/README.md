@@ -1,29 +1,65 @@
-# Honey Shop Backend
+# Zabe Honey Shop — Backend
 
-FastAPI + PostgreSQL + SQLAlchemy backend for the Honey Shop monorepo.
+FastAPI API for the Zabe Honey Shop monorepo.
 
 ## Stack
 
-- **Framework:** FastAPI
-- **Database:** PostgreSQL
-- **ORM:** SQLAlchemy 2.0 + Alembic
-- **Auth:** JWT in httpOnly cookies (access + refresh tokens)
-- **Payments:** M-Pesa Daraja (coming later)
-- **Images:** Cloudinary (coming later)
+| Piece | Choice |
+|-------|--------|
+| Framework | FastAPI |
+| DB | PostgreSQL |
+| ORM | SQLAlchemy 2.0 |
+| Migrations | Alembic |
+| Auth | JWT access + refresh tokens in **httpOnly cookies** |
+| Password hashing | passlib + bcrypt 4.0.1 |
+| Images | Cloudinary |
+| Email | Resend **or** SMTP |
+| Tests | pytest + httpx + in-memory SQLite |
+| Deploy | Render |
 
-## Local Development
+## Project layout
 
-### 1. Start PostgreSQL
+```text
+backend/
+├── app/
+│   ├── main.py              # FastAPI app + CORS + routers
+│   ├── api/                 # Route modules
+│   │   ├── auth.py
+│   │   ├── products.py
+│   │   ├── orders.py
+│   │   ├── uploads.py
+│   │   ├── customers.py     # Admin customer list
+│   │   ├── settings.py      # Admin store settings
+│   │   ├── health.py
+│   │   └── deps.py          # get_current_user / admin
+│   ├── core/                # config, security
+│   ├── db/                  # session, Base
+│   ├── models/              # User, Product, Order, StoreSettings
+│   ├── schemas/             # Pydantic
+│   └── services/            # cloudinary, email
+├── alembic/versions/        # 001–005
+├── tests/
+├── requirements.txt
+├── requirements-dev.txt
+├── runtime.txt              # Python 3.12
+├── docker-compose.yml       # Local Postgres
+└── .env.example
+```
+
+## Local setup
+
+### 1. PostgreSQL
 
 ```bash
 docker compose up -d
+# or use any Postgres and set DATABASE_URL
 ```
 
-### 2. Create virtual environment & install dependencies
+### 2. Virtualenv + deps
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -31,161 +67,136 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# Edit .env if needed (defaults work with the docker-compose above)
 ```
 
-### 4. Run migrations
+Important variables (values are secrets — never commit them):
+
+| Variable | Purpose |
+|----------|---------|
+| `DATABASE_URL` | Postgres connection string |
+| `SECRET_KEY` | JWT signing |
+| `CORS_ORIGINS` | Comma-separated origins (Vercel URL + `http://localhost:5173`) |
+| `DEBUG` | `true` locally; `false` in production (`SameSite=None` cookies when false) |
+| `BOOTSTRAP_SECRET` | One-time promote user → admin |
+| `CLOUDINARY_CLOUD_NAME` / `API_KEY` / `API_SECRET` / `FOLDER` | Image uploads |
+| `RESEND_API_KEY` + `EMAIL_FROM` | Welcome email (or SMTP_*) |
+
+### 4. Migrations
 
 ```bash
 alembic upgrade head
 ```
 
-### 5. Run the API
+Migrations:
+
+| Rev | Change |
+|-----|--------|
+| 001 | users |
+| 002 | products |
+| 003 | orders + order_items |
+| 004 | wider product `image_url` |
+| 005 | store_settings |
+
+### 5. Run
 
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-- API: http://localhost:8000
-- Interactive docs: http://localhost:8000/api/v1/docs
-- Health: http://localhost:8000/api/v1/health
+- API root: http://localhost:8000  
+- Swagger: http://localhost:8000/api/v1/docs  
+- Health: http://localhost:8000/api/v1/health  
 
-## Auth Endpoints
+## API overview
 
-| Method | Path                        | Description                          | Auth required |
-|--------|-----------------------------|--------------------------------------|---------------|
-| POST   | `/api/v1/auth/register`     | Create account + set cookies         | No            |
-| POST   | `/api/v1/auth/login`        | Login + set cookies                  | No            |
-| POST   | `/api/v1/auth/logout`       | Clear cookies                        | No            |
-| POST   | `/api/v1/auth/refresh`      | Refresh access token                 | Refresh cookie|
-| GET    | `/api/v1/auth/me`           | Current user                         | Access cookie |
+Prefix: `/api/v1`
 
-Cookies used:
-- `access_token` (httpOnly, short-lived)
-- `refresh_token` (httpOnly, longer-lived, path-scoped)
+### Health
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/health` | No |
 
-## Project Structure
+### Auth
+| Method | Path | Auth | Notes |
+|--------|------|------|------|
+| POST | `/auth/register` | No | Sets cookies; queues welcome email |
+| POST | `/auth/login` | No | Sets cookies |
+| POST | `/auth/logout` | Cookie | Clears cookies |
+| GET | `/auth/me` | Cookie | Current user |
+| POST | `/auth/refresh` | Refresh cookie | New access token |
+| POST | `/auth/bootstrap-admin` | Body secret | Promote existing user to admin |
 
-```text
-backend/
-├── app/
-│   ├── api/          # Route modules (auth, health, ...)
-│   ├── core/         # Config, security
-│   ├── db/           # Database session & base
-│   ├── models/       # SQLAlchemy models
-│   ├── schemas/      # Pydantic schemas
-│   ├── services/     # Business logic (future)
-│   └── main.py
-├── alembic/          # Database migrations
-├── docker-compose.yml
-├── requirements.txt
-└── .env.example
-```
+### Products
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/products` | No (active only; `include_inactive=true` for admin UIs) |
+| GET | `/products/{id}` | No |
+| POST | `/products` | Admin |
+| PATCH | `/products/{id}` | Admin |
+| DELETE | `/products/{id}` | Admin (soft-delete) |
 
+### Orders
+| Method | Path | Auth |
+|--------|------|------|
+| POST | `/orders` | Logged-in user |
+| GET | `/orders` | Own orders |
+| GET | `/orders/{id}` | Owner or admin |
+| GET | `/admin/orders` | Admin |
+| PATCH | `/admin/orders/{id}` | Admin (status) |
 
-## Product Endpoints
+### Uploads
+| Method | Path | Auth |
+|--------|------|------|
+| POST | `/uploads/image` | Admin | multipart file → Cloudinary URL |
 
-| Method | Path | Description | Auth |
-|--------|------|-------------|------|
-| GET | `/api/v1/products` | List active products | Public |
-| GET | `/api/v1/products/{id}` | Get one product | Public |
-| POST | `/api/v1/products` | Create product | Admin |
-| PATCH | `/api/v1/products/{id}` | Update product | Admin |
-| DELETE | `/api/v1/products/{id}` | Soft-delete product | Admin |
+### Admin customers & settings
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/admin/customers` | Admin |
+| GET | `/admin/settings` | Admin |
+| PATCH | `/admin/settings` | Admin |
 
-### Seed sample products
+## Auth behaviour
 
-```bash
-alembic upgrade head
-python seed_products.py
-```
+- **Access token** cookie: short-lived (~15 min), path `/`
+- **Refresh token** cookie: longer-lived, path `/api/v1/auth`
+- Production: `Secure` + `SameSite=None` (cross-site Vercel → Render)
+- Local `DEBUG=true`: `SameSite=Lax`
+- Frontend should send `credentials: 'include'`
 
+### Bootstrap admin
 
-## Order Endpoints
-
-| Method | Path | Description | Auth |
-|--------|------|-------------|------|
-| POST | `/api/v1/orders` | Create order from cart items | User |
-| GET | `/api/v1/orders` | List my orders | User |
-| GET | `/api/v1/orders/{id}` | Get order detail | User/Admin |
-| GET | `/api/v1/admin/orders` | List all orders | Admin |
-| PATCH | `/api/v1/admin/orders/{id}` | Update order status | Admin |
-
-Statuses: `pending`, `paid`, `processing`, `shipped`, `delivered`, `cancelled`
-
-## Admin bootstrap
-
-1. Register a normal user
-2. Set env `BOOTSTRAP_SECRET` on the server
-3. Call:
-
-```bash
-curl -X POST https://your-api/api/v1/auth/bootstrap-admin \
-  -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com","secret":"your-bootstrap-secret"}'
-```
-
-Then remove or rotate `BOOTSTRAP_SECRET`.
-
-
-## Image uploads (Cloudinary)
-
-Admin-only endpoint:
-
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/v1/uploads/image` | Multipart file upload → returns `{ url, public_id, ... }` |
-
-Set on Render:
-
-```env
-CLOUDINARY_CLOUD_NAME=...
-CLOUDINARY_API_KEY=...
-CLOUDINARY_API_SECRET=...
-CLOUDINARY_FOLDER=honey-shop
-```
-
-Then set a product's `image_url` to the returned `url` via `PATCH /api/v1/products/{id}`.
-
+1. Register a user  
+2. `POST /api/v1/auth/bootstrap-admin` with `{ "email": "...", "secret": "<BOOTSTRAP_SECRET>" }`  
+3. Login again  
 
 ## Tests
 
 ```bash
 pip install -r requirements-dev.txt
-pytest
-# with coverage:
+PYTHONPATH=. pytest
+# coverage:
 pytest --cov=app --cov-report=term-missing
 ```
 
-Tests use an in-memory SQLite database and do not need Postgres or Docker.
+Uses in-memory SQLite; no Docker required for tests.
 
+## Render deployment
 
-## Welcome email on register
+- **Root Directory:** `backend`
+- **Build:** `pip install -r requirements.txt`
+- **Start:** `alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Python 3.12** via `runtime.txt`
+- Set all env vars in the Render dashboard (never in git)
+- Free tier cold starts: external ping to `/api/v1/health` every 5–10 minutes
 
-After a successful `POST /api/v1/auth/register`, the API queues a thank-you email.
+## Not implemented yet
 
-**Resend**
-```env
-RESEND_API_KEY=re_xxxx
-EMAIL_FROM=Honey Shop <onboarding@yourdomain.com>
-```
+- M-Pesa Daraja STK push / callbacks  
+- Order confirmation emails  
+- Public storefront reading settings for branding (settings are admin-persisted only)
 
-**SMTP**
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=you@gmail.com
-SMTP_PASSWORD=app-password
-SMTP_USE_TLS=true
-EMAIL_FROM=Honey Shop <you@gmail.com>
-```
+## Related
 
-Registration still succeeds if email is not configured or sending fails.
-
-## Next Steps
-
-- Product model + CRUD
-- Connect frontend to the new auth API
-- M-Pesa integration
-- Cloudinary image uploads
-- Admin user seeding
+- Frontend: [../frontend](../frontend)  
+- Monorepo root: [../README.md](../README.md)
