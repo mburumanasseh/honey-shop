@@ -147,9 +147,9 @@
 }
 
 .admin-sidebar__logo {
-  height: 88px;
+  height: 120px;
   width: auto;
-  max-width: 240px;
+  max-width: 280px;
   object-fit: contain;
 }
 

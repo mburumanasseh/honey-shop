@@ -8,7 +8,7 @@ function AdminSidebar() {
       <div className="admin-sidebar__brand">
         <NavLink to="/admin" className="admin-sidebar__brand-link">
           <img
-            src="/mercy-gold-logo.svg"
+            src="/mercy-gold-logo.jpg"
             alt="Mercy Gold Honey"
             className="admin-sidebar__logo"
           />
