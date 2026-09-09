@@ -267,3 +267,14 @@
     gap: 12px;
   }
 }
+
+.checkout__pay-later {
+  margin: 1.25rem 0 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 10px;
+  background: #faf6ef;
+  border: 1px solid #e8d9b0;
+  color: #5c4a1f;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}

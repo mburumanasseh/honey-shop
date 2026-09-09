@@ -71,7 +71,7 @@ function Login() {
           <h1>Login</h1>
 
           <p>
-            Sign in to your Zabe Honey Shop account.
+            Sign in to your Mercy Gold Honey account.
           </p>
         </div>
 

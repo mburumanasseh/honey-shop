@@ -18,13 +18,13 @@ function Navbar() {
       <div className="container navbar__content">
         <Link to="/" className="navbar__brand">
           <img
-            src="/zabe-logo.jpg"
-            alt="Zabe Honey Shop"
+            src="/mercy-gold-logo.svg"
+            alt="Mercy Gold Honey"
             className="navbar__logo"
           />
           <span className="navbar__brand-text">
-            <span className="navbar__brand-name">Zabe</span>
-            <span className="navbar__brand-tag">Honey Shop</span>
+            <span className="navbar__brand-name">Mercy Gold</span>
+            <span className="navbar__brand-tag">Honey</span>
           </span>
         </Link>
 
@@ -45,11 +45,7 @@ function Navbar() {
               <Link to="/profile" className="navbar__account">
                 {currentUser.name}
               </Link>
-              <button
-                type="button"
-                className="navbar__logout"
-                onClick={handleLogout}
-              >
+              <button type="button" className="navbar__logout" onClick={handleLogout}>
                 Logout
               </button>
             </>

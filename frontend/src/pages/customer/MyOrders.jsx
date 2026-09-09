@@ -62,7 +62,7 @@ function MyOrders() {
         <div className="container">
           <span className="shop-page__eyebrow">Account</span>
           <h1>My orders</h1>
-          <p>Track orders you have placed with Zabe Honey Shop.</p>
+          <p>Track orders you have placed with Mercy Gold Honey.</p>
         </div>
       </section>
       <section className="shop-page__products">

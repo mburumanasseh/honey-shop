@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import './ProtectedAdminRoute.css'
 
-const ADMIN_UNLOCK_KEY = 'honey_shop_admin_unlocked'
+const ADMIN_UNLOCK_KEY = 'mercy_gold_admin_unlocked'
 
 function isAdminUnlocked() {
   try {

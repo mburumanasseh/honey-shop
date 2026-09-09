@@ -13,7 +13,7 @@ class StoreSettings(Base):
     __tablename__ = "store_settings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    store_name: Mapped[str] = mapped_column(String(200), default="Zabe Honey Shop", nullable=False)
+    store_name: Mapped[str] = mapped_column(String(200), default="Mercy Gold Honey", nullable=False)
     email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     phone: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     currency: Mapped[str] = mapped_column(String(10), default="KES", nullable=False)

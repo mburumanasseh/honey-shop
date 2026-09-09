@@ -1,6 +1,6 @@
-# Zabe Honey Shop
+# Mercy Gold Honey
 
-Monorepo for **Zabe Honey Shop** — a Kenyan honey e-commerce platform.
+Monorepo for **Mercy Gold Honey** — a Kenyan honey e-commerce platform.
 
 | Layer | Stack | Hosting |
 |-------|--------|---------|

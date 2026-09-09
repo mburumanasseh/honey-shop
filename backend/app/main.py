@@ -38,7 +38,7 @@ app.include_router(settings_router, prefix=settings.API_V1_PREFIX)
 @app.get("/")
 def root():
     return {
-        "message": "Zabe Honey Shop API",
+        "message": "Mercy Gold Honey API",
         "docs": f"{settings.API_V1_PREFIX}/docs",
         "health": f"{settings.API_V1_PREFIX}/health",
     }

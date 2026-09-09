@@ -48,7 +48,7 @@ function Customers() {
       <div className="customers-header">
         <div>
           <h1>Customers</h1>
-          <p>Registered accounts on Zabe Honey Shop.</p>
+          <p>Registered accounts on Mercy Gold Honey.</p>
         </div>
       </div>
 
