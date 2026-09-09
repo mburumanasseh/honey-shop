@@ -18,7 +18,7 @@ function Navbar() {
       <div className="container navbar__content">
         <Link to="/" className="navbar__brand">
           <img
-            src="/mercy-gold-logo.svg"
+            src="/mercy-gold-logo.jpg"
             alt="Mercy Gold Honey"
             className="navbar__logo"
           />

@@ -5,7 +5,7 @@
 }
 
 .navbar__content {
-  min-height: 120px;
+  min-height: 170px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,9 +22,9 @@
 }
 
 .navbar__logo {
-  height: 112px;
+  height: 150px;
   width: auto;
-  max-width: 320px;
+  max-width: 420px;
   display: block;
   object-fit: contain;
 }
@@ -53,12 +53,12 @@
 
 @media (max-width: 640px) {
   .navbar__content {
-    min-height: 96px;
+    min-height: 120px;
   }
 
   .navbar__logo {
-    height: 80px;
-    max-width: 220px;
+    height: 100px;
+    max-width: 280px;
   }
 
   .navbar__brand-tag {

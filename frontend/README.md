@@ -45,7 +45,7 @@ VITE_API_URL=https://honey-shop-260z.onrender.com
 ```text
 frontend/
 ├── public/
-│   ├── mercy-gold-logo.svg      # Brand logo
+│   ├── mercy-gold-logo.jpg      # Brand logo
 │   └── honeyjar.jpg       # Fallback product image
 ├── src/
 │   ├── components/
@@ -108,7 +108,7 @@ Session unlock is stored in `sessionStorage` for the tab; logout clears it. API 
 ## Branding
 
 - Name: **Mercy Gold Honey**
-- Logo: top-left navbar + admin sidebar (`/mercy-gold-logo.svg`)
+- Logo: top-left navbar + admin sidebar (`/mercy-gold-logo.jpg`)
 
 ## Vercel
 
