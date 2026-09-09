@@ -52,23 +52,44 @@ export async function deleteProduct(id) {
 }
 
 export async function uploadProductImage(file) {
+  // Use apiRequest path for consistent 401 refresh: FormData must not force JSON headers
   const formData = new FormData()
   formData.append('file', file)
-  const response = await fetch(`${getApiUrl()}/api/v1/uploads/image`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData,
-  })
-  let data = null
-  const contentType = response.headers.get('content-type')
-  if (contentType && contentType.includes('application/json')) {
-    data = await response.json()
+
+  const doUpload = async () => {
+    const response = await fetch(`${getApiUrl()}/api/v1/uploads/image`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    })
+    let data = null
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json()
+    }
+    return { response, data }
   }
+
+  let { response, data } = await doUpload()
+  if (response.status === 401) {
+    // refresh via plain auth call
+    const refresh = await fetch(`${getApiUrl()}/api/v1/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+    if (refresh.ok) {
+      ;({ response, data } = await doUpload())
+    }
+  }
+
   if (!response.ok) {
-    const message =
+    let message =
       (typeof data?.detail === 'string' && data.detail) ||
       data?.message ||
       'Image upload failed'
+    if (response.status === 401) {
+      message = 'Session expired. Please unlock admin again on /admin.'
+    }
     const error = new Error(message)
     error.status = response.status
     throw error

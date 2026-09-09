@@ -10,7 +10,7 @@ class ProductCreate(BaseModel):
     description: Optional[str] = None
     price: Decimal = Field(..., gt=0)
     size: Optional[str] = Field(None, max_length=50)
-    image_url: Optional[str] = Field(None, max_length=500)
+    image_url: Optional[str] = Field(None, max_length=2000)
     stock: int = Field(0, ge=0)
     is_active: bool = True
 
@@ -20,7 +20,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     price: Optional[Decimal] = Field(None, gt=0)
     size: Optional[str] = Field(None, max_length=50)
-    image_url: Optional[str] = Field(None, max_length=500)
+    image_url: Optional[str] = Field(None, max_length=2000)
     stock: Optional[int] = Field(None, ge=0)
     is_active: Optional[bool] = None
 
