@@ -18,7 +18,7 @@ def _get_or_create_settings(db: Session) -> StoreSettings:
     if row is None:
         row = StoreSettings(
             id=1,
-            store_name="Zabe Honey Shop",
+            store_name="Mercy Gold Honey",
             email=None,
             phone=None,
             currency="KES",

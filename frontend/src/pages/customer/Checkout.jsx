@@ -4,7 +4,6 @@ import { useCart } from '../../context/useCart'
 import { useAuth } from '../../context/useAuth'
 import calculateDeliveryFee from '../../services/deliveryService'
 import { createOrder } from '../../services/orderService'
-import MpesaPayment from '../../components/checkout/MpesaPayment'
 import './Checkout.css'
 
 function Checkout() {
@@ -20,7 +19,6 @@ function Checkout() {
     address: '',
   })
 
-  const [mpesaPhone, setMpesaPhone] = useState('')
   const [errors, setErrors] = useState({})
   const [submitError, setSubmitError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -102,8 +100,9 @@ function Checkout() {
         <div className="container checkout__empty">
           <h1>Order placed</h1>
           <p>
-            Thank you. Your order #{orderSuccess.id} is{' '}
-            <strong>{orderSuccess.status}</strong>.
+            Thank you. Your order #{orderSuccess.id} was received and is{' '}
+            <strong>{orderSuccess.status}</strong>. You do not need to pay
+            online yet — we will follow up about delivery and payment.
           </p>
           <p>
             Total: KSh {Number(orderSuccess.total_amount).toLocaleString()}
@@ -215,11 +214,13 @@ function Checkout() {
                 </div>
               </div>
 
-              <MpesaPayment
-                amount={total}
-                phone={mpesaPhone}
-                onPhoneChange={setMpesaPhone}
-              />
+              <div className="checkout__pay-later">
+                <p>
+                  <strong>No payment required now.</strong> Place your order and
+                  we will confirm delivery and payment details with you (including
+                  M-Pesa when available).
+                </p>
+              </div>
 
               <button
                 type="submit"

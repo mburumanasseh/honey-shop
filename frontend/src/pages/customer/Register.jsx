@@ -89,7 +89,7 @@ function Register() {
     <main className="register-page">
       <div className="register-page__card">
         <div className="register-page__header">
-          <span>Join Zabe Honey Shop</span>
+          <span>Join Mercy Gold Honey</span>
 
           <h1>Create Account</h1>
 

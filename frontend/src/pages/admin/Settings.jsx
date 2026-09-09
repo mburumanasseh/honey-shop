@@ -4,7 +4,7 @@ import './Settings.css'
 
 function Settings() {
   const [form, setForm] = useState({
-    storeName: 'Zabe Honey Shop',
+    storeName: 'Mercy Gold Honey',
     email: '',
     phone: '',
     currency: 'KES',
@@ -24,7 +24,7 @@ function Settings() {
         const data = await getStoreSettings()
         if (!cancelled) {
           setForm({
-            storeName: data.store_name || 'Zabe Honey Shop',
+            storeName: data.store_name || 'Mercy Gold Honey',
             email: data.email || '',
             phone: data.phone || '',
             currency: data.currency || 'KES',

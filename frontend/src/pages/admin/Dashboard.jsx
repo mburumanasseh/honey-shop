@@ -77,7 +77,7 @@ function Dashboard() {
         <div>
           <span>Overview</span>
           <h2>Welcome back</h2>
-          <p>Here is what is happening with Zabe Honey Shop.</p>
+          <p>Here is what is happening with Mercy Gold Honey.</p>
         </div>
         <button type="button" onClick={load} disabled={loading}>
           {loading ? 'Refreshing…' : 'Refresh'}

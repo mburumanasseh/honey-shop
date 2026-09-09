@@ -1,6 +1,6 @@
-# Zabe Honey Shop — Backend
+# Mercy Gold Honey — Backend
 
-FastAPI API for the Zabe Honey Shop monorepo.
+FastAPI API for the Mercy Gold Honey monorepo.
 
 ## Stack
 

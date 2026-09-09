@@ -8,12 +8,12 @@ function AdminSidebar() {
       <div className="admin-sidebar__brand">
         <NavLink to="/admin" className="admin-sidebar__brand-link">
           <img
-            src="/zabe-logo.jpg"
-            alt="Zabe Honey Shop"
+            src="/mercy-gold-logo.svg"
+            alt="Mercy Gold Honey"
             className="admin-sidebar__logo"
           />
           <span className="admin-sidebar__brand-text">
-            <strong>Zabe</strong>
+            <strong>Mercy Gold</strong>
             <span>Honey Shop</span>
           </span>
         </NavLink>

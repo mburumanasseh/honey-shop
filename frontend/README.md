@@ -1,6 +1,6 @@
-# Zabe Honey Shop — Frontend
+# Mercy Gold Honey — Frontend
 
-React + Vite client for the Zabe Honey Shop monorepo: **customer storefront** and **admin panel**.
+React + Vite client for the Mercy Gold Honey monorepo: **customer storefront** and **admin panel**.
 
 ## Stack
 
@@ -45,7 +45,7 @@ VITE_API_URL=https://honey-shop-260z.onrender.com
 ```text
 frontend/
 ├── public/
-│   ├── zabe-logo.jpg      # Brand logo
+│   ├── mercy-gold-logo.svg      # Brand logo
 │   └── honeyjar.jpg       # Fallback product image
 ├── src/
 │   ├── components/
@@ -61,7 +61,7 @@ frontend/
 │   │   └── ProtectedAdminRoute.jsx   # Password gate + is_admin
 │   ├── services/          # api, auth, product, order, admin, delivery
 │   └── layouts/           # CustomerLayout, AdminLayout
-├── index.html             # Title: Zabe Honey Shop
+├── index.html             # Title: Mercy Gold Honey
 └── vercel.json            # SPA rewrites (when Root Directory = frontend)
 ```
 
@@ -107,8 +107,8 @@ Session unlock is stored in `sessionStorage` for the tab; logout clears it. API 
 
 ## Branding
 
-- Name: **Zabe Honey Shop**
-- Logo: top-left navbar + admin sidebar (`/zabe-logo.jpg`)
+- Name: **Mercy Gold Honey**
+- Logo: top-left navbar + admin sidebar (`/mercy-gold-logo.svg`)
 
 ## Vercel
 
