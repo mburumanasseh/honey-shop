@@ -50,16 +50,17 @@ function AddProduct() {
         imageUrl = uploaded.url
       }
 
-      await createProduct({
+      const created = await createProduct({
         name: formData.name.trim(),
         description: formData.description.trim() || null,
         size: formData.size.trim() || null,
-        price: formData.price,
+        price: Number(formData.price),
         stock: Number(formData.stock),
         image_url: imageUrl,
-        is_active: formData.is_active,
+        is_active: Boolean(formData.is_active),
       })
-      navigate('/admin/products')
+      // Go to list; product id helps confirm it saved
+      navigate('/admin/products', { state: { createdId: created?.id } })
     } catch (err) {
       setSubmitError(err.message || 'Could not create product')
     } finally {

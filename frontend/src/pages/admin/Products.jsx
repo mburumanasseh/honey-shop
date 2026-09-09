@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { deleteProduct, listProducts } from '../../services/productService'
 import './Products.css'
 
 function Products() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [products, setProducts] = useState([])
+  const [createdNotice, setCreatedNotice] = useState(
+    location.state?.createdId ? `Product #${location.state.createdId} created.` : '',
+  )
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -76,6 +80,12 @@ function Products() {
             : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
         </span>
       </div>
+
+      {createdNotice && (
+        <p className="admin-products__notice" role="status">
+          {createdNotice}
+        </p>
+      )}
 
       {(error || actionError) && (
         <p className="admin-products__error" role="alert">
