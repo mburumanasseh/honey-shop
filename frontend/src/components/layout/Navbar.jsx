@@ -16,16 +16,12 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="container navbar__content">
-        <Link to="/" className="navbar__brand">
+        <Link to="/" className="navbar__brand" aria-label="Mercy Gold Honey home">
           <img
             src="/mercy-gold-logo.jpg"
             alt="Mercy Gold Honey"
             className="navbar__logo"
           />
-          <span className="navbar__brand-text">
-            <span className="navbar__brand-name">Mercy Gold</span>
-            <span className="navbar__brand-tag">Honey</span>
-          </span>
         </Link>
 
         <nav className="navbar__links" aria-label="Main navigation">

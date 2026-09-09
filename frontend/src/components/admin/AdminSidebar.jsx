@@ -6,16 +6,12 @@ function AdminSidebar() {
     <aside className="admin-sidebar">
       {/* Brand */}
       <div className="admin-sidebar__brand">
-        <NavLink to="/admin" className="admin-sidebar__brand-link">
+        <NavLink to="/admin" className="admin-sidebar__brand-link" aria-label="Mercy Gold Honey admin">
           <img
             src="/mercy-gold-logo.jpg"
             alt="Mercy Gold Honey"
             className="admin-sidebar__logo"
           />
-          <span className="admin-sidebar__brand-text">
-            <strong>Mercy Gold</strong>
-            <span>Honey Shop</span>
-          </span>
         </NavLink>
         <span className="admin-sidebar__badge">Admin</span>
       </div>
