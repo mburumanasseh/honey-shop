@@ -12,6 +12,8 @@ import Cart from '../pages/customer/Cart'
 import Checkout from '../pages/customer/Checkout'
 import Login from '../pages/customer/Login'
 import Register from '../pages/customer/Register'
+import Profile from '../pages/customer/Profile'
+import MyOrders from '../pages/customer/MyOrders'
 
 // Admin pages
 import Dashboard from '../pages/admin/Dashboard'
@@ -64,6 +66,16 @@ function AppRoutes() {
           <Route
             path="checkout"
             element={<Checkout />}
+          />
+
+          <Route
+            path="profile"
+            element={<Profile />}
+          />
+
+          <Route
+            path="orders"
+            element={<MyOrders />}
           />
         </Route>
 
