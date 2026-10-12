@@ -35,3 +35,5 @@ button.admin-sidebar__link {
   font-family: inherit;
   text-align: left;
 }
+
+@import './polish.css';
