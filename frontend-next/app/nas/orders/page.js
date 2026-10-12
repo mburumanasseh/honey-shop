@@ -32,32 +32,50 @@ export default function NasOrdersPage() {
     load()
   }, [load])
 
-  const patch = async (id, payload) => {
+  const handleStatus = async (orderId, status) => {
     setError('')
     try {
-      await adminUpdateOrder(id, payload)
+      await adminUpdateOrder(orderId, { status })
       await load()
     } catch (err) {
-      setError(err.message || 'Update failed')
+      setError(err.message || 'Could not update status')
+    }
+  }
+
+  const handlePaymentMethod = async (orderId, method) => {
+    setError('')
+    try {
+      await adminUpdateOrder(orderId, { payment_method: method || 'none' })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not update payment method')
     }
   }
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
-        <div>
-          <span className="nas-eyebrow">Sales</span>
-          <h1>Orders</h1>
-        </div>
+    <div className="admin-orders">
+      <div className="admin-orders__header">
+        <span className="admin-orders__eyebrow">Sales</span>
+        <h1>Orders</h1>
+        <p>View and update customer orders.</p>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
+
+      {error && (
+        <p role="alert" className="admin-orders__error">
+          {error}
+        </p>
+      )}
+
       {loading ? (
-        <p>Loading…</p>
+        <p>Loading orders…</p>
       ) : orders.length === 0 ? (
-        <p className="nas-muted">No orders yet.</p>
+        <div className="admin-orders__empty">
+          <h2>No orders yet</h2>
+          <p>Orders will appear here after customers checkout.</p>
+        </div>
       ) : (
-        <div className="nas-table-wrap">
-          <table className="nas-table">
+        <div className="admin-orders__table-wrapper">
+          <table className="admin-orders__table">
             <thead>
               <tr>
                 <th>ID</th>
@@ -70,18 +88,20 @@ export default function NasOrdersPage() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((o) => (
-                <tr key={o.id}>
-                  <td>#{o.id}</td>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>#{order.id}</td>
                   <td>
-                    <strong>{o.shipping_name}</strong>
-                    <div className="nas-muted">{o.shipping_phone}</div>
+                    <div>
+                      <strong>{order.shipping_name}</strong>
+                      <div>{order.shipping_phone}</div>
+                    </div>
                   </td>
-                  <td>KSh {Number(o.total_amount).toLocaleString()}</td>
+                  <td>KSh {Number(order.total_amount).toLocaleString()}</td>
                   <td>
                     <select
-                      value={o.status}
-                      onChange={(e) => patch(o.id, { status: e.target.value })}
+                      value={order.status}
+                      onChange={(e) => handleStatus(order.id, e.target.value)}
                     >
                       {STATUSES.map((s) => (
                         <option key={s} value={s}>
@@ -92,12 +112,11 @@ export default function NasOrdersPage() {
                   </td>
                   <td>
                     <select
-                      value={o.payment_method || ''}
+                      value={order.payment_method || ''}
                       onChange={(e) =>
-                        patch(o.id, {
-                          payment_method: e.target.value || 'none',
-                        })
+                        handlePaymentMethod(order.id, e.target.value)
                       }
+                      aria-label={`Payment method for order ${order.id}`}
                     >
                       {PAYMENT_METHODS.map((m) => (
                         <option key={m.value || 'none'} value={m.value}>
@@ -106,10 +125,10 @@ export default function NasOrdersPage() {
                       ))}
                     </select>
                   </td>
-                  <td>{o.items?.length ?? 0}</td>
+                  <td>{order.items?.length ?? 0}</td>
                   <td>
-                    {o.created_at
-                      ? new Date(o.created_at).toLocaleString()
+                    {order.created_at
+                      ? new Date(order.created_at).toLocaleString()
                       : '—'}
                   </td>
                 </tr>

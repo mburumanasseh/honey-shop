@@ -5,7 +5,7 @@ import { listCustomers } from '../../../lib/clientApi'
 
 export default function NasCustomersPage() {
   const [customers, setCustomers] = useState([])
-  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -25,65 +25,78 @@ export default function NasCustomersPage() {
     load()
   }, [load])
 
-  const filtered = useMemo(() => {
-    const q = search.toLowerCase().trim()
-    if (!q) return customers
+  const filteredCustomers = useMemo(() => {
+    const search = searchTerm.toLowerCase().trim()
+    if (!search) return customers
     return customers.filter(
       (c) =>
-        c.name?.toLowerCase().includes(q) ||
-        c.email?.toLowerCase().includes(q) ||
-        (c.phone || '').toLowerCase().includes(q),
+        c.name?.toLowerCase().includes(search) ||
+        c.email?.toLowerCase().includes(search) ||
+        (c.phone || '').toLowerCase().includes(search),
     )
-  }, [customers, search])
+  }, [customers, searchTerm])
+
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat('en-KE', {
+      style: 'currency',
+      currency: 'KES',
+      maximumFractionDigits: 0,
+    }).format(amount || 0)
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
+    <div className="customers-page">
+      <div className="customers-header">
         <div>
-          <span className="nas-eyebrow">People</span>
           <h1>Customers</h1>
+          <p>Registered accounts on Mercy Gold Honey.</p>
         </div>
       </div>
-      <div className="nas-toolbar">
+
+      <div className="customers-toolbar">
         <input
           type="search"
           placeholder="Search name, email, phone…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <span className="nas-muted">
-          {loading ? 'Loading…' : `${filtered.length} customers`}
+        <span>
+          {loading
+            ? 'Loading…'
+            : `${filteredCustomers.length} customer${filteredCustomers.length === 1 ? '' : 's'}`}
         </span>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
+
+      {error && <p role="alert">{error}</p>}
+
       {loading ? (
-        <p>Loading…</p>
+        <p>Loading customers…</p>
+      ) : filteredCustomers.length === 0 ? (
+        <p>No customers found.</p>
       ) : (
-        <div className="nas-table-wrap">
-          <table className="nas-table">
+        <div className="customers-table-wrapper">
+          <table className="customers-table">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Orders</th>
-                <th>Spent</th>
+                <th>Total spent</th>
                 <th>Role</th>
                 <th>Joined</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => (
+              {filteredCustomers.map((c) => (
                 <tr key={c.id}>
                   <td>
                     <strong>{c.name}</strong>
+                    {!c.is_active && <span> (inactive)</span>}
                   </td>
                   <td>{c.email}</td>
                   <td>{c.phone || '—'}</td>
                   <td>{c.orders_count}</td>
-                  <td>
-                    KSh {Number(c.total_spent || 0).toLocaleString()}
-                  </td>
+                  <td>{formatCurrency(c.total_spent)}</td>
                   <td>{c.is_admin ? 'Admin' : 'Customer'}</td>
                   <td>
                     {c.created_at

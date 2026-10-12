@@ -1,0 +1,37 @@
+@import './AdminLayout.css';
+@import './AdminSidebar.css';
+@import './AdminHeader.css';
+@import './AdminGate.css';
+@import './Admin.css';
+@import './Products.css';
+@import './Orders.css';
+@import './Payments.css';
+@import './Customers.css';
+@import './Inventory.css';
+@import './Settings.css';
+@import './AddProduct.css';
+
+/* Logo sizing (Vite sidebar) */
+.admin-sidebar__logo {
+  height: 48px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+}
+.admin-sidebar__brand-link {
+  display: flex;
+  align-items: center;
+}
+.admin-sidebar__badge {
+  margin-top: 6px;
+}
+/* Next Link active class is "active" same as NavLink */
+button.admin-sidebar__link {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}

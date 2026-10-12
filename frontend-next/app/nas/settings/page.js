@@ -18,7 +18,9 @@ export default function NasSettingsPage() {
 
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
+    async function load() {
+      setLoading(true)
+      setError('')
       try {
         const data = await getStoreSettings()
         if (!cancelled) {
@@ -35,18 +37,19 @@ export default function NasSettingsPage() {
       } finally {
         if (!cancelled) setLoading(false)
       }
-    })()
+    }
+    load()
     return () => {
       cancelled = true
     }
   }, [])
 
-  const onChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target
-    setForm((f) => ({ ...f, [name]: value }))
+    setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
     setMessage('')
@@ -68,46 +71,52 @@ export default function NasSettingsPage() {
       })
       setMessage('Settings saved.')
     } catch (err) {
-      setError(err.message || 'Could not save')
+      setError(err.message || 'Could not save settings')
     } finally {
       setSaving(false)
     }
   }
 
-  if (loading) return <p>Loading settings…</p>
+  if (loading) {
+    return (
+      <div className="admin-settings">
+        <p>Loading settings…</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
-        <div>
-          <span className="nas-eyebrow">Store</span>
-          <h1>Settings</h1>
-        </div>
+    <div className="admin-settings">
+      <div className="admin-settings__header">
+        <h1>Settings</h1>
+        <p>Store details saved to the database.</p>
       </div>
+
       {message && <p role="status">{message}</p>}
-      {error && <p className="nas-error" role="alert">{error}</p>}
-      <form className="nas-form" onSubmit={onSubmit}>
+      {error && <p role="alert">{error}</p>}
+
+      <form onSubmit={handleSubmit} className="admin-settings__form">
         <label>
           Store name
-          <input name="storeName" value={form.storeName} onChange={onChange} required />
+          <input name="storeName" value={form.storeName} onChange={handleChange} required />
         </label>
         <label>
           Contact email
-          <input name="email" type="email" value={form.email} onChange={onChange} />
+          <input name="email" type="email" value={form.email} onChange={handleChange} />
         </label>
         <label>
           Phone
-          <input name="phone" value={form.phone} onChange={onChange} />
+          <input name="phone" value={form.phone} onChange={handleChange} />
         </label>
         <label>
           Currency
-          <input name="currency" value={form.currency} onChange={onChange} />
+          <input name="currency" value={form.currency} onChange={handleChange} />
         </label>
         <label>
           Address
-          <textarea name="address" rows={3} value={form.address} onChange={onChange} />
+          <textarea name="address" rows="3" value={form.address} onChange={handleChange} />
         </label>
-        <button type="submit" className="nas-btn" disabled={saving}>
+        <button type="submit" disabled={saving}>
           {saving ? 'Saving…' : 'Save settings'}
         </button>
       </form>
