@@ -163,31 +163,62 @@ export default function NasDashboardPage() {
         />
       </div>
 
+      {presence?.recent?.length > 0 && (
+        <section className="admin-dashboard__section" style={{ marginBottom: 24 }}>
+          <div className="admin-dashboard__section-header">
+            <div>
+              <span>Live</span>
+              <h2>Recent activity on site</h2>
+            </div>
+          </div>
+          <div className="admin-dashboard__presence">
+            <table className="admin-dashboard__presence-table">
+              <thead>
+                <tr>
+                  <th>Visitor</th>
+                  <th>User</th>
+                  <th>Page</th>
+                  <th>Last seen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {presence.recent.map((row, idx) => (
+                  <tr key={`${row.visitor_id}-${idx}`}>
+                    <td>{row.visitor_id}</td>
+                    <td>
+                      {row.user_id != null ? `User #${row.user_id}` : 'Guest'}
+                    </td>
+                    <td>{row.path || '—'}</td>
+                    <td>{row.seconds_ago}s ago</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
       <section className="admin-dashboard__section">
         <div className="admin-dashboard__section-header">
           <div>
-            <span>Sales</span>
+            <span>Latest activity</span>
             <h2>Recent orders</h2>
           </div>
           <Link href="/nas/orders">View all</Link>
         </div>
-        {recentOrders.length === 0 ? (
+        {loading ? (
+          <p>Loading orders…</p>
+        ) : recentOrders.length === 0 ? (
           <p>No orders yet.</p>
         ) : (
           <div className="admin-dashboard__orders">
             {recentOrders.map((order) => (
               <div key={order.id} className="admin-dashboard__order">
                 <div>
-                  <strong>#{order.id} · {order.shipping_name}</strong>
-                  <span>
-                    {order.created_at
-                      ? new Date(order.created_at).toLocaleString()
-                      : ''}
-                  </span>
+                  <strong>#ORD-{order.id}</strong>
+                  <span>{order.shipping_name}</span>
                 </div>
-                <strong>
-                  KSh {Number(order.total_amount).toLocaleString()}
-                </strong>
+                <strong>{formatKes(order.total_amount)}</strong>
                 <span className={statusClass(order.status)}>{order.status}</span>
               </div>
             ))}
