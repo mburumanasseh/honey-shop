@@ -3,7 +3,16 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/cart', '/checkout', '/login', '/register', '/orders', '/profile'],
+      disallow: [
+        '/cart',
+        '/checkout',
+        '/login',
+        '/register',
+        '/orders',
+        '/profile',
+        '/nas',
+        '/nas/',
+      ],
     },
     sitemap: 'https://mercygold.co.ke/sitemap.xml',
   }
