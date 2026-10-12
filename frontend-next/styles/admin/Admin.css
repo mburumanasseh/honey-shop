@@ -4,7 +4,33 @@
 }
 
 .admin-dashboard__intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 32px;
+}
+
+.admin-dashboard__intro button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-dashboard__intro button:hover:not(:disabled) {
+  background: var(--color-surface-warm);
+}
+
+.admin-dashboard__intro button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .admin-dashboard__intro span,
