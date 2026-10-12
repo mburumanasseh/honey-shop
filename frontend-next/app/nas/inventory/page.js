@@ -30,7 +30,7 @@ export default function NasInventoryPage() {
     [items],
   )
 
-  const saveStock = async (product, raw) => {
+  const handleStockChange = async (product, raw) => {
     const stock = Number(raw)
     if (Number.isNaN(stock) || stock < 0) return
     setSavingId(product.id)
@@ -46,22 +46,27 @@ export default function NasInventoryPage() {
   }
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
+    <div className="inventory-page">
+      <div className="inventory-header">
         <div>
-          <span className="nas-eyebrow">Stock</span>
           <h1>Inventory</h1>
-          <p className="nas-muted">
-            {items.length} products · {lowStock} low stock (≤10)
-          </p>
+          <p>Stock levels for all products.</p>
+        </div>
+        <div className="inventory-summary">
+          <span>{items.length} products</span>
+          <span>{lowStock} low stock (≤10)</span>
         </div>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
+
+      {error && <p role="alert">{error}</p>}
+
       {loading ? (
-        <p>Loading…</p>
+        <p>Loading inventory…</p>
+      ) : items.length === 0 ? (
+        <p>No products yet. Add products first.</p>
       ) : (
-        <div className="nas-table-wrap">
-          <table className="nas-table">
+        <div className="inventory-table-wrapper">
+          <table className="inventory-table">
             <thead>
               <tr>
                 <th>Product</th>
@@ -72,24 +77,24 @@ export default function NasInventoryPage() {
               </tr>
             </thead>
             <tbody>
-              {items.map((p) => (
-                <tr key={p.id}>
+              {items.map((product) => (
+                <tr key={product.id}>
                   <td>
-                    <strong>{p.name}</strong>
-                    <div className="nas-muted">#{p.id}</div>
+                    <strong>{product.name}</strong>
+                    <div>#{product.id}</div>
                   </td>
-                  <td>{p.size || '—'}</td>
-                  <td>KSh {Number(p.price).toLocaleString()}</td>
+                  <td>{product.size || '—'}</td>
+                  <td>KSh {Number(product.price).toLocaleString()}</td>
                   <td>
                     <input
                       type="number"
                       min="0"
-                      defaultValue={p.stock}
-                      key={`${p.id}-${p.stock}`}
-                      disabled={savingId === p.id}
+                      defaultValue={product.stock}
+                      key={`${product.id}-${product.stock}`}
+                      disabled={savingId === product.id}
                       onBlur={(e) => {
-                        if (Number(e.target.value) !== p.stock) {
-                          saveStock(p, e.target.value)
+                        if (Number(e.target.value) !== product.stock) {
+                          handleStockChange(product, e.target.value)
                         }
                       }}
                       onKeyDown={(e) => {
@@ -97,10 +102,11 @@ export default function NasInventoryPage() {
                       }}
                       style={{ width: '5rem' }}
                     />
+                    {savingId === product.id && <span> saving…</span>}
                   </td>
                   <td>
-                    {p.is_active
-                      ? p.stock <= 10
+                    {product.is_active
+                      ? product.stock <= 10
                         ? 'Low stock'
                         : 'In stock'
                       : 'Inactive'}

@@ -11,11 +11,21 @@ const PAYMENT_METHODS = [
 ]
 
 function paymentLabel(order) {
-  if (order.payment_method === 'cash') return 'Paid (cash)'
-  if (order.payment_method === 'mpesa') return 'Paid (M-Pesa)'
-  if (order.payment_method === 'other') return 'Paid (other)'
-  if (['paid', 'processing', 'shipped', 'delivered'].includes(order.status))
+  if (order.payment_method) {
+    return order.payment_method === 'cash'
+      ? 'Paid (cash)'
+      : order.payment_method === 'mpesa'
+        ? 'Paid (M-Pesa)'
+        : 'Paid (other)'
+  }
+  if (
+    order.status === 'paid' ||
+    order.status === 'processing' ||
+    order.status === 'shipped' ||
+    order.status === 'delivered'
+  ) {
     return 'Paid'
+  }
   if (order.status === 'cancelled') return 'Cancelled'
   return 'Pending'
 }
@@ -30,7 +40,8 @@ export default function NasPaymentsPage() {
     setLoading(true)
     setError('')
     try {
-      setOrders((await adminListOrders({ limit: 100 })) || [])
+      const data = await adminListOrders({ limit: 100 })
+      setOrders(data || [])
     } catch (err) {
       setError(err.message || 'Failed to load payments')
     } finally {
@@ -42,7 +53,39 @@ export default function NasPaymentsPage() {
     load()
   }, [load])
 
+  const handlePaymentMethod = async (orderId, method) => {
+    setError('')
+    setSavingId(orderId)
+    try {
+      await adminUpdateOrder(orderId, {
+        payment_method: method || 'none',
+      })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not update payment')
+    } finally {
+      setSavingId(null)
+    }
+  }
+
+  const handleMarkPaidCash = async (orderId) => {
+    setError('')
+    setSavingId(orderId)
+    try {
+      await adminUpdateOrder(orderId, {
+        status: 'paid',
+        payment_method: 'cash',
+      })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not mark as paid (cash)')
+    } finally {
+      setSavingId(null)
+    }
+  }
+
   const summary = useMemo(() => {
+    const total = orders.length
     let completed = 0
     let pending = 0
     let failed = 0
@@ -52,113 +95,120 @@ export default function NasPaymentsPage() {
       else if (label === 'Cancelled') failed += 1
       else pending += 1
     }
-    return { total: orders.length, completed, pending, failed }
+    return { total, completed, pending, failed }
   }, [orders])
 
-  const update = async (id, payload) => {
-    setSavingId(id)
-    setError('')
-    try {
-      await adminUpdateOrder(id, payload)
-      await load()
-    } catch (err) {
-      setError(err.message || 'Update failed')
-    } finally {
-      setSavingId(null)
-    }
-  }
-
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
+    <div className="admin-payments">
+      <div className="admin-payments__header">
         <div>
-          <span className="nas-eyebrow">Money</span>
+          <span className="admin-payments__eyebrow">Store Management</span>
           <h1>Payments</h1>
-          <p className="nas-muted">Mark cash payments or set M-Pesa / other.</p>
+          <p>
+            Mark orders as paid when cash is received, or set M-Pesa / other.
+            You can change payment method anytime from this page.
+          </p>
         </div>
       </div>
-      <div className="nas-stats">
-        <div className="nas-stat">
+
+      <div className="admin-payments__summary">
+        <div className="admin-payments__card">
           <span>Total</span>
           <strong>{summary.total}</strong>
         </div>
-        <div className="nas-stat">
+        <div className="admin-payments__card">
           <span>Completed</span>
           <strong>{summary.completed}</strong>
         </div>
-        <div className="nas-stat">
+        <div className="admin-payments__card">
           <span>Pending</span>
           <strong>{summary.pending}</strong>
         </div>
-        <div className="nas-stat">
-          <span>Cancelled</span>
+        <div className="admin-payments__card">
+          <span>Failed / cancelled</span>
           <strong>{summary.failed}</strong>
         </div>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
+
+      {error && <p role="alert">{error}</p>}
+
       {loading ? (
         <p>Loading…</p>
+      ) : orders.length === 0 ? (
+        <p>No orders yet — payments will show after checkout.</p>
       ) : (
-        <div className="nas-table-wrap">
-          <table className="nas-table">
+        <div className="admin-payments__table-wrapper">
+          <table className="admin-payments__table">
             <thead>
               <tr>
-                <th>Ref</th>
+                <th>Reference</th>
                 <th>Customer</th>
                 <th>Amount</th>
                 <th>Method</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              {orders.map((o) => (
-                <tr key={o.id}>
-                  <td>#ORD-{o.id}</td>
-                  <td>{o.shipping_name}</td>
-                  <td>KSh {Number(o.total_amount).toLocaleString()}</td>
-                  <td>
-                    <select
-                      value={o.payment_method || ''}
-                      disabled={savingId === o.id}
-                      onChange={(e) =>
-                        update(o.id, {
-                          payment_method: e.target.value || 'none',
-                        })
-                      }
-                    >
-                      {PAYMENT_METHODS.map((m) => (
-                        <option key={m.value || 'none'} value={m.value}>
-                          {m.label}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    {paymentLabel(o)}
-                    <div className="nas-muted">{o.status}</div>
-                  </td>
-                  <td>
-                    {o.status === 'pending' && !o.payment_method ? (
-                      <button
-                        type="button"
-                        className="nas-btn nas-btn--green"
-                        disabled={savingId === o.id}
-                        onClick={() =>
-                          update(o.id, {
-                            status: 'paid',
-                            payment_method: 'cash',
-                          })
+              {orders.map((order) => {
+                const label = paymentLabel(order)
+                const statusClass =
+                  label.startsWith('Paid')
+                    ? 'payment-status payment-status--completed'
+                    : label === 'Cancelled'
+                      ? 'payment-status payment-status--failed'
+                      : 'payment-status payment-status--pending'
+                const busy = savingId === order.id
+                return (
+                  <tr key={order.id}>
+                    <td>#ORD-{order.id}</td>
+                    <td>{order.shipping_name}</td>
+                    <td>KSh {Number(order.total_amount).toLocaleString()}</td>
+                    <td>
+                      <select
+                        value={order.payment_method || ''}
+                        disabled={busy}
+                        onChange={(e) =>
+                          handlePaymentMethod(order.id, e.target.value)
                         }
+                        aria-label={`Payment method for order ${order.id}`}
                       >
-                        Mark paid (cash)
-                      </button>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                </tr>
-              ))}
+                        {PAYMENT_METHODS.map((m) => (
+                          <option key={m.value || 'none'} value={m.value}>
+                            {m.label}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <span className={statusClass}>{label}</span>
+                      <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
+                        {order.status}
+                      </div>
+                    </td>
+                    <td>
+                      {order.status === 'pending' && !order.payment_method ? (
+                        <button
+                          type="button"
+                          className="admin-payments__cash-btn"
+                          disabled={busy}
+                          onClick={() => handleMarkPaidCash(order.id)}
+                        >
+                          {busy ? 'Saving…' : 'Mark paid (cash)'}
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '0.85rem', opacity: 0.6 }}>—</span>
+                      )}
+                    </td>
+                    <td>
+                      {order.created_at
+                        ? new Date(order.created_at).toLocaleString()
+                        : '—'}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

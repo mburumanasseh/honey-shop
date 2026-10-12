@@ -1,14 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { deleteProduct, listProducts } from '../../../lib/clientApi'
 
 export default function NasProductsPage() {
+  const router = useRouter()
   const [products, setProducts] = useState([])
-  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [actionError, setActionError] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -26,56 +28,76 @@ export default function NasProductsPage() {
     load()
   }, [load])
 
-  const filtered = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase()),
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
   const handleDelete = async (product) => {
     if (
       !window.confirm(
-        `Permanently delete "${product.name}"?\n\nThis cannot be undone.`,
+        `Permanently delete "${product.name}" from the database?\n\nThis cannot be undone. Past orders will still show the product name.`,
       )
     )
       return
-    setError('')
+    setActionError('')
     try {
       await deleteProduct(product.id)
       await load()
     } catch (err) {
-      setError(err.message || 'Could not delete')
+      setActionError(err.message || 'Could not delete product')
     }
   }
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
+    <div className="admin-products">
+      <div className="admin-products__header">
         <div>
-          <span className="nas-eyebrow">Catalog</span>
+          <span className="admin-products__eyebrow">Store Management</span>
           <h1>Products</h1>
+          <p>Manage your honey products, prices, and inventory.</p>
         </div>
-        <Link href="/nas/products/new" className="nas-btn">
-          + Add product
-        </Link>
+        <button
+          type="button"
+          className="admin-products__add-button"
+          onClick={() => router.push('/nas/products/new')}
+        >
+          + Add Product
+        </button>
       </div>
-      <div className="nas-toolbar">
-        <input
-          type="search"
-          placeholder="Search…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <span className="nas-muted">
-          {loading ? 'Loading…' : `${filtered.length} products`}
+
+      <div className="admin-products__toolbar">
+        <div className="admin-products__search">
+          <span>⌕</span>
+          <input
+            type="search"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
+        </div>
+        <span className="admin-products__count">
+          {loading
+            ? 'Loading…'
+            : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
         </span>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
+
+      {(error || actionError) && (
+        <p className="admin-products__error" role="alert">
+          {error || actionError}
+        </p>
+      )}
+
       {loading ? (
-        <p>Loading…</p>
-      ) : filtered.length === 0 ? (
-        <p className="nas-muted">No products found.</p>
+        <p>Loading products…</p>
+      ) : filteredProducts.length === 0 ? (
+        <div className="admin-products__empty">
+          <h2>No products found</h2>
+          <p>Add a product or try a different search.</p>
+        </div>
       ) : (
-        <div className="nas-table-wrap">
-          <table className="nas-table">
+        <div className="admin-products__table-wrapper">
+          <table className="admin-products__table">
             <thead>
               <tr>
                 <th>Product</th>
@@ -83,40 +105,51 @@ export default function NasProductsPage() {
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Status</th>
-                <th />
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((p) => (
-                <tr key={p.id}>
+              {filteredProducts.map((product) => (
+                <tr key={product.id}>
                   <td>
-                    <div className="nas-product-cell">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={p.image || '/honeyjar.jpg'} alt="" />
-                      <div>
-                        <strong>{p.name}</strong>
-                        <span className="nas-muted">#{p.id}</span>
+                    <div className="admin-product">
+                      <div className="admin-product__image">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={product.image || '/honeyjar.jpg'}
+                          alt={product.name}
+                        />
+                      </div>
+                      <div className="admin-product__info">
+                        <strong>{product.name}</strong>
+                        <span>ID: #{product.id}</span>
                       </div>
                     </div>
                   </td>
-                  <td>{p.size || '—'}</td>
-                  <td>KSh {Number(p.price).toLocaleString()}</td>
-                  <td>{p.stock}</td>
+                  <td>{product.size || '—'}</td>
                   <td>
-                    {p.is_active
-                      ? p.stock > 0
-                        ? 'In stock'
-                        : 'Out of stock'
-                      : 'Inactive'}
+                    <strong>KSh {Number(product.price).toLocaleString()}</strong>
+                  </td>
+                  <td>{product.stock}</td>
+                  <td>
+                    <span className="admin-product__status">
+                      {product.is_active
+                        ? product.stock > 0
+                          ? 'In Stock'
+                          : 'Out of stock'
+                        : 'Inactive'}
+                    </span>
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      className="nas-btn-danger"
-                      onClick={() => handleDelete(p)}
-                    >
-                      Delete
-                    </button>
+                    <div className="admin-product__actions">
+                      <button
+                        type="button"
+                        className="admin-product__delete"
+                        onClick={() => handleDelete(product)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

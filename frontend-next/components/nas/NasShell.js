@@ -5,13 +5,12 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
 
 const NAV = [
-  { href: '/nas', label: 'Dashboard', end: true },
-  { href: '/nas/products', label: 'Products' },
-  { href: '/nas/orders', label: 'Orders' },
-  { href: '/nas/customers', label: 'Customers' },
-  { href: '/nas/inventory', label: 'Inventory' },
-  { href: '/nas/payments', label: 'Payments' },
-  { href: '/nas/settings', label: 'Settings' },
+  { href: '/nas', label: 'Dashboard', icon: '▦', end: true },
+  { href: '/nas/products', label: 'Products', icon: '🍯' },
+  { href: '/nas/orders', label: 'Orders', icon: '▤' },
+  { href: '/nas/customers', label: 'Customers', icon: '♙' },
+  { href: '/nas/inventory', label: 'Inventory', icon: '◫' },
+  { href: '/nas/payments', label: 'Payments', icon: '▣' },
 ]
 
 function linkActive(pathname, href, end) {
@@ -22,45 +21,99 @@ function linkActive(pathname, href, end) {
 export default function NasShell({ children }) {
   const pathname = usePathname() || ''
   const { currentUser, logout } = useAuth()
+  const initial = (currentUser?.name || currentUser?.email || 'A')
+    .charAt(0)
+    .toUpperCase()
 
   return (
-    <div className="nas-layout">
-      <aside className="nas-sidebar">
-        <div className="nas-sidebar__brand">
-          <Link href="/nas">Mercy Gold</Link>
-          <span>Console</span>
+    <div className="admin-layout">
+      <aside className="admin-sidebar">
+        <div className="admin-sidebar__brand">
+          <Link
+            href="/nas"
+            className="admin-sidebar__brand-link"
+            aria-label="Mercy Gold Honey console"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mercy-gold-logo.jpg"
+              alt="Mercy Gold Honey"
+              className="admin-sidebar__logo"
+            />
+          </Link>
+          <span className="admin-sidebar__badge">Admin</span>
         </div>
-        <nav className="nas-sidebar__nav" aria-label="Console">
+
+        <nav className="admin-sidebar__nav" aria-label="Admin navigation">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={
                 linkActive(pathname, item.href, item.end)
-                  ? 'nas-sidebar__link active'
-                  : 'nas-sidebar__link'
+                  ? 'admin-sidebar__link active'
+                  : 'admin-sidebar__link'
               }
             >
+              <span>{item.icon}</span>
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="nas-sidebar__bottom">
-          <p className="nas-sidebar__user">{currentUser?.name || currentUser?.email}</p>
-          <button
-            type="button"
-            className="nas-sidebar__link"
-            onClick={() => logout()}
+
+        <div className="admin-sidebar__bottom">
+          <Link
+            href="/nas/settings"
+            className={
+              linkActive(pathname, '/nas/settings')
+                ? 'admin-sidebar__link active'
+                : 'admin-sidebar__link'
+            }
           >
-            Sign out
-          </button>
-          <Link href="/" className="nas-sidebar__link">
-            ← Store
+            <span>⚙</span>
+            Settings
+          </Link>
+          <Link href="/" className="admin-sidebar__link">
+            <span>←</span>
+            Back to Shop
           </Link>
         </div>
       </aside>
-      <div className="nas-layout__main">
-        <main className="nas-layout__content">{children}</main>
+
+      <div className="admin-layout__main">
+        <header className="admin-header">
+          <div className="admin-header__title">
+            <span>Mercy Gold Honey</span>
+            <h1>Admin Dashboard</h1>
+          </div>
+          <div className="admin-header__user">
+            <div className="admin-header__avatar" aria-hidden>
+              {initial}
+            </div>
+            <div className="admin-header__user-info">
+              <strong>{currentUser?.name || 'Administrator'}</strong>
+              <span>Store Manager</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => logout()}
+              style={{
+                marginLeft: 8,
+                border: '1px solid var(--color-border)',
+                background: 'transparent',
+                borderRadius: 8,
+                padding: '8px 12px',
+                font: 'inherit',
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+                cursor: 'pointer',
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+        <main className="admin-layout__content">{children}</main>
       </div>
     </div>
   )

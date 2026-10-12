@@ -1,0 +1,249 @@
+.customers-page {
+  padding: 2rem;
+  min-height: 100%;
+}
+
+/* Header */
+
+.customers-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.customers-header h1 {
+  margin: 0;
+  color: var(--color-text-dark);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.customers-header p {
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Customer count */
+
+.customer-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 130px;
+  padding: 0.8rem 1.2rem;
+
+  background: var(--color-surface-warm);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.customer-count span {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.customer-count small {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* Toolbar */
+
+.customers-toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.customer-search {
+  position: relative;
+  width: 350px;
+}
+
+.customer-search input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.6rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+
+  background: var(--color-surface-warm);
+  color: var(--color-text-dark);
+
+  font-size: 0.9rem;
+  outline: none;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.customer-search input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.95rem;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+
+  pointer-events: none;
+}
+
+/* Table */
+
+.customers-table-container {
+  width: 100%;
+  overflow-x: auto;
+
+  background: var(--color-surface-warm);
+  border-radius: 14px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.customers-table th {
+  padding: 1rem 1.2rem;
+
+  background: rgba(0, 0, 0, 0.025);
+
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  white-space: nowrap;
+}
+
+.customers-table td {
+  padding: 1rem 1.2rem;
+
+  color: var(--color-text-dark);
+  font-size: 0.9rem;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.customers-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.customers-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+/* Customer */
+
+.customer-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.customer-avatar {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--color-primary);
+  color: #fff;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.orders-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 30px;
+  padding: 0.3rem 0.55rem;
+
+  background: rgba(212, 160, 23, 0.12);
+  color: var(--color-primary);
+
+  border-radius: 6px;
+
+  font-weight: 600;
+}
+
+.total-spent {
+  font-weight: 600;
+}
+
+/* Empty state */
+
+.no-customers {
+  padding: 3rem !important;
+
+  color: var(--color-text-muted) !important;
+  text-align: center;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .customers-page {
+    padding: 1.25rem;
+  }
+
+  .customers-header {
+    align-items: flex-start;
+  }
+
+  .customers-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .customer-count {
+    min-width: 100px;
+  }
+
+  .customer-search {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .customers-header {
+    flex-direction: column;
+  }
+
+  .customer-count {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .customers-table {
+    min-width: 850px;
+  }
+}

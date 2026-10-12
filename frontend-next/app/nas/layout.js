@@ -1,3 +1,4 @@
+import '../../styles/admin/index.css'
 import NasGate from '../../components/nas/NasGate'
 import NasShell from '../../components/nas/NasShell'
 

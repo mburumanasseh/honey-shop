@@ -48,8 +48,8 @@ export default function NasGate({ children }) {
 
   if (!ready || loading) {
     return (
-      <div className="nas-gate">
-        <div className="nas-gate__card">
+      <div className="admin-gate">
+        <div className="admin-gate__card">
           <p>Checking access…</p>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function NasGate({ children }) {
         return
       }
       if (!result.user?.is_admin) {
-        setError('This account does not have access.')
+        setError('This account does not have admin access.')
         setUnlockedFlag(false)
         setUnlocked(false)
         await logout()
@@ -88,19 +88,19 @@ export default function NasGate({ children }) {
   }
 
   return (
-    <div className="nas-gate">
-      <div className="nas-gate__card">
-        <span className="nas-gate__eyebrow">Private</span>
-        <h1>Sign in</h1>
-        <p className="nas-gate__hint">
-          Enter your credentials to continue.
+    <div className="admin-gate">
+      <div className="admin-gate__card">
+        <span className="admin-gate__eyebrow">Admin access</span>
+        <h1>Enter admin password</h1>
+        <p className="admin-gate__hint">
+          Sign in with an administrator account to open the dashboard.
         </p>
         {error && (
-          <p className="nas-gate__error" role="alert">
+          <p className="admin-gate__error" role="alert">
             {error}
           </p>
         )}
-        <form className="nas-gate__form" onSubmit={handleSubmit}>
+        <form className="admin-gate__form" onSubmit={handleSubmit}>
           <label htmlFor="nas-email">Email</label>
           <input
             id="nas-email"
@@ -109,6 +109,7 @@ export default function NasGate({ children }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            placeholder="admin@example.com"
           />
           <label htmlFor="nas-password">Password</label>
           <input
@@ -118,12 +119,13 @@ export default function NasGate({ children }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            placeholder="••••••••"
           />
           <button type="submit" disabled={submitting}>
-            {submitting ? 'Verifying…' : 'Continue'}
+            {submitting ? 'Verifying…' : 'Unlock admin'}
           </button>
         </form>
-        <p className="nas-gate__footer">
+        <p className="admin-gate__footer">
           <Link href="/">← Back to store</Link>
         </p>
       </div>

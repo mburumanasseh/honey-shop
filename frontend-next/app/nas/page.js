@@ -17,6 +17,28 @@ function formatKes(amount) {
   }).format(amount || 0)
 }
 
+function statusClass(status) {
+  const s = (status || '').toLowerCase()
+  if (['paid', 'delivered', 'shipped', 'processing'].includes(s)) {
+    return 'order-status order-status--paid'
+  }
+  if (s === 'cancelled') return 'order-status order-status--cancelled'
+  return 'order-status order-status--pending'
+}
+
+function StatCard({ title, value, description, icon }) {
+  return (
+    <article className="stat-card">
+      <div className="stat-card__top">
+        <span className="stat-card__icon">{icon}</span>
+        <span className="stat-card__title">{title}</span>
+      </div>
+      <strong className="stat-card__value">{value}</strong>
+      <p className="stat-card__description">{description}</p>
+    </article>
+  )
+}
+
 export default function NasDashboardPage() {
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
@@ -81,79 +103,94 @@ export default function NasDashboardPage() {
     () =>
       [...orders]
         .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
-        .slice(0, 8),
+        .slice(0, 5),
     [orders],
   )
 
   return (
-    <div className="nas-page">
-      <div className="nas-page__header">
+    <div className="admin-dashboard">
+      <div className="admin-dashboard__intro">
         <div>
-          <span className="nas-eyebrow">Overview</span>
-          <h1>Dashboard</h1>
+          <span>Overview</span>
+          <h2>Welcome back</h2>
+          <p>Here is what is happening with Mercy Gold Honey.</p>
         </div>
-        <button type="button" className="nas-btn" onClick={load} disabled={loading}>
+        <button type="button" onClick={load} disabled={loading}>
           {loading ? 'Refreshing…' : 'Refresh'}
         </button>
       </div>
-      {error && <p className="nas-error" role="alert">{error}</p>}
-      <div className="nas-stats">
-        <div className="nas-stat">
-          <span>Online now</span>
-          <strong>{presence == null ? '…' : String(presence.online_total ?? 0)}</strong>
-        </div>
-        <div className="nas-stat">
-          <span>Orders</span>
-          <strong>{loading ? '…' : stats.orderCount}</strong>
-        </div>
-        <div className="nas-stat">
-          <span>Revenue</span>
-          <strong>{loading ? '…' : formatKes(stats.revenue)}</strong>
-        </div>
-        <div className="nas-stat">
-          <span>Products</span>
-          <strong>{loading ? '…' : stats.activeProducts}</strong>
-        </div>
-        <div className="nas-stat">
-          <span>Customers</span>
-          <strong>{loading ? '…' : stats.customerCount}</strong>
-        </div>
+
+      {error && (
+        <p role="alert" className="admin-dashboard__error">
+          {error}
+        </p>
+      )}
+
+      <div className="admin-dashboard__stats">
+        <StatCard
+          title="Online now"
+          value={presence == null ? '…' : String(presence.online_total ?? 0)}
+          description={
+            presence
+              ? `${presence.online_logged_in || 0} logged in · ${presence.online_guests || 0} guests (last ${presence.ttl_seconds || 90}s)`
+              : 'People currently on the site'
+          }
+          icon="●"
+        />
+        <StatCard
+          title="Orders"
+          value={loading ? '…' : String(stats.orderCount)}
+          description="Orders received"
+          icon="▤"
+        />
+        <StatCard
+          title="Revenue"
+          value={loading ? '…' : formatKes(stats.revenue)}
+          description="Total sales (excl. cancelled)"
+          icon="KSh"
+        />
+        <StatCard
+          title="Products"
+          value={loading ? '…' : String(stats.activeProducts)}
+          description="Active products"
+          icon="🍯"
+        />
+        <StatCard
+          title="Customers"
+          value={loading ? '…' : String(stats.customerCount)}
+          description="Registered customers"
+          icon="♙"
+        />
       </div>
-      <section className="nas-section">
-        <div className="nas-section__head">
-          <h2>Recent orders</h2>
+
+      <section className="admin-dashboard__section">
+        <div className="admin-dashboard__section-header">
+          <div>
+            <span>Sales</span>
+            <h2>Recent orders</h2>
+          </div>
           <Link href="/nas/orders">View all</Link>
         </div>
         {recentOrders.length === 0 ? (
-          <p className="nas-muted">No orders yet.</p>
+          <p>No orders yet.</p>
         ) : (
-          <div className="nas-table-wrap">
-            <table className="nas-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Customer</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                  <th>When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOrders.map((o) => (
-                  <tr key={o.id}>
-                    <td>#{o.id}</td>
-                    <td>{o.shipping_name}</td>
-                    <td>KSh {Number(o.total_amount).toLocaleString()}</td>
-                    <td>{o.status}</td>
-                    <td>
-                      {o.created_at
-                        ? new Date(o.created_at).toLocaleString()
-                        : '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="admin-dashboard__orders">
+            {recentOrders.map((order) => (
+              <div key={order.id} className="admin-dashboard__order">
+                <div>
+                  <strong>#{order.id} · {order.shipping_name}</strong>
+                  <span>
+                    {order.created_at
+                      ? new Date(order.created_at).toLocaleString()
+                      : ''}
+                  </span>
+                </div>
+                <strong>
+                  KSh {Number(order.total_amount).toLocaleString()}
+                </strong>
+                <span className={statusClass(order.status)}>{order.status}</span>
+              </div>
+            ))}
           </div>
         )}
       </section>
