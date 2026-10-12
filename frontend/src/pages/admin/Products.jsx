@@ -37,7 +37,10 @@ function Products() {
   )
 
   const handleDelete = async (product) => {
-    if (!window.confirm(`Remove "${product.name}" from the store?`)) return
+    const ok = window.confirm(
+      `Permanently delete "${product.name}" from the database?\n\nThis cannot be undone. Past orders will still show the product name.`,
+    )
+    if (!ok) return
     setActionError('')
     try {
       await deleteProduct(product.id)

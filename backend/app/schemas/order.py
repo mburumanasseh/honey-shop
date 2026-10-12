@@ -14,6 +14,12 @@ ALLOWED_STATUSES = {
     "cancelled",
 }
 
+ALLOWED_PAYMENT_METHODS = {
+    "cash",
+    "mpesa",
+    "other",
+}
+
 
 class OrderItemCreate(BaseModel):
     product_id: int
@@ -31,7 +37,7 @@ class OrderCreate(BaseModel):
 
 class OrderItemResponse(BaseModel):
     id: int
-    product_id: int
+    product_id: Optional[int] = None
     product_name: str
     unit_price: Decimal
     quantity: int
@@ -49,6 +55,7 @@ class OrderResponse(BaseModel):
     shipping_phone: str
     shipping_address: str
     shipping_email: Optional[str] = None
+    payment_method: Optional[str] = None
     notes: Optional[str] = None
     items: List[OrderItemResponse]
     created_at: datetime
@@ -58,13 +65,10 @@ class OrderResponse(BaseModel):
 
 
 class OrderStatusUpdate(BaseModel):
-    status: str
+    """Admin can update fulfillment status and/or payment method (e.g. cash)."""
 
-    def validate_status(self) -> str:
-        status = self.status.strip().lower()
-        if status not in ALLOWED_STATUSES:
-            raise ValueError(f"Invalid status. Allowed: {', '.join(sorted(ALLOWED_STATUSES))}")
-        return status
+    status: Optional[str] = None
+    payment_method: Optional[str] = None
 
 
 class OrderLookupRequest(BaseModel):

@@ -1,12 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { adminListOrders } from '../../services/orderService'
+import { adminListOrders, adminUpdateOrder } from '../../services/orderService'
 import './Payments.css'
 
-function paymentLabel(status) {
-  if (status === 'paid' || status === 'processing' || status === 'shipped' || status === 'delivered') {
-    return 'Completed'
+const PAYMENT_METHODS = [
+  { value: '', label: 'Not set' },
+  { value: 'cash', label: 'Cash' },
+  { value: 'mpesa', label: 'M-Pesa' },
+  { value: 'other', label: 'Other' },
+]
+
+function paymentLabel(order) {
+  if (order.payment_method) {
+    return order.payment_method === 'cash'
+      ? 'Paid (cash)'
+      : order.payment_method === 'mpesa'
+        ? 'Paid (M-Pesa)'
+        : 'Paid (other)'
   }
-  if (status === 'cancelled') return 'Failed'
+  if (
+    order.status === 'paid' ||
+    order.status === 'processing' ||
+    order.status === 'shipped' ||
+    order.status === 'delivered'
+  ) {
+    return 'Paid'
+  }
+  if (order.status === 'cancelled') return 'Cancelled'
   return 'Pending'
 }
 
@@ -14,6 +33,7 @@ function Payments() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [savingId, setSavingId] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -32,15 +52,48 @@ function Payments() {
     load()
   }, [load])
 
+  const handlePaymentMethod = async (orderId, method) => {
+    setError('')
+    setSavingId(orderId)
+    try {
+      await adminUpdateOrder(orderId, {
+        payment_method: method || 'none',
+        // Setting a method auto-marks paid on the backend when still pending
+        ...(method ? {} : {}),
+      })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not update payment')
+    } finally {
+      setSavingId(null)
+    }
+  }
+
+  const handleMarkPaidCash = async (orderId) => {
+    setError('')
+    setSavingId(orderId)
+    try {
+      await adminUpdateOrder(orderId, {
+        status: 'paid',
+        payment_method: 'cash',
+      })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not mark as paid (cash)')
+    } finally {
+      setSavingId(null)
+    }
+  }
+
   const summary = useMemo(() => {
     const total = orders.length
     let completed = 0
     let pending = 0
     let failed = 0
     for (const o of orders) {
-      const label = paymentLabel(o.status)
-      if (label === 'Completed') completed += 1
-      else if (label === 'Failed') failed += 1
+      const label = paymentLabel(o)
+      if (label.startsWith('Paid')) completed += 1
+      else if (label === 'Cancelled') failed += 1
       else pending += 1
     }
     return { total, completed, pending, failed }
@@ -53,8 +106,8 @@ function Payments() {
           <span className="admin-payments__eyebrow">Store Management</span>
           <h1>Payments</h1>
           <p>
-            Order payment status (M-Pesa transactions will appear here when
-            connected).
+            Mark orders as paid when cash is received, or set M-Pesa / other.
+            You can change payment method anytime from this page.
           </p>
         </div>
       </div>
@@ -94,29 +147,60 @@ function Payments() {
                 <th>Amount</th>
                 <th>Method</th>
                 <th>Status</th>
+                <th>Actions</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order) => {
-                const label = paymentLabel(order.status)
+                const label = paymentLabel(order)
                 const statusClass =
-                  label === 'Completed'
+                  label.startsWith('Paid')
                     ? 'payment-status payment-status--completed'
-                    : label === 'Failed'
+                    : label === 'Cancelled'
                       ? 'payment-status payment-status--failed'
                       : 'payment-status payment-status--pending'
+                const busy = savingId === order.id
                 return (
                   <tr key={order.id}>
                     <td>#ORD-{order.id}</td>
                     <td>{order.shipping_name}</td>
                     <td>KSh {Number(order.total_amount).toLocaleString()}</td>
-                    <td>Checkout</td>
+                    <td>
+                      <select
+                        value={order.payment_method || ''}
+                        disabled={busy}
+                        onChange={(e) =>
+                          handlePaymentMethod(order.id, e.target.value)
+                        }
+                        aria-label={`Payment method for order ${order.id}`}
+                      >
+                        {PAYMENT_METHODS.map((m) => (
+                          <option key={m.value || 'none'} value={m.value}>
+                            {m.label}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
                     <td>
                       <span className={statusClass}>{label}</span>
                       <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
                         {order.status}
                       </div>
+                    </td>
+                    <td>
+                      {order.status === 'pending' && !order.payment_method ? (
+                        <button
+                          type="button"
+                          className="admin-payments__cash-btn"
+                          disabled={busy}
+                          onClick={() => handleMarkPaidCash(order.id)}
+                        >
+                          {busy ? 'Saving…' : 'Mark paid (cash)'}
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '0.85rem', opacity: 0.6 }}>—</span>
+                      )}
                     </td>
                     <td>
                       {order.created_at

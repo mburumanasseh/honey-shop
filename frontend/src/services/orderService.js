@@ -51,3 +51,11 @@ export async function adminUpdateOrderStatus(id, status) {
     body: JSON.stringify({ status }),
   })
 }
+
+/** Update status and/or payment_method (cash | mpesa | other). */
+export async function adminUpdateOrder(id, payload) {
+  return apiRequest(`/api/v1/admin/orders/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}

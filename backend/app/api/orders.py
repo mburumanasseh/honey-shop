@@ -10,6 +10,7 @@ from app.models.order import Order, OrderItem
 from app.models.product import Product
 from app.models.user import User
 from app.schemas.order import (
+    ALLOWED_PAYMENT_METHODS,
     ALLOWED_STATUSES,
     OrderCreate,
     OrderLookupRequest,
@@ -205,18 +206,44 @@ def admin_update_order_status(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
 ):
-    status_value = payload.status.strip().lower()
-    if status_value not in ALLOWED_STATUSES:
+    """Update order status and/or payment method (cash / mpesa / other)."""
+    if payload.status is None and payload.payment_method is None:
         raise HTTPException(
             status_code=400,
-            detail=f"Invalid status. Allowed: {', '.join(sorted(ALLOWED_STATUSES))}",
+            detail="Provide status and/or payment_method",
         )
 
     order = _order_query(db).filter(Order.id == order_id).first()
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
 
-    order.status = status_value
+    if payload.status is not None:
+        status_value = payload.status.strip().lower()
+        if status_value not in ALLOWED_STATUSES:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid status. Allowed: {', '.join(sorted(ALLOWED_STATUSES))}",
+            )
+        order.status = status_value
+
+    if payload.payment_method is not None:
+        method = payload.payment_method.strip().lower()
+        if method == "" or method == "none":
+            order.payment_method = None
+        elif method not in ALLOWED_PAYMENT_METHODS:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Invalid payment_method. Allowed: "
+                    f"{', '.join(sorted(ALLOWED_PAYMENT_METHODS))}, or empty to clear"
+                ),
+            )
+        else:
+            order.payment_method = method
+            # Recording a real payment method implies the order is at least paid
+            if order.status == "pending":
+                order.status = "paid"
+
     db.commit()
     db.refresh(order)
     return _order_query(db).filter(Order.id == order.id).first()
