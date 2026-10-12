@@ -1,8 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
-import { adminListOrders, adminUpdateOrderStatus } from '../../services/orderService'
+import {
+  adminListOrders,
+  adminUpdateOrder,
+  adminUpdateOrderStatus,
+} from '../../services/orderService'
 import './Orders.css'
 
 const STATUSES = ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']
+const PAYMENT_METHODS = [
+  { value: '', label: 'Not set' },
+  { value: 'cash', label: 'Cash' },
+  { value: 'mpesa', label: 'M-Pesa' },
+  { value: 'other', label: 'Other' },
+]
 
 function Orders() {
   const [orders, setOrders] = useState([])
@@ -36,6 +46,18 @@ function Orders() {
     }
   }
 
+  const handlePaymentMethod = async (orderId, method) => {
+    setError('')
+    try {
+      await adminUpdateOrder(orderId, {
+        payment_method: method || 'none',
+      })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not update payment method')
+    }
+  }
+
   return (
     <div className="admin-orders">
       <div className="admin-orders__header">
@@ -66,6 +88,7 @@ function Orders() {
                 <th>Customer</th>
                 <th>Total</th>
                 <th>Status</th>
+                <th>Payment</th>
                 <th>Items</th>
                 <th>Created</th>
               </tr>
@@ -89,6 +112,21 @@ function Orders() {
                       {STATUSES.map((s) => (
                         <option key={s} value={s}>
                           {s}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      value={order.payment_method || ''}
+                      onChange={(e) =>
+                        handlePaymentMethod(order.id, e.target.value)
+                      }
+                      aria-label={`Payment method for order ${order.id}`}
+                    >
+                      {PAYMENT_METHODS.map((m) => (
+                        <option key={m.value || 'none'} value={m.value}>
+                          {m.label}
                         </option>
                       ))}
                     </select>

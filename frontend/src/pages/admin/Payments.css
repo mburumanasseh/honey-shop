@@ -171,3 +171,34 @@
     grid-template-columns: 1fr;
   }
 }
+.admin-payments__table select {
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 1px solid #e8dfd2;
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+
+.admin-payments__cash-btn {
+  min-height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: #2f855a;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-payments__cash-btn:hover:not(:disabled) {
+  background: #276749;
+}
+
+.admin-payments__cash-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

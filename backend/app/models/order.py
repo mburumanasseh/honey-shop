@@ -19,6 +19,7 @@ class Order(Base):
     shipping_phone: Mapped[str] = mapped_column(String(30), nullable=False)
     shipping_address: Mapped[str] = mapped_column(Text, nullable=False)
     shipping_email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    payment_method: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -44,7 +45,11 @@ class OrderItem(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False, index=True)
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False, index=True)
+    product_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("products.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     product_name: Mapped[str] = mapped_column(String(200), nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)

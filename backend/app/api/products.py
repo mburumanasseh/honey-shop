@@ -91,13 +91,17 @@ def delete_product(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
 ):
-    """Soft-delete: set is_active = False."""
+    """Permanently delete a product from the database.
+
+    Historical order line items keep product_name / price snapshots;
+    order_items.product_id is set to NULL via ON DELETE SET NULL.
+    """
     product = db.get(Product, product_id)
     if product is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Product not found",
         )
-    product.is_active = False
+    db.delete(product)
     db.commit()
     return None
