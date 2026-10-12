@@ -114,3 +114,125 @@ export async function lookupOrder({ order_id, phone }) {
 export async function getProductClient(id) {
   return apiRequest(`/api/v1/products/${id}`)
 }
+
+export function getApiUrl() {
+  return API_URL
+}
+
+export function normalizeProduct(product) {
+  if (!product) return product
+  let image = product.image_url || product.image || ''
+  if (image.startsWith('/src/')) image = '/honeyjar.jpg'
+  return {
+    ...product,
+    price: Number(product.price),
+    image,
+    stock: product.stock ?? 0,
+    is_active: product.is_active !== false,
+  }
+}
+
+export async function listProducts(options = {}) {
+  const params = new URLSearchParams()
+  if (options.includeInactive) params.set('include_inactive', 'true')
+  if (options.limit) params.set('limit', String(options.limit))
+  const qs = params.toString()
+  const products = await apiRequest(`/api/v1/products${qs ? `?${qs}` : ''}`)
+  return (products || []).map(normalizeProduct)
+}
+
+export async function createProduct(payload) {
+  const product = await apiRequest('/api/v1/products', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  return normalizeProduct(product)
+}
+
+export async function updateProduct(id, payload) {
+  const product = await apiRequest(`/api/v1/products/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+  return normalizeProduct(product)
+}
+
+export async function deleteProduct(id) {
+  return apiRequest(`/api/v1/products/${id}`, { method: 'DELETE' })
+}
+
+export async function uploadProductImage(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const doUpload = async () => {
+    const response = await fetch(`${API_URL}/api/v1/uploads/image`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    })
+    let data = null
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json()
+    }
+    return { response, data }
+  }
+  let { response, data } = await doUpload()
+  if (response.status === 401) {
+    try {
+      await tryRefreshSession()
+      ;({ response, data } = await doUpload())
+    } catch {
+      /* fall through */
+    }
+  }
+  if (!response.ok) {
+    let message =
+      (typeof data?.detail === 'string' && data.detail) ||
+      data?.message ||
+      'Image upload failed'
+    if (response.status === 401) message = 'Session expired. Unlock again on /nas.'
+    const error = new Error(message)
+    error.status = response.status
+    throw error
+  }
+  return data
+}
+
+export async function adminListOrders(options = {}) {
+  const params = new URLSearchParams()
+  if (options.skip != null) params.set('skip', String(options.skip))
+  if (options.limit != null) params.set('limit', String(options.limit))
+  const qs = params.toString()
+  return apiRequest(`/api/v1/admin/orders${qs ? `?${qs}` : ''}`)
+}
+
+export async function adminUpdateOrder(id, payload) {
+  return apiRequest(`/api/v1/admin/orders/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function listCustomers(options = {}) {
+  const params = new URLSearchParams()
+  if (options.limit) params.set('limit', String(options.limit))
+  if (options.skip) params.set('skip', String(options.skip))
+  const qs = params.toString()
+  return apiRequest(`/api/v1/admin/customers${qs ? `?${qs}` : ''}`)
+}
+
+export async function getStoreSettings() {
+  return apiRequest('/api/v1/admin/settings')
+}
+
+export async function updateStoreSettings(payload) {
+  return apiRequest('/api/v1/admin/settings', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function getAdminPresence() {
+  return apiRequest('/api/v1/admin/presence')
+}
