@@ -25,7 +25,7 @@ export default function LoginForm() {
       setError(result.message)
       return
     }
-    const next = searchParams.get('next') || '/'
+    const next = searchParams.get('next') || '/account'
     router.push(next)
   }
 

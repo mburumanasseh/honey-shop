@@ -8,6 +8,7 @@ export default function robots() {
         '/checkout',
         '/login',
         '/register',
+        '/account',
         '/orders',
         '/profile',
         '/nas',

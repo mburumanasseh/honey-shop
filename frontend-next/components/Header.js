@@ -31,8 +31,8 @@ export default function Header() {
           </Link>
           {isAuthenticated ? (
             <>
+              <Link href="/account">Account</Link>
               <Link href="/orders">Orders</Link>
-              <Link href="/profile">{currentUser?.name || 'Account'}</Link>
               <button type="button" className="linkish" onClick={() => logout()}>
                 Logout
               </button>

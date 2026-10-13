@@ -47,7 +47,7 @@ export default function RegisterPage() {
       setError(result.message)
       return
     }
-    router.push('/')
+    router.push('/account')
   }
 
   return (
