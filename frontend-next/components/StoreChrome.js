@@ -13,7 +13,7 @@ export default function StoreChrome({ children }) {
   }
 
   return (
-    <>
+    <div className="store-shell">
       <Header />
       <main className="site-main">{children}</main>
       <footer className="site-footer">
@@ -31,6 +31,6 @@ export default function StoreChrome({ children }) {
         </div>
       </footer>
       <WhatsAppButton />
-    </>
+    </div>
   )
 }

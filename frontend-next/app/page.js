@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Hero from '../components/Hero'
+import TrustStrip from '../components/TrustStrip'
 import AddToCartButton from '../components/AddToCartButton'
 import { listProducts, normalizeProduct } from '../lib/api'
 
@@ -24,6 +25,7 @@ export default async function HomePage() {
   return (
     <div>
       <Hero />
+      <TrustStrip />
 
       <section id="featured" className="featured-section">
         <div className="container">
