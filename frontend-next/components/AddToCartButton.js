@@ -1,5 +1,6 @@
 'use client'
 
+import { IconCheck } from './Icons'
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 
@@ -22,7 +23,7 @@ export default function AddToCartButton({ product }) {
       onClick={handleClick}
       disabled={disabled}
     >
-      {disabled ? 'Out of stock' : added ? 'Added to cart ✓' : 'Add to cart'}
+      {disabled ? 'Out of stock' : added ? (<><IconCheck size={16} /> Added</>) : 'Add to cart'}
     </button>
   )
 }

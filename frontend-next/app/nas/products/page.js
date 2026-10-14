@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteProduct, listProducts } from '../../../lib/clientApi'
+import { IconSearch } from '../../../components/Icons'
 
 export default function NasProductsPage() {
   const router = useRouter()
@@ -67,7 +68,7 @@ export default function NasProductsPage() {
 
       <div className="admin-products__toolbar">
         <div className="admin-products__search">
-          <span>⌕</span>
+          <span className="admin-products__search-icon"><IconSearch size={16} /></span>
           <input
             type="search"
             placeholder="Search products..."

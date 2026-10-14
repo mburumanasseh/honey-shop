@@ -3,14 +3,24 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
+import {
+  IconArrowLeft,
+  IconGrid,
+  IconHoney,
+  IconLayers,
+  IconList,
+  IconSettings,
+  IconUsers,
+  IconWallet,
+} from '../Icons'
 
 const NAV = [
-  { href: '/nas', label: 'Dashboard', icon: '▦', end: true },
-  { href: '/nas/products', label: 'Products', icon: '🍯' },
-  { href: '/nas/orders', label: 'Orders', icon: '▤' },
-  { href: '/nas/customers', label: 'Customers', icon: '♙' },
-  { href: '/nas/inventory', label: 'Inventory', icon: '◫' },
-  { href: '/nas/payments', label: 'Payments', icon: '▣' },
+  { href: '/nas', label: 'Dashboard', Icon: IconGrid, end: true },
+  { href: '/nas/products', label: 'Products', Icon: IconHoney },
+  { href: '/nas/orders', label: 'Orders', Icon: IconList },
+  { href: '/nas/customers', label: 'Customers', Icon: IconUsers },
+  { href: '/nas/inventory', label: 'Inventory', Icon: IconLayers },
+  { href: '/nas/payments', label: 'Payments', Icon: IconWallet },
 ]
 
 function linkActive(pathname, href, end) {
@@ -55,7 +65,9 @@ export default function NasShell({ children }) {
                   : 'admin-sidebar__link'
               }
             >
-              <span>{item.icon}</span>
+              <span className="admin-sidebar__icon">
+                <item.Icon size={18} />
+              </span>
               {item.label}
             </Link>
           ))}
@@ -70,11 +82,15 @@ export default function NasShell({ children }) {
                 : 'admin-sidebar__link'
             }
           >
-            <span>⚙</span>
+            <span className="admin-sidebar__icon">
+              <IconSettings size={18} />
+            </span>
             Settings
           </Link>
           <Link href="/" className="admin-sidebar__link">
-            <span>←</span>
+            <span className="admin-sidebar__icon">
+              <IconArrowLeft size={18} />
+            </span>
             Back to Shop
           </Link>
         </div>
