@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
@@ -28,16 +29,86 @@ function linkActive(pathname, href, end) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
+function SidebarNav({ pathname, onNavigate }) {
+  return (
+    <>
+      <nav className="admin-sidebar__nav" aria-label="Admin navigation">
+        {NAV.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={
+              linkActive(pathname, item.href, item.end)
+                ? 'admin-sidebar__link active'
+                : 'admin-sidebar__link'
+            }
+            onClick={onNavigate}
+          >
+            <span className="admin-sidebar__icon">
+              <item.Icon size={18} />
+            </span>
+            <span className="admin-sidebar__label">{item.label}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <div className="admin-sidebar__bottom">
+        <Link
+          href="/nas/settings"
+          className={
+            linkActive(pathname, '/nas/settings')
+              ? 'admin-sidebar__link active'
+              : 'admin-sidebar__link'
+          }
+          onClick={onNavigate}
+        >
+          <span className="admin-sidebar__icon">
+            <IconSettings size={18} />
+          </span>
+          <span className="admin-sidebar__label">Settings</span>
+        </Link>
+        <Link href="/" className="admin-sidebar__link" onClick={onNavigate}>
+          <span className="admin-sidebar__icon">
+            <IconArrowLeft size={18} />
+          </span>
+          <span className="admin-sidebar__label">Back to Shop</span>
+        </Link>
+      </div>
+    </>
+  )
+}
+
 export default function NasShell({ children }) {
   const pathname = usePathname() || ''
   const { currentUser, logout } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
   const initial = (currentUser?.name || currentUser?.email || 'A')
     .charAt(0)
     .toUpperCase()
 
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    if (!menuOpen) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
+
+  const closeMenu = () => setMenuOpen(false)
+
   return (
     <div className="admin-layout">
-      <aside className="admin-sidebar">
+      {/* Desktop sidebar */}
+      <aside className="admin-sidebar admin-sidebar--desktop">
         <div className="admin-sidebar__brand">
           <Link
             href="/nas"
@@ -53,54 +124,60 @@ export default function NasShell({ children }) {
           </Link>
           <span className="admin-sidebar__badge">Admin</span>
         </div>
+        <SidebarNav pathname={pathname} />
+      </aside>
 
-        <nav className="admin-sidebar__nav" aria-label="Admin navigation">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={
-                linkActive(pathname, item.href, item.end)
-                  ? 'admin-sidebar__link active'
-                  : 'admin-sidebar__link'
-              }
-            >
-              <span className="admin-sidebar__icon">
-                <item.Icon size={18} />
-              </span>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="admin-sidebar__bottom">
+      {/* Mobile drawer */}
+      <div
+        className="admin-nav-backdrop"
+        data-open={menuOpen || undefined}
+        onClick={closeMenu}
+        aria-hidden={!menuOpen}
+      />
+      <aside
+        className="admin-sidebar admin-sidebar--drawer"
+        data-open={menuOpen || undefined}
+        aria-hidden={!menuOpen}
+      >
+        <div className="admin-sidebar__brand">
           <Link
-            href="/nas/settings"
-            className={
-              linkActive(pathname, '/nas/settings')
-                ? 'admin-sidebar__link active'
-                : 'admin-sidebar__link'
-            }
+            href="/nas"
+            className="admin-sidebar__brand-link"
+            onClick={closeMenu}
+            aria-label="Mercy Gold Honey console"
           >
-            <span className="admin-sidebar__icon">
-              <IconSettings size={18} />
-            </span>
-            Settings
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mercy-gold-logo.jpg"
+              alt="Mercy Gold Honey"
+              className="admin-sidebar__logo"
+            />
           </Link>
-          <Link href="/" className="admin-sidebar__link">
-            <span className="admin-sidebar__icon">
-              <IconArrowLeft size={18} />
-            </span>
-            Back to Shop
-          </Link>
+          <span className="admin-sidebar__badge">Admin</span>
         </div>
+        <SidebarNav pathname={pathname} onNavigate={closeMenu} />
       </aside>
 
       <div className="admin-layout__main">
         <header className="admin-header">
-          <div className="admin-header__title">
-            <span>Mercy Gold Honey</span>
-            <h1>Admin Dashboard</h1>
+          <div className="admin-header__left">
+            <button
+              type="button"
+              className="admin-menu-toggle"
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              <span className="admin-menu-toggle__bars" data-open={menuOpen || undefined}>
+                <span />
+                <span />
+                <span />
+              </span>
+            </button>
+            <div className="admin-header__title">
+              <span>Mercy Gold Honey</span>
+              <h1>Admin</h1>
+            </div>
           </div>
           <div className="admin-header__user">
             <div className="admin-header__avatar" aria-hidden>
@@ -112,18 +189,8 @@ export default function NasShell({ children }) {
             </div>
             <button
               type="button"
+              className="admin-header__logout"
               onClick={() => logout()}
-              style={{
-                marginLeft: 8,
-                border: '1px solid var(--color-border)',
-                background: 'transparent',
-                borderRadius: 8,
-                padding: '8px 12px',
-                font: 'inherit',
-                fontWeight: 600,
-                color: 'var(--color-text-muted)',
-                cursor: 'pointer',
-              }}
             >
               Logout
             </button>

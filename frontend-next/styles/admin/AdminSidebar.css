@@ -90,53 +90,7 @@
   }
 }
 
-@media (max-width: 700px) {
-  .admin-sidebar {
-    position: fixed;
-    z-index: 10;
-    width: 72px;
-    padding: 20px 10px;
-  }
-
-  .admin-sidebar__brand {
-    align-items: center;
-    padding: 0;
-    margin-bottom: 28px;
-  }
-
-  .admin-sidebar__brand a {
-    font-size: 0;
-  }
-
-  .admin-sidebar__brand a::first-letter {
-    font-size: 1.4rem;
-  }
-
-  .admin-sidebar__brand span {
-    display: none;
-  }
-
-  .admin-sidebar__link {
-    justify-content: center;
-    padding: 0;
-  }
-
-  .admin-sidebar__link span {
-    width: auto;
-  }
-
-  .admin-sidebar__link {
-    font-size: 0;
-  }
-
-  .admin-sidebar__bottom {
-    padding-top: 20px;
-  }
-
-  .admin-layout__main {
-    margin-left: 72px;
-  }
-}
+/* Mobile handled by polish.css drawer (NasShell) */
 
 .admin-sidebar__brand-link {
   display: flex;
@@ -147,9 +101,9 @@
 }
 
 .admin-sidebar__logo {
-  height: 140px;
+  height: 56px;
   width: auto;
-  max-width: 320px;
+  max-width: 160px;
   object-fit: contain;
 }
 

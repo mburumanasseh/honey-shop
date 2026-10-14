@@ -13,7 +13,7 @@
 
 /* Logo sizing (Vite sidebar) */
 .admin-sidebar__logo {
-  height: 48px;
+  height: 56px;
   width: auto;
   max-width: 160px;
   object-fit: contain;
