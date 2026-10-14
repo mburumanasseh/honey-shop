@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
+import { IconEye, IconEyeOff } from '../../components/Icons'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -117,7 +118,7 @@ export default function RegisterPage() {
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? '🙈' : '👁'}
+                {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
               </button>
             </div>
           </label>
@@ -138,7 +139,7 @@ export default function RegisterPage() {
                 onClick={() => setShowConfirm((v) => !v)}
                 aria-label={showConfirm ? 'Hide password' : 'Show password'}
               >
-                {showConfirm ? '🙈' : '👁'}
+                {showConfirm ? <IconEyeOff size={18} /> : <IconEye size={18} />}
               </button>
             </div>
           </label>

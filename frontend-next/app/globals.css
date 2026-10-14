@@ -2101,3 +2101,32 @@ button.linkish {
     grid-row: 2;
   }
 }
+
+
+/* SVG icons in UI chips */
+.trust-strip__icon,
+.account-action__icon,
+.admin-sidebar__icon,
+.stat-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-dark, #8c5a16);
+}
+
+.admin-sidebar__icon {
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.admin-products__search-icon {
+  display: inline-flex;
+  color: var(--color-text-muted);
+}
+
+.password-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}

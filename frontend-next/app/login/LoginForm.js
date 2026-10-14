@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
+import { IconEye, IconEyeOff } from '../../components/Icons'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -75,7 +76,7 @@ export default function LoginForm() {
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? '🙈' : '👁'}
+                {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
               </button>
             </div>
           </label>

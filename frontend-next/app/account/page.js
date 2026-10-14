@@ -4,6 +4,14 @@ import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '../../context/AuthContext'
 import { listMyOrders } from '../../lib/clientApi'
+import {
+  IconCart,
+  IconChat,
+  IconHoney,
+  IconPackage,
+  IconSearch,
+  IconUser,
+} from '../../components/Icons'
 
 function formatKes(amount) {
   return new Intl.NumberFormat('en-KE', {
@@ -25,37 +33,37 @@ function statusClass(status) {
 const QUICK_LINKS = [
   {
     href: '/shop',
-    icon: '🍯',
+    Icon: IconHoney,
     title: 'Shop honey',
     desc: 'Browse the collection',
   },
   {
     href: '/orders',
-    icon: '📦',
+    Icon: IconPackage,
     title: 'My orders',
     desc: 'Full order history',
   },
   {
     href: '/track',
-    icon: '🔎',
+    Icon: IconSearch,
     title: 'Track order',
     desc: 'Find by order # + phone',
   },
   {
     href: '/cart',
-    icon: '🛒',
+    Icon: IconCart,
     title: 'Cart',
     desc: 'Review items to checkout',
   },
   {
     href: '/profile',
-    icon: '👤',
+    Icon: IconUser,
     title: 'Profile',
     desc: 'Name, email & phone',
   },
   {
     href: '/faq',
-    icon: '💬',
+    Icon: IconChat,
     title: 'Help & FAQ',
     desc: 'Answers about delivery',
   },
@@ -181,7 +189,7 @@ export default function AccountDashboardPage() {
           {QUICK_LINKS.map((item) => (
             <Link key={item.href} href={item.href} className="account-action">
               <span className="account-action__icon" aria-hidden>
-                {item.icon}
+                <item.Icon size={18} />
               </span>
               <strong>{item.title}</strong>
               <span>{item.desc}</span>

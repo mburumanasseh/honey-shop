@@ -8,6 +8,13 @@ import {
   listCustomers,
   listProducts,
 } from '../../lib/clientApi'
+import {
+  IconActivity,
+  IconCurrency,
+  IconHoney,
+  IconList,
+  IconUsers,
+} from '../../components/Icons'
 
 function formatKes(amount) {
   return new Intl.NumberFormat('en-KE', {
@@ -135,31 +142,31 @@ export default function NasDashboardPage() {
               ? `${presence.online_logged_in || 0} logged in · ${presence.online_guests || 0} guests (last ${presence.ttl_seconds || 90}s)`
               : 'People currently on the site'
           }
-          icon="●"
+          icon={<IconActivity size={18} />}
         />
         <StatCard
           title="Orders"
           value={loading ? '…' : String(stats.orderCount)}
           description="Orders received"
-          icon="▤"
+          icon={<IconList size={18} />}
         />
         <StatCard
           title="Revenue"
           value={loading ? '…' : formatKes(stats.revenue)}
           description="Total sales (excl. cancelled)"
-          icon="KSh"
+          icon={<IconCurrency size={18} />}
         />
         <StatCard
           title="Products"
           value={loading ? '…' : String(stats.activeProducts)}
           description="Active products"
-          icon="🍯"
+          icon={<IconHoney size={18} />}
         />
         <StatCard
           title="Customers"
           value={loading ? '…' : String(stats.customerCount)}
           description="Registered customers"
-          icon="♙"
+          icon={<IconUsers size={18} />}
         />
       </div>
 
