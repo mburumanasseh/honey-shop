@@ -1,127 +1,126 @@
 .admin-sidebar {
   position: sticky;
   top: 0;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
-  width: 250px;
-  min-height: 100vh;
-  padding: 28px 18px;
+  width: 248px;
+  flex-shrink: 0;
+  height: 100vh;
+  height: 100dvh;
+  padding: 20px 14px 18px;
   box-sizing: border-box;
-  background-color: var(--color-surface);
-  border-right: 1px solid var(--color-border);
+  background: #ffffff;
+  border-right: 1px solid var(--color-border, #e8dfd2);
+  overflow-y: auto;
 }
 
 .admin-sidebar__brand {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 0 12px;
-  margin-bottom: 40px;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 4px 10px 18px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--color-border, #e8dfd2);
 }
 
-.admin-sidebar__brand a {
-  color: var(--color-primary-dark);
-  font-size: 1.35rem;
-  font-weight: 800;
+.admin-sidebar__brand-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
+  color: inherit;
 }
 
-.admin-sidebar__brand span {
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+.admin-sidebar__logo {
+  height: 48px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
+}
+
+.admin-sidebar__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(183, 121, 31, 0.12);
+  color: var(--color-primary-dark, #8c5a16);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .admin-sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  flex: 1;
+  padding-top: 8px;
 }
 
 .admin-sidebar__bottom {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   margin-top: auto;
-  padding-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border, #e8dfd2);
 }
 
 .admin-sidebar__link {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 46px;
-  padding: 0 14px;
-  color: var(--color-text-muted);
-  border-radius: var(--radius-md);
-  font-size: 0.92rem;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--color-text-muted, #6b625c);
+  border-radius: 10px;
+  font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.admin-sidebar__link span {
-  display: flex;
+.admin-sidebar__icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  font-size: 1rem;
-}
-
-.admin-sidebar__link:hover {
-  color: var(--color-primary-dark);
-  background-color: var(--color-surface-warm);
-  transform: translateX(2px);
-}
-
-.admin-sidebar__link.active {
-  color: var(--color-primary-dark);
-  background-color: rgba(214, 158, 46, 0.14);
-}
-
-@media (max-width: 900px) {
-  .admin-sidebar {
-    width: 210px;
-  }
-}
-
-/* Mobile handled by polish.css drawer (NasShell) */
-
-.admin-sidebar__brand-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
   color: inherit;
 }
 
-.admin-sidebar__logo {
-  height: 56px;
-  width: auto;
-  max-width: 160px;
-  object-fit: contain;
+.admin-sidebar__label {
+  line-height: 1.2;
 }
 
-.admin-sidebar__brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
+.admin-sidebar__link:hover {
+  color: var(--color-primary-dark, #8c5a16);
+  background-color: var(--color-surface-warm, #f8f1e3);
 }
 
-.admin-sidebar__brand-text strong {
-  font-size: 1rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.admin-sidebar__link.active {
+  color: var(--color-primary-dark, #8c5a16);
+  background: linear-gradient(
+    90deg,
+    rgba(214, 158, 46, 0.22) 0%,
+    rgba(214, 158, 46, 0.08) 100%
+  );
+  box-shadow: inset 3px 0 0 var(--color-primary, #b7791f);
 }
 
-.admin-sidebar__brand-text span {
-  font-size: 0.7rem;
-  opacity: 0.8;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.admin-sidebar__link.active .admin-sidebar__icon {
+  color: var(--color-primary-dark, #8c5a16);
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar--desktop {
+    width: 220px;
+  }
 }

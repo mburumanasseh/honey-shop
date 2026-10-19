@@ -14,39 +14,28 @@
   max-width: 1440px;
 }
 
-/* Sidebar */
-.admin-sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, #ffffff 0%, #fffdf8 100%);
-  box-shadow: 4px 0 24px rgba(45, 36, 31, 0.04);
+/* Sidebar — desktop polish (mobile drawer rules further below) */
+.admin-sidebar--desktop {
+  width: 248px;
+  background: #fff;
+  box-shadow: 1px 0 0 var(--color-border, #e8dfd2);
 }
 
-.admin-sidebar__logo {
-  height: 56px;
-  max-width: 180px;
+.admin-sidebar--desktop .admin-sidebar__logo {
+  height: 48px;
+  max-width: 148px;
 }
 
-.admin-sidebar__badge {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: rgba(183, 121, 31, 0.12);
-  color: var(--color-primary-dark, #8c5a16);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  width: fit-content;
+.admin-sidebar--desktop .admin-sidebar__link {
+  border-radius: 10px;
 }
 
-.admin-sidebar__link {
-  border-radius: 12px;
-  letter-spacing: 0.01em;
-}
-
-.admin-sidebar__link.active {
-  background: linear-gradient(135deg, rgba(214, 158, 46, 0.2), rgba(183, 121, 31, 0.1));
+.admin-sidebar--desktop .admin-sidebar__link.active {
+  background: linear-gradient(
+    90deg,
+    rgba(214, 158, 46, 0.2) 0%,
+    rgba(214, 158, 46, 0.06) 100%
+  );
   box-shadow: inset 3px 0 0 var(--color-primary, #b7791f);
   color: var(--color-primary-dark, #8c5a16);
 }
@@ -684,8 +673,8 @@
 /* Desktop logo size (sidebar) */
 @media (min-width: 701px) {
   .admin-sidebar--desktop .admin-sidebar__logo {
-    height: 56px;
-    max-width: 160px;
+    height: 48px;
+    max-width: 148px;
   }
 
   .admin-sidebar--drawer,
