@@ -2510,3 +2510,29 @@ button.linkish {
   font-size: 1.05rem;
   line-height: 1.75;
 }
+
+
+.about-story__body--compact {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.about-story__caption-block {
+  padding: 1.5rem 0 0.5rem;
+  text-align: center;
+}
+
+.about-story__caption-block h2 {
+  margin: 0 0 0.65rem;
+  color: var(--color-primary-dark);
+  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+  font-weight: 600;
+}
+
+.about-story__caption-block p {
+  margin: 0 auto;
+  max-width: 640px;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-style: italic;
+}
