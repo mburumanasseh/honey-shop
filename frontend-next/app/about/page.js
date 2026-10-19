@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'About',
+  title: 'Our Story',
   description:
     'Our story — born from nature, inspired by the sweetness of life. Mercy Gold Honey, pure natural Kenyan honey.',
 }
@@ -26,23 +26,53 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Opening image + caption */}
-      <section className="about-story__media">
+      {/* Image 2 — sunny dipper, directly under the lede */}
+      <section className="about-story__media about-story__media--tight">
+        <div className="container">
+          <figure className="about-story__figure">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/about/about-dipper.jpg"
+              alt="Honey dripping from a wooden dipper into a glass jar in sunlight"
+            />
+          </figure>
+        </div>
+      </section>
+
+      {/* Opening realization + jar board photo */}
+      <section className="about-story__body about-story__body--compact">
+        <div className="container about-story__prose">
+          <p>
+            But the more we looked at it, the more we realised that honey is
+            about so much more than its taste. Behind every golden drop is a
+            remarkable story of nature, hard work, and life working together.
+          </p>
+        </div>
+      </section>
+
+      {/* Image 1 — jar on board */}
+      <section className="about-story__media about-story__media--tight">
         <div className="container">
           <figure className="about-story__figure">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/about/about-jar-board.jpg"
-              alt="Jar of golden honey with honeycomb and wooden spoon"
+              alt="Jar of golden honey with honeycomb, wooden spoon, and flowers"
             />
           </figure>
-          <div className="about-story__caption">
-            <h2>Mercy Gold Honey — Pure. Natural. Kenyan.</h2>
-            <p>
-              Nature&apos;s golden gift, bringing sweetness to your table and
-              reminding us of the beauty behind every drop.
-            </p>
-          </div>
+        </div>
+      </section>
+
+      {/* Image 3 — bee (also under the same opening idea) */}
+      <section className="about-story__media about-story__media--tight">
+        <div className="container">
+          <figure className="about-story__figure">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/about/about-bee.jpg"
+              alt="Honeybee collecting pollen on a white flower"
+            />
+          </figure>
         </div>
       </section>
 
@@ -67,7 +97,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Narrative */}
+      {/* Main narrative */}
       <section className="about-story__body">
         <div className="container about-story__prose">
           <p>
@@ -97,38 +127,17 @@ export default function AboutPage() {
             For us, honey is a celebration of sweetness, the beauty of
             pollination, and the incredible world of the bees.
           </p>
-
         </div>
       </section>
 
-      {/* Closing thought + bee photo */}
-      <section className="about-story__bee">
+      {/* Closing caption from script */}
+      <section className="about-story__caption-block">
         <div className="container">
-          <p className="about-story__bee-text">
-            But the more we looked at it, the more we realised that honey is
-            about so much more than its taste. Behind every golden drop is a
-            remarkable story of nature, hard work, and life working together.
+          <h2>Mercy Gold Honey — Pure. Natural. Kenyan.</h2>
+          <p>
+            Nature&apos;s golden gift, bringing sweetness to your table and
+            reminding us of the beauty behind every drop.
           </p>
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-bee.jpg"
-              alt="Honeybee collecting pollen on a white flower"
-            />
-          </figure>
-        </div>
-      </section>
-
-      {/* Dipper photo */}
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-dipper.jpg"
-              alt="Honey dripping from a wooden dipper into a glass jar"
-            />
-          </figure>
         </div>
       </section>
 
