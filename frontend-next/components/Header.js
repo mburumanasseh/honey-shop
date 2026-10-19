@@ -108,7 +108,7 @@ export default function Header() {
           <nav className="site-nav site-nav--desktop" aria-label="Main">
             <Link href="/">Home</Link>
             <Link href="/shop">Shop</Link>
-            <Link href="/about">About</Link>
+            <Link href="/about">Our Story</Link>
             <Link href="/faq">FAQ</Link>
             <Link href="/track">Track</Link>
             {authLinks}
@@ -137,7 +137,7 @@ export default function Header() {
           Shop
         </Link>
         <Link href="/about" onClick={() => setMenuOpen(false)}>
-          About
+          Our Story
         </Link>
         <Link href="/faq" onClick={() => setMenuOpen(false)}>
           FAQ
