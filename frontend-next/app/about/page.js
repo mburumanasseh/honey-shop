@@ -9,7 +9,6 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div className="about-story">
-      {/* Intro */}
       <section className="about-story__intro">
         <div className="container about-story__intro-inner">
           <span className="about-story__eyebrow">Our story</span>
@@ -26,7 +25,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Image 2 — sunny dipper, directly under the lede */}
       <section className="about-story__media about-story__media--tight">
         <div className="container">
           <figure className="about-story__figure">
@@ -39,7 +37,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Opening realization + jar board photo */}
       <section className="about-story__body about-story__body--compact">
         <div className="container about-story__prose">
           <p>
@@ -50,20 +47,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Image 1 — jar on board */}
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-jar-board.jpg"
-              alt="Jar of golden honey with honeycomb, wooden spoon, and flowers"
-            />
-          </figure>
-        </div>
-      </section>
-
-      {/* Image 3 — bee (also under the same opening idea) */}
       <section className="about-story__media about-story__media--tight">
         <div className="container">
           <figure className="about-story__figure">
@@ -76,28 +59,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Dark brand band */}
-      <section className="about-story__band">
-        <div className="container about-story__band-inner">
-          <div className="about-story__band-brand">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/mercy-gold-logo.jpg"
-              alt=""
-              className="about-story__band-logo"
-            />
-            <div>
-              <strong>Mercy Gold</strong>
-              <span>Honey</span>
-            </div>
-          </div>
-          <p className="about-story__band-tagline">
-            Nature&apos;s sweetest gift, straight from the hive.
-          </p>
-        </div>
-      </section>
-
-      {/* Main narrative */}
       <section className="about-story__body">
         <div className="container about-story__prose">
           <p>
@@ -130,7 +91,19 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Closing caption from script */}
+      {/* Jar photo immediately above closing caption */}
+      <section className="about-story__media about-story__media--tight">
+        <div className="container">
+          <figure className="about-story__figure">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/about/about-jar-board.jpg"
+              alt="Jar of golden honey with honeycomb, wooden spoon, and flowers"
+            />
+          </figure>
+        </div>
+      </section>
+
       <section className="about-story__caption-block">
         <div className="container">
           <h2>Mercy Gold Honey — Pure. Natural. Kenyan.</h2>
@@ -141,7 +114,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="about-story__cta">
         <div className="container">
           <p>Taste the story in every jar.</p>
