@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import { IconCart } from './Icons'
+import BrandLockup from './BrandLockup'
 
 function CartIcon({ count }) {
   return (
@@ -76,14 +77,7 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <Link href="/" className="brand" aria-label="Mercy Gold Honey home">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/mercy-gold-logo.jpg"
-            alt="Mercy Gold Honey"
-            className="brand-logo"
-          />
-        </Link>
+        <BrandLockup light className="brand" />
 
         <div className="site-header__actions">
           <Link href="/cart" className="cart-trigger" title="Cart">

@@ -2536,3 +2536,73 @@ button.linkish {
   line-height: 1.6;
   font-style: italic;
 }
+
+
+/* Brand lockup: mark + wordmark */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.brand-lockup:hover {
+  color: inherit;
+  opacity: 0.92;
+}
+
+.brand-lockup__mark {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fffdf8;
+  flex-shrink: 0;
+}
+
+.brand-lockup__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.12;
+}
+
+.brand-lockup__text strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.brand-lockup__text span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.brand-lockup--light .brand-lockup__text strong {
+  color: #e8c57a;
+}
+
+.brand-lockup--light .brand-lockup__text span {
+  color: var(--color-chrome-muted, rgba(243, 230, 212, 0.72));
+}
+
+.site-header .brand-lockup__mark {
+  width: 42px;
+  height: 42px;
+}
+
+@media (min-width: 900px) {
+  .site-header .brand-lockup__mark {
+    width: 44px;
+    height: 44px;
+  }
+
+  .site-header .brand-lockup__text strong {
+    font-size: 1rem;
+  }
+}
