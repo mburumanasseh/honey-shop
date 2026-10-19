@@ -3,7 +3,7 @@ import { listProducts } from '../lib/api'
 const BASE = 'https://mercygold.co.ke'
 
 export default async function sitemap() {
-  const staticRoutes = ['', '/shop'].map((path) => ({
+  const staticRoutes = ['', '/shop', '/about', '/faq', '/benefits', '/track'].map((path) => ({
     url: `${BASE}${path || '/'}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',

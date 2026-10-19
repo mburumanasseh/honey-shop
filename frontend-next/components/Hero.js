@@ -15,9 +15,9 @@ export default function Hero() {
             <Link href="/shop" className="btn-primary">
               Shop Honey
             </Link>
-            <a href="#featured" className="btn-secondary">
-              Explore Our Honey
-            </a>
+            <Link href="/benefits" className="btn-secondary">
+              Benefits of honey
+            </Link>
           </div>
         </div>
         <div className="hero-block__image">
