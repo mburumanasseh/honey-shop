@@ -98,17 +98,17 @@ export default function AboutPage() {
             pollination, and the incredible world of the bees.
           </p>
 
-          <p>
+        </div>
+      </section>
+
+      {/* Closing thought + bee photo */}
+      <section className="about-story__bee">
+        <div className="container">
+          <p className="about-story__bee-text">
             But the more we looked at it, the more we realised that honey is
             about so much more than its taste. Behind every golden drop is a
             remarkable story of nature, hard work, and life working together.
           </p>
-        </div>
-      </section>
-
-      {/* Bee photo */}
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
           <figure className="about-story__figure">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

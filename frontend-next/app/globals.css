@@ -2497,3 +2497,16 @@ button.linkish {
     max-height: 320px;
   }
 }
+
+
+.about-story__bee {
+  padding: 0.5rem 0 1rem;
+}
+
+.about-story__bee-text {
+  max-width: 680px;
+  margin: 0 auto 1.35rem;
+  color: #4a3f36;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
