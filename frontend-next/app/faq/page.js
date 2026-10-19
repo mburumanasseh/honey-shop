@@ -54,6 +54,9 @@ export default function FaqPage() {
           <Link href="/shop" className="faq__button">
             Shop honey
           </Link>
+          <Link href="/benefits" className="faq__button faq__button--secondary">
+            Benefits of honey
+          </Link>
           <Link href="/about" className="faq__button faq__button--secondary">
             About us
           </Link>

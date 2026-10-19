@@ -33,17 +33,25 @@ function statusClass(status) {
   return 'order-status order-status--pending'
 }
 
-function StatCard({ title, value, description, icon }) {
-  return (
-    <article className="stat-card">
+function StatCard({ title, value, description, icon, href }) {
+  const body = (
+    <>
       <div className="stat-card__top">
         <span className="stat-card__icon">{icon}</span>
         <span className="stat-card__title">{title}</span>
       </div>
       <strong className="stat-card__value">{value}</strong>
       <p className="stat-card__description">{description}</p>
-    </article>
+    </>
   )
+  if (href) {
+    return (
+      <Link href={href} className="stat-card stat-card--link">
+        {body}
+      </Link>
+    )
+  }
+  return <article className="stat-card">{body}</article>
 }
 
 export default function NasDashboardPage() {
@@ -136,6 +144,7 @@ export default function NasDashboardPage() {
       <div className="admin-dashboard__stats">
         <StatCard
           title="Online now"
+          href="#live-activity"
           value={presence == null ? '…' : String(presence.online_total ?? 0)}
           description={
             presence
@@ -146,24 +155,28 @@ export default function NasDashboardPage() {
         />
         <StatCard
           title="Orders"
+          href="/nas/orders"
           value={loading ? '…' : String(stats.orderCount)}
           description="Orders received"
           icon={<IconList size={18} />}
         />
         <StatCard
           title="Revenue"
+          href="/nas/payments"
           value={loading ? '…' : formatKes(stats.revenue)}
           description="Total sales (excl. cancelled)"
           icon={<IconCurrency size={18} />}
         />
         <StatCard
           title="Products"
+          href="/nas/products"
           value={loading ? '…' : String(stats.activeProducts)}
           description="Active products"
           icon={<IconHoney size={18} />}
         />
         <StatCard
           title="Customers"
+          href="/nas/customers"
           value={loading ? '…' : String(stats.customerCount)}
           description="Registered customers"
           icon={<IconUsers size={18} />}
@@ -171,7 +184,7 @@ export default function NasDashboardPage() {
       </div>
 
       {presence?.recent?.length > 0 && (
-        <section className="admin-dashboard__section" style={{ marginBottom: 24 }}>
+        <section id="live-activity" className="admin-dashboard__section" style={{ marginBottom: 24 }}>
           <div className="admin-dashboard__section-header">
             <div>
               <span>Live</span>
@@ -220,14 +233,18 @@ export default function NasDashboardPage() {
         ) : (
           <div className="admin-dashboard__orders">
             {recentOrders.map((order) => (
-              <div key={order.id} className="admin-dashboard__order">
+              <Link
+                key={order.id}
+                href="/nas/orders"
+                className="admin-dashboard__order admin-dashboard__order--link"
+              >
                 <div>
                   <strong>#ORD-{order.id}</strong>
                   <span>{order.shipping_name}</span>
                 </div>
                 <strong>{formatKes(order.total_amount)}</strong>
                 <span className={statusClass(order.status)}>{order.status}</span>
-              </div>
+              </Link>
             ))}
           </div>
         )}
