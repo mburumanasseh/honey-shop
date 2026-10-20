@@ -2861,3 +2861,42 @@ button.linkish {
     height: 180px;
   }
 }
+
+
+/* ——— FAQ page v2 (editorial cards) ——— */
+.faq-v2 { background: var(--color-background); }
+.faq-v2__eyebrow { display: block; margin-bottom: 0.65rem; color: var(--color-primary); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.faq-v2__hero { padding: 2.5rem 0 2rem; background: linear-gradient(105deg, rgba(248, 241, 227, 0.95) 0%, rgba(255, 253, 248, 0.5) 48%, transparent 100%); }
+.faq-v2__hero-inner { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.75rem; align-items: center; }
+.faq-v2__hero-copy h1 { margin: 0 0 0.75rem; font-size: clamp(2rem, 4.5vw, 2.75rem); letter-spacing: -0.03em; line-height: 1.15; color: var(--color-text); }
+.faq-v2__hero-copy p { margin: 0; max-width: 22rem; color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.55; }
+.faq-v2__rule { width: 48px; height: 3px; margin-top: 1.15rem; border-radius: 2px; background: var(--color-primary); }
+.faq-v2__hero-visual { position: relative; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--color-border); }
+.faq-v2__hero-visual img { width: 100%; height: min(340px, 48vw); object-fit: cover; display: block; }
+.faq-v2__script { position: absolute; left: 1.1rem; top: 1.1rem; z-index: 1; margin: 0; color: #8c5a16; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-style: italic; line-height: 1.35; text-shadow: 0 1px 0 rgba(255, 253, 248, 0.7); }
+.faq-v2__grid-wrap { padding: 0.5rem 0 2rem; }
+.faq-v2__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.faq-v2__card { padding: 1.15rem 1.2rem 1.2rem; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.faq-v2__card summary { display: grid; grid-template-columns: auto 1fr auto; gap: 0.75rem; align-items: start; cursor: pointer; list-style: none; font-weight: 600; color: var(--color-text); font-size: 1.02rem; line-height: 1.35; }
+.faq-v2__card summary::-webkit-details-marker { display: none; }
+.faq-v2__icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: var(--color-surface-warm); color: var(--color-primary-dark); border: 1px solid var(--color-border); flex-shrink: 0; }
+.faq-v2__q { padding-top: 0.35rem; }
+.faq-v2__chev { width: 10px; height: 10px; margin-top: 0.55rem; border-right: 2px solid var(--color-primary); border-bottom: 2px solid var(--color-primary); transform: rotate(45deg); transition: transform 0.15s ease; opacity: 0.7; }
+.faq-v2__card[open] .faq-v2__chev { transform: rotate(-135deg); margin-top: 0.75rem; }
+.faq-v2__card p { margin: 0.85rem 0 0; padding-left: calc(40px + 0.75rem); color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.55; }
+.faq-v2__actions-band { padding: 1.75rem 0 2.5rem; background: linear-gradient(90deg, rgba(248, 241, 227, 0.9), rgba(255, 253, 248, 0.75)); border-block: 1px solid var(--color-border); }
+.faq-v2__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.5rem; }
+.faq-v2__action { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: #fff; border: 1px solid var(--color-border); color: var(--color-primary-dark); font-weight: 600; font-size: 0.95rem; text-decoration: none; box-shadow: var(--shadow-sm); transition: border-color 0.15s ease, color 0.15s ease; }
+.faq-v2__action:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.faq-v2__action-icon { display: inline-flex; color: var(--color-primary); }
+.faq-v2__tagline { margin: 0; width: 100%; text-align: center; color: var(--color-primary-dark); font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; font-style: italic; }
+@media (max-width: 960px) {
+  .faq-v2__hero-inner { grid-template-columns: 1fr; }
+  .faq-v2__grid { grid-template-columns: 1fr 1fr; }
+  .faq-v2__hero-visual img { height: 240px; }
+}
+@media (max-width: 640px) {
+  .faq-v2__grid { grid-template-columns: 1fr; }
+  .faq-v2__card p { padding-left: 0; }
+  .faq-v2__hero { padding-top: 1.75rem; }
+}
