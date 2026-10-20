@@ -1,12 +1,4 @@
 import Link from 'next/link'
-import {
-  IconCheck,
-  IconHive,
-  IconHoney,
-  IconLeaf,
-  IconPackage,
-  IconTruck,
-} from '../../components/Icons'
 
 export const metadata = {
   title: 'Benefits of honey',
@@ -18,42 +10,42 @@ const BENEFITS = [
   {
     title: 'A natural source of energy',
     body: 'Honey contains naturally occurring sugars that provide a quick source of energy. Add it to tea, porridge, yoghurt or enjoy it straight from the spoon.',
-    icon: 'energy',
+    image: '/benefits/card-energy.jpg',
   },
   {
     title: 'Naturally delicious',
     body: 'Honey brings its own character to everything it touches. From delicate floral notes to rich, bold flavours, different honeys have different personalities.',
-    icon: 'leaf',
+    image: '/benefits/card-delicious.jpg',
   },
   {
     title: 'Perfect for your everyday moments',
     body: 'Morning tea. Warm mandazi. A bowl of porridge. Fresh bread. Use Mercy Gold as a natural sweetener whenever you want to add a little extra goodness to your day.',
-    icon: 'cup',
+    image: '/benefits/card-everyday.jpg',
   },
   {
     title: 'A gift from bees and flowers',
     body: 'Every jar tells a story. Bees travel from flower to flower collecting nectar, while pollination helps plants reproduce and thrive. It’s a beautiful partnership.',
-    icon: 'hive',
+    image: '/benefits/card-gift.jpg',
   },
   {
     title: 'So many ways to enjoy it',
     body: 'From baking to marinades, salad dressings and yoghurt, honey adds depth of flavour that white sugar just can’t match.',
-    icon: 'kitchen',
+    image: '/benefits/card-enjoy.jpg',
   },
   {
     title: 'A simple alternative to refined sugar',
     body: 'Looking to make small changes in your everyday meals? Honey can be used in place of some refined sugar in drinks and recipes.',
-    icon: 'leaf',
+    image: '/benefits/card-sugar.jpg',
   },
   {
     title: 'From the hive to your table',
     body: 'At Mercy Gold, we want you to experience honey as nature intended — with its natural colour, aroma, flavour and character. Our honey is sourced in Kenya and carefully selected so that every jar brings you closer to the hive.',
-    icon: 'truck',
+    image: '/benefits/card-hive.jpg',
   },
   {
     title: 'Better than ultra-processed sugar',
     body: 'Swapping some table sugar for honey is a practical step toward more natural food choices for the whole family.',
-    icon: 'check',
+    image: '/benefits/card-better.jpg',
   },
 ]
 
@@ -66,37 +58,16 @@ const JOURNEY = [
 ]
 
 const VARIETIES = [
-  'Light & floral',
-  'Forest',
-  'Wildflower',
-  'Raw',
-  'Comb honey',
+  { label: 'Light & floral', image: '/benefits/var-light.jpg' },
+  { label: 'Forest', image: '/benefits/var-forest.jpg' },
+  { label: 'Wildflower', image: '/benefits/var-wildflower.jpg' },
+  { label: 'Raw', image: '/benefits/var-raw.jpg' },
+  { label: 'Comb honey', image: '/benefits/var-comb.jpg' },
 ]
-
-function BenefitIcon({ name }) {
-  const props = { size: 18 }
-  switch (name) {
-    case 'energy':
-      return <IconHoney {...props} />
-    case 'hive':
-      return <IconHive {...props} />
-    case 'truck':
-      return <IconTruck {...props} />
-    case 'check':
-      return <IconCheck {...props} />
-    case 'kitchen':
-      return <IconPackage {...props} />
-    case 'cup':
-      return <IconLeaf {...props} />
-    default:
-      return <IconLeaf {...props} />
-  }
-}
 
 export default function BenefitsPage() {
   return (
     <div className="benefits-v2">
-      {/* Hero */}
       <section className="benefits-v2__hero">
         <div className="container benefits-v2__hero-inner">
           <div className="benefits-v2__hero-copy">
@@ -121,14 +92,13 @@ export default function BenefitsPage() {
           <div className="benefits-v2__hero-visual">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/about/about-dipper.jpg"
-              alt="Golden Mercy Gold honey in a glass jar"
+              src="/benefits/hero.jpg"
+              alt="Mercy Gold honey jar among flowers and honeycomb"
             />
           </div>
         </div>
       </section>
 
-      {/* Benefits grid + journey */}
       <section className="benefits-v2__main">
         <div className="container">
           <header className="benefits-v2__section-head">
@@ -141,11 +111,14 @@ export default function BenefitsPage() {
             <div className="benefits-v2__grid">
               {BENEFITS.map((item) => (
                 <article key={item.title} className="benefits-v2__card">
-                  <span className="benefits-v2__card-icon" aria-hidden>
-                    <BenefitIcon name={item.icon} />
-                  </span>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
+                  <div className="benefits-v2__card-media">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={item.image} alt="" />
+                  </div>
+                  <div className="benefits-v2__card-body">
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -154,8 +127,8 @@ export default function BenefitsPage() {
               <div className="benefits-v2__journey-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/about/about-bee.jpg"
-                  alt="Honeybee on a flower"
+                  src="/benefits/journey-bee.jpg"
+                  alt="Honeybee on a yellow flower"
                 />
               </div>
               <span className="benefits-v2__eyebrow">The incredible journey</span>
@@ -183,12 +156,14 @@ export default function BenefitsPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
       <section className="benefits-v2__band">
         <div className="container benefits-v2__band-inner">
           <div className="benefits-v2__band-visual">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/honeyjar.jpg" alt="Jar of Mercy Gold honey" />
+            <img
+              src="/benefits/cta-jar.jpg"
+              alt="Mercy Gold honey jar with honeycomb"
+            />
           </div>
           <div className="benefits-v2__band-copy">
             <span className="benefits-v2__eyebrow">Find your favourite sweetness</span>
@@ -201,7 +176,11 @@ export default function BenefitsPage() {
             </Link>
             <ul className="benefits-v2__varieties">
               {VARIETIES.map((v) => (
-                <li key={v}>{v}</li>
+                <li key={v.label}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={v.image} alt="" />
+                  <span>{v.label}</span>
+                </li>
               ))}
             </ul>
           </div>
