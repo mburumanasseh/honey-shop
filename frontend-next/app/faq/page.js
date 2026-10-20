@@ -58,7 +58,7 @@ export default function FaqPage() {
             Benefits of honey
           </Link>
           <Link href="/about" className="faq__button faq__button--secondary">
-            About us
+            Our Story
           </Link>
         </div>
       </div>
