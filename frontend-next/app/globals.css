@@ -2649,7 +2649,7 @@ button.linkish {
 }
 
 .benefits-v2__card-media {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2.15 / 1;
   overflow: hidden;
   background: var(--color-surface-warm);
 }
