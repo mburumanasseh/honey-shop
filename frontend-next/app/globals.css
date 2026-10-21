@@ -3381,7 +3381,17 @@ button.linkish {
 }
 
 .home-varieties__media {
-  aspect-ratio: 1 / 0.95;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-surface-warm);
+}
+
+.home-varieties__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .home-varieties__body {
