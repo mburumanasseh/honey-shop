@@ -15,25 +15,25 @@ const VARIETIES = [
     name: 'Light & Floral',
     tags: 'Delicate · Smooth · Refreshing',
     href: '/shop',
-    image: '/benefits/card-everyday.jpg',
+    image: '/home/var-light.jpg',
   },
   {
     name: 'Forest Honey',
     tags: 'Rich · Bold · Distinctive',
     href: '/shop',
-    image: '/benefits/card-delicious.jpg',
+    image: '/home/var-forest.jpg',
   },
   {
     name: 'Raw Honey',
     tags: 'Pure · Natural · Unprocessed',
     href: '/shop',
-    image: '/benefits/card-better.jpg',
+    image: '/home/var-raw.jpg',
   },
   {
     name: 'Comb Honey',
     tags: 'Natural · Fresh · Wholesome',
     href: '/shop',
-    image: '/benefits/card-energy.jpg',
+    image: '/home/var-comb.jpg',
   },
 ]
 
