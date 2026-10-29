@@ -155,9 +155,9 @@ export default function CheckoutPage() {
       <main className="checkout">
         <div className="container checkout__empty">
           <h1>Your Cart Is Empty</h1>
-          <p>Add some honey to your cart before proceeding to checkout.</p>
+          <p>Add some products to your cart before checkout.</p>
           <Link href="/shop" className="checkout__shop-button">
-            Browse Honey
+            Browse shop
           </Link>
         </div>
       </main>

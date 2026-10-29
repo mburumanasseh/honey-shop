@@ -48,7 +48,7 @@ export default function NasCustomersPage() {
       <div className="customers-header">
         <div>
           <h1>Customers</h1>
-          <p>Registered accounts on Mercy Gold Honey.</p>
+          <p>Registered accounts on Mercy Gold.</p>
         </div>
       </div>
 

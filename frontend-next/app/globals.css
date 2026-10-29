@@ -3132,3 +3132,53 @@ button.linkish {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Our Story — marketplace */
+.about-story__hero {
+  padding: 3rem 0 1.5rem;
+  background: linear-gradient(180deg, rgba(248, 241, 227, 0.7), transparent);
+}
+
+.about-story__hero h1 {
+  margin: 0.4rem 0 0.85rem;
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  line-height: 1.2;
+}
+
+.about-story__lead {
+  max-width: 36rem;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.about-story__body {
+  padding: 1rem 0 2rem;
+}
+
+.about-story__narrow {
+  max-width: 40rem;
+}
+
+.about-story__narrow p {
+  margin: 0 0 1.1rem;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.about-story__closing {
+  margin-top: 1.75rem !important;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.about-story__cta {
+  padding: 0 0 3rem;
+}
+
+.about-story__cta-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}

@@ -3,128 +3,72 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Our Story',
   description:
-    'Our story — born from nature, inspired by the sweetness of life. Mercy Gold Honey, pure natural Kenyan honey.',
+    'Mercy Gold connects Kenyan farmers with buyers — secure checkout, delivery across Kenya, farmers paid after delivery.',
 }
 
 export default function AboutPage() {
   return (
     <div className="about-story">
-      <section className="about-story__intro">
-        <div className="container about-story__intro-inner">
-          <span className="about-story__eyebrow">Our story</span>
-          <h1 className="about-story__title">
-            <span className="about-story__title-dark">Born from Nature.</span>
-            <span className="about-story__title-gold">
-              Inspired by the Sweetness of Life.
-            </span>
+      <section className="about-story__hero">
+        <div className="container about-story__hero-inner">
+          <span className="page-eyebrow">Our Story</span>
+          <h1>
+            Built for farmers.
+            <br />
+            Trusted by buyers.
           </h1>
-          <div className="about-story__rule" aria-hidden />
-          <p className="about-story__lede">
-            It started with something sweet — honey.
+          <p className="about-story__lead">
+            Mercy Gold started with a simple idea: good farm food should reach
+            more tables, and the people who grow it should be paid fairly and
+            safely.
           </p>
-        </div>
-      </section>
-
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-dipper.jpg"
-              alt="Honey dripping from a wooden dipper into a glass jar in sunlight"
-            />
-          </figure>
-        </div>
-      </section>
-
-      <section className="about-story__body about-story__body--compact">
-        <div className="container about-story__prose">
-          <p>
-            But the more we looked at it, the more we realised that honey is
-            about so much more than its taste. Behind every golden drop is a
-            remarkable story of nature, hard work, and life working together.
-          </p>
-        </div>
-      </section>
-
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-bee.jpg"
-              alt="Honeybee collecting pollen on a white flower"
-            />
-          </figure>
         </div>
       </section>
 
       <section className="about-story__body">
-        <div className="container about-story__prose">
+        <div className="container about-story__narrow">
           <p>
-            We were fascinated by the little things that make it all possible:
-            bees moving from flower to flower, pollination helping plants
-            flourish, and landscapes bursting into bloom. And then there are the
-            bees themselves — fiercely protective of their hives and the
-            precious honey they work so hard to produce. There&apos;s something
-            beautiful about that dedication. It reminds us that honey is not
-            just a sweet treat; it&apos;s the result of an extraordinary natural
-            process.
+            Kenya is full of farmers producing excellent honey, milk, eggs,
+            produce, and more. What often stands in the way is trust —
+            buyers want quality and reliable delivery; farmers want to know
+            they will actually get paid.
           </p>
-
-          <blockquote className="about-story__quote">
-            That is the inspiration behind Mercy Gold Honey.
-          </blockquote>
-
           <p>
-            We want to bring a little of that natural wonder into your everyday
-            life. Whether you&apos;re drizzling honey over warm mandazi, stirring
-            it into your favourite cup of tea, or enjoying a spoonful just
-            because you can, we want every jar to remind you of the goodness that
-            nature has to offer.
+            That is the gap Mercy Gold fills. We are the middleman who makes
+            the marketplace work: buyers order and pay through us; we confirm
+            delivery; then we release payment to the farmer.
           </p>
-
           <p>
-            For us, honey is a celebration of sweetness, the beauty of
-            pollination, and the incredible world of the bees.
+            We still care deeply about natural, carefully produced food —
+            especially honey and milk — but Mercy Gold is not a single-product
+            shop. It is a platform for Kenyan farm products, with room to grow
+            into dairy, produce, and whatever else our approved farmers list.
           </p>
-        </div>
-      </section>
-
-      {/* Jar photo immediately above closing caption */}
-      <section className="about-story__media about-story__media--tight">
-        <div className="container">
-          <figure className="about-story__figure">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/about/about-jar-board.jpg"
-              alt="Jar of golden honey with honeycomb, wooden spoon, and flowers"
-            />
-          </figure>
-        </div>
-      </section>
-
-      <section className="about-story__caption-block">
-        <div className="container">
-          <h2>Mercy Gold Honey — Pure. Natural. Kenyan.</h2>
           <p>
-            Nature&apos;s golden gift, bringing sweetness to your table and
-            reminding us of the beauty behind every drop.
+            For buyers, that means one place to shop with clear categories and
+            secured checkout. For farmers, it means a simple way to list
+            products, get approved, fulfil orders, and get paid after the
+            customer receives their goods.
+          </p>
+          <p className="about-story__closing">
+            <strong>Mercy Gold</strong> — Pure. Natural. Kenyan.
+            <br />
+            Farm products, secured end to end.
           </p>
         </div>
       </section>
 
       <section className="about-story__cta">
-        <div className="container">
-          <p>Taste the story in every jar.</p>
-          <div className="about-story__actions">
-            <Link href="/shop" className="btn-primary">
-              Shop our honey
-            </Link>
-            <Link href="/benefits" className="btn-secondary">
-              Benefits of honey
-            </Link>
-          </div>
+        <div className="container about-story__cta-inner">
+          <Link href="/shop" className="btn-primary">
+            Shop products
+          </Link>
+          <Link href="/sell/register" className="btn-secondary">
+            Register as a farmer
+          </Link>
+          <Link href="/faq" className="btn-secondary">
+            FAQs
+          </Link>
         </div>
       </section>
     </div>

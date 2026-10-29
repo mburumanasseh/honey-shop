@@ -66,7 +66,7 @@ export default function CartPage() {
           </button>
         </div>
         <p className="muted">
-          Review your honey before checkout. No login required to place an
+          Review your items before checkout. No login required to place an
           order.
         </p>
         {isRefreshing && <p className="muted">Updating prices and stock…</p>}

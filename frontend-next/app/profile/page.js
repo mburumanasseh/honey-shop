@@ -35,7 +35,7 @@ export default function ProfilePage() {
         <div>
           <span className="account-hero__eyebrow">Profile</span>
           <h1>Your details</h1>
-          <p>Information linked to your Mercy Gold Honey account.</p>
+          <p>Information linked to your Mercy Gold account.</p>
         </div>
         <div className="account-hero__actions">
           <Link href="/account" className="btn-ghost">

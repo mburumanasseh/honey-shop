@@ -8,7 +8,7 @@ export default function BrandLockup({ href = '/', className = '', light = false 
     <Link
       href={href}
       className={`brand-lockup${light ? ' brand-lockup--light' : ''} ${className}`.trim()}
-      aria-label="Mercy Gold Honey home"
+      aria-label="Mercy Gold home"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
