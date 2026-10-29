@@ -263,3 +263,28 @@ export async function deleteSellerProduct(id) {
   })
 }
 
+/* ——— Admin farmers & approvals ——— */
+
+export async function listAdminFarmers() {
+  return apiRequest('/api/v1/admin/farmers')
+}
+
+export async function setFarmerSellerActive(id, seller_active) {
+  return apiRequest(`/api/v1/admin/farmers/${id}/seller-active`, {
+    method: 'PATCH',
+    body: JSON.stringify({ seller_active }),
+  })
+}
+
+export async function listProductApprovals(status = 'pending') {
+  const q = status ? `?status=${encodeURIComponent(status)}` : ''
+  return apiRequest(`/api/v1/admin/product-approvals${q}`)
+}
+
+export async function setProductApproval(id, approval_status) {
+  return apiRequest(`/api/v1/admin/product-approvals/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ approval_status }),
+  })
+}
+

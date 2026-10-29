@@ -18,6 +18,8 @@ import {
 const NAV = [
   { href: '/nas', label: 'Dashboard', Icon: IconGrid, end: true },
   { href: '/nas/products', label: 'Products', Icon: IconHoney },
+  { href: '/nas/approvals', label: 'Approvals', Icon: IconList },
+  { href: '/nas/farmers', label: 'Farmers', Icon: IconUsers },
   { href: '/nas/orders', label: 'Orders', Icon: IconList },
   { href: '/nas/customers', label: 'Customers', Icon: IconUsers },
   { href: '/nas/inventory', label: 'Inventory', Icon: IconLayers },
