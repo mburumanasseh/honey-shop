@@ -292,3 +292,10 @@ export async function listSellerOrders() {
   return apiRequest('/api/v1/seller/orders')
 }
 
+export async function updateMyProfile(payload) {
+  return apiRequest('/api/v1/auth/me', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+

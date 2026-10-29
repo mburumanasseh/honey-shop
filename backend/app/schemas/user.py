@@ -38,5 +38,13 @@ class UserResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class UserProfileUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=2, max_length=120)
+    phone: Optional[str] = Field(None, max_length=30)
+    farm_name: Optional[str] = Field(None, max_length=200)
+    county: Optional[str] = Field(None, max_length=100)
+    mpesa_number: Optional[str] = Field(None, max_length=30)
+
+
 class MessageResponse(BaseModel):
     message: str

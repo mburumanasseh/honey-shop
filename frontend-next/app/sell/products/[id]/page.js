@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation'
 import {
   listSellerProducts,
   updateSellerProduct,
+  uploadProductImage,
 } from '../../../../lib/clientApi'
 
 const CATEGORIES = [
@@ -22,6 +23,7 @@ export default function EditSellerProductPage() {
   const [form, setForm] = useState(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const load = useCallback(async () => {
     try {
@@ -53,6 +55,23 @@ export default function EditSellerProductPage() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((f) => ({ ...f, [name]: value }))
+  }
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError('')
+    setUploading(true)
+    try {
+      const result = await uploadProductImage(file)
+      const url = result.url || result.secure_url
+      if (!url) throw new Error('No image URL returned')
+      setForm((f) => ({ ...f, image_url: url }))
+    } catch (err) {
+      setError(err.message || 'Image upload failed')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -167,13 +186,33 @@ export default function EditSellerProductPage() {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Image URL
-            <input name="image_url" value={form.image_url} onChange={handleChange} />
-          </label>
         </div>
+        <label>
+          Product image
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleFile}
+            disabled={uploading}
+          />
+        </label>
+        {uploading && <p className="muted">Uploading image…</p>}
+        {form.image_url ? (
+          <div className="sell-image-preview">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={form.image_url} alt="" />
+          </div>
+        ) : null}
+        <label>
+          Or image URL
+          <input name="image_url" value={form.image_url} onChange={handleChange} />
+        </label>
         <div className="sell-actions">
-          <button type="submit" className="btn-primary" disabled={submitting}>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={submitting || uploading}
+          >
             {submitting ? 'Saving…' : 'Save changes'}
           </button>
           <Link href="/sell/products" className="btn-secondary">

@@ -18,6 +18,7 @@ from app.models.user import User
 from app.schemas.user import (
     MessageResponse,
     UserLogin,
+    UserProfileUpdate,
     UserRegister,
     UserResponse,
 )
@@ -185,6 +186,23 @@ def refresh(
 def me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
+
+
+@router.patch("/me", response_model=UserResponse)
+def update_me(
+    payload: UserProfileUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_active_user)],
+):
+    """Update profile fields for the logged-in user (farmers use this for farm details)."""
+    data = payload.model_dump(exclude_unset=True)
+    for field, value in data.items():
+        if isinstance(value, str):
+            value = value.strip() or None
+        setattr(current_user, field, value)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
 
 @router.post("/bootstrap-admin", response_model=UserResponse)
 def bootstrap_admin(

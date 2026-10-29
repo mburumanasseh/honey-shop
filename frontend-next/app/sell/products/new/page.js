@@ -4,7 +4,10 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../../../../context/AuthContext'
-import { createSellerProduct } from '../../../../lib/clientApi'
+import {
+  createSellerProduct,
+  uploadProductImage,
+} from '../../../../lib/clientApi'
 
 const CATEGORIES = [
   { value: 'honey', label: 'Honey' },
@@ -30,6 +33,7 @@ export default function NewSellerProductPage() {
   })
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   if (!canList) {
     return (
@@ -44,6 +48,23 @@ export default function NewSellerProductPage() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((f) => ({ ...f, [name]: value }))
+  }
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError('')
+    setUploading(true)
+    try {
+      const result = await uploadProductImage(file)
+      const url = result.url || result.secure_url
+      if (!url) throw new Error('No image URL returned')
+      setForm((f) => ({ ...f, image_url: url }))
+    } catch (err) {
+      setError(err.message || 'Image upload failed')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -146,18 +167,34 @@ export default function NewSellerProductPage() {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Image URL
-            <input
-              name="image_url"
-              value={form.image_url}
-              onChange={handleChange}
-              placeholder="https://…"
-            />
-          </label>
         </div>
+        <label>
+          Product image
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleFile}
+            disabled={uploading}
+          />
+        </label>
+        {uploading && <p className="muted">Uploading image…</p>}
+        {form.image_url ? (
+          <div className="sell-image-preview">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={form.image_url} alt="" />
+          </div>
+        ) : null}
+        <label>
+          Or image URL
+          <input
+            name="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            placeholder="https://…"
+          />
+        </label>
         <div className="sell-actions">
-          <button type="submit" className="btn-primary" disabled={submitting}>
+          <button type="submit" className="btn-primary" disabled={submitting || uploading}>
             {submitting ? 'Saving…' : 'Submit for approval'}
           </button>
           <Link href="/sell/products" className="btn-secondary">

@@ -4,6 +4,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { adminListOrders, adminUpdateOrder } from '../../../lib/clientApi'
 
 const STATUSES = ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']
+const PAYOUT_STATUSES = [
+  { value: 'none', label: 'Not ready' },
+  { value: 'ready', label: 'Ready to pay' },
+  { value: 'paid', label: 'Paid to farmer' },
+]
+
 const PAYMENT_METHODS = [
   { value: '', label: 'Not set' },
   { value: 'cash', label: 'Cash' },
@@ -52,6 +58,16 @@ export default function NasOrdersPage() {
     }
   }
 
+  const handlePayout = async (orderId, payout_status) => {
+    setError('')
+    try {
+      await adminUpdateOrder(orderId, { payout_status })
+      await load()
+    } catch (err) {
+      setError(err.message || 'Could not update payout status')
+    }
+  }
+
   return (
     <div className="admin-orders">
       <div className="admin-orders__header">
@@ -83,6 +99,7 @@ export default function NasOrdersPage() {
                 <th>Total</th>
                 <th>Status</th>
                 <th>Payment</th>
+                <th>Payout</th>
                 <th>Items</th>
                 <th>Created</th>
               </tr>
@@ -120,6 +137,24 @@ export default function NasOrdersPage() {
                     >
                       {PAYMENT_METHODS.map((m) => (
                         <option key={m.value || 'none'} value={m.value}>
+                          {m.label}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      value={order.payout_status || 'none'}
+                      onChange={(e) => handlePayout(order.id, e.target.value)}
+                      aria-label={`Payout status for order ${order.id}`}
+                      title={
+                        order.status !== 'delivered'
+                          ? 'Mark delivered before ready/paid'
+                          : undefined
+                      }
+                    >
+                      {PAYOUT_STATUSES.map((m) => (
+                        <option key={m.value} value={m.value}>
                           {m.label}
                         </option>
                       ))}

@@ -10,6 +10,7 @@ from app.models.order import Order, OrderItem
 from app.models.product import Product
 from app.models.user import User
 from app.schemas.order import (
+    ALLOWED_PAYOUT_STATUSES,
     ALLOWED_PAYMENT_METHODS,
     ALLOWED_STATUSES,
     OrderCreate,
@@ -207,11 +208,15 @@ def admin_update_order_status(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
 ):
-    """Update order status and/or payment method (cash / mpesa / other)."""
-    if payload.status is None and payload.payment_method is None:
+    """Update order status, payment method, and/or payout_status."""
+    if (
+        payload.status is None
+        and payload.payment_method is None
+        and payload.payout_status is None
+    ):
         raise HTTPException(
             status_code=400,
-            detail="Provide status and/or payment_method",
+            detail="Provide status, payment_method, and/or payout_status",
         )
 
     order = _order_query(db).filter(Order.id == order_id).first()
@@ -244,6 +249,22 @@ def admin_update_order_status(
             # Recording a real payment method implies the order is at least paid
             if order.status == "pending":
                 order.status = "paid"
+
+    if payload.payout_status is not None:
+        from app.schemas.order import ALLOWED_PAYOUT_STATUSES
+
+        payout = payload.payout_status.strip().lower()
+        if payout not in ALLOWED_PAYOUT_STATUSES:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid payout_status. Allowed: {', '.join(sorted(ALLOWED_PAYOUT_STATUSES))}",
+            )
+        if payout in ("ready", "paid") and order.status != "delivered":
+            raise HTTPException(
+                status_code=400,
+                detail="Mark the order as delivered before setting payout to ready or paid",
+            )
+        order.payout_status = payout
 
     db.commit()
     db.refresh(order)

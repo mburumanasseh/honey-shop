@@ -20,6 +20,8 @@ class Order(Base):
     shipping_address: Mapped[str] = mapped_column(Text, nullable=False)
     shipping_email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     payment_method: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    # none | ready | paid — admin marks ready after delivery confirmed
+    payout_status: Mapped[str] = mapped_column(String(20), default="none", nullable=False)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
