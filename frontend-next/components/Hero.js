@@ -22,7 +22,7 @@ export default function Hero() {
         </div>
         <div className="hero-block__image">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/honeyjar.jpg" alt="Mercy Gold farm products" />
+          <img src="/hero-farm-products.jpg" alt="Fresh Kenyan farm products — honey, milk, eggs, and produce" />
         </div>
       </div>
     </section>
