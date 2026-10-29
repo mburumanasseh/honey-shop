@@ -63,9 +63,9 @@ export default function SellShell({ children }) {
       <div className="sell-main">
         {sellerInactive && (
           <div className="sell-banner sell-banner--warn" role="status">
-            Your seller account is <strong>inactive</strong>. You can view your
-            dashboard but cannot create new listings. Contact Mercy Gold if you
-            need this reactivated.
+            Your seller account is <strong>pending verification</strong> or has
+            been deactivated. You can log in, but you cannot list products until
+            Mercy Gold verifies your account after contacting you.
           </div>
         )}
         <div className="sell-main__inner">{children}</div>

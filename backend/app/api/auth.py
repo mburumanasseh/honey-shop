@@ -84,6 +84,12 @@ def register(
             detail="An account with this email already exists",
         )
 
+    if not getattr(payload, "accepted_terms", False):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You must accept the Terms and Conditions to create an account",
+        )
+
     role = (payload.role or "customer").strip().lower()
     if role not in ("customer", "farmer"):
         role = "customer"
@@ -101,7 +107,8 @@ def register(
         farm_location=payload.farm_location.strip() if getattr(payload, "farm_location", None) else None,
         goods_to_sell=payload.goods_to_sell.strip() if getattr(payload, "goods_to_sell", None) else None,
         mpesa_number=payload.mpesa_number.strip() if payload.mpesa_number else None,
-        seller_active=True,
+        # Farmers start inactive until admin verifies legitimacy
+        seller_active=(role != "farmer"),
     )
     db.add(user)
     db.commit()

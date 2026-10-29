@@ -34,6 +34,7 @@ export default function SellRegisterPage() {
     mpesa_number: '',
   })
   const [showPassword, setShowPassword] = useState(false)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -75,6 +76,10 @@ export default function SellRegisterPage() {
       setError('Select or describe the goods you want to sell')
       return
     }
+    if (!acceptedTerms) {
+      setError('Please accept the Terms and Conditions to continue.')
+      return
+    }
 
     setSubmitting(true)
     const result = await register({
@@ -88,6 +93,7 @@ export default function SellRegisterPage() {
       farm_location: form.farm_location.trim(),
       goods_to_sell: goodsParts.join(', '),
       mpesa_number: form.mpesa_number || undefined,
+      accepted_terms: true,
     })
     setSubmitting(false)
     if (!result.success) {
@@ -104,8 +110,9 @@ export default function SellRegisterPage() {
         <span className="page-eyebrow">Sell on Mercy Gold</span>
         <h1>Register as a farmer</h1>
         <p className="muted">
-          Tell us where you farm and what you want to sell. Your listings still
-          need Mercy Gold approval before they appear in the shop.
+          Tell us where you farm and what you want to sell. Your account stays
+          pending until Mercy Gold verifies you are a legitimate seller. Product
+          listings also need approval before they appear in the shop.
         </p>
         {error && (
           <p className="error" role="alert">
@@ -227,8 +234,25 @@ export default function SellRegisterPage() {
             </label>
           </fieldset>
 
+          <label className="terms-check">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <span>
+              I agree to the{' '}
+              <Link href="/terms" target="_blank">
+                Terms and Conditions
+              </Link>
+              . I understand my seller account needs admin verification before I
+              can list products, and that Mercy Gold may use my details for
+              verification, security, and service improvement under Kenyan law.
+            </span>
+          </label>
+
           <button type="submit" className="btn-primary" disabled={submitting}>
-            {submitting ? 'Creating…' : 'Create seller account'}
+            {submitting ? 'Creating…' : 'Submit for verification'}
           </button>
         </form>
         <p className="muted sell-auth__foot">
