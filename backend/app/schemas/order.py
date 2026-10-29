@@ -20,6 +20,12 @@ ALLOWED_PAYMENT_METHODS = {
     "other",
 }
 
+ALLOWED_PAYOUT_STATUSES = {
+    "none",
+    "ready",
+    "paid",
+}
+
 
 class OrderItemCreate(BaseModel):
     product_id: int
@@ -57,6 +63,7 @@ class OrderResponse(BaseModel):
     shipping_address: str
     shipping_email: Optional[str] = None
     payment_method: Optional[str] = None
+    payout_status: str = "none"
     notes: Optional[str] = None
     items: List[OrderItemResponse]
     created_at: datetime
@@ -66,10 +73,11 @@ class OrderResponse(BaseModel):
 
 
 class OrderStatusUpdate(BaseModel):
-    """Admin can update fulfillment status and/or payment method (e.g. cash)."""
+    """Admin can update fulfillment status, payment method, and payout readiness."""
 
     status: Optional[str] = None
     payment_method: Optional[str] = None
+    payout_status: Optional[str] = None  # none | ready | paid
 
 
 class OrderLookupRequest(BaseModel):

@@ -31,6 +31,7 @@ class SellerOrderResponse(BaseModel):
     order_id: int
     status: str
     payment_method: Optional[str] = None
+    payout_status: str = "none"
     shipping_name: str
     shipping_phone: str
     shipping_address: str
@@ -82,6 +83,7 @@ def list_seller_orders(
                 order_id=order.id,
                 status=order.status,
                 payment_method=order.payment_method,
+                payout_status=getattr(order, "payout_status", None) or "none",
                 shipping_name=order.shipping_name,
                 shipping_phone=order.shipping_phone,
                 shipping_address=order.shipping_address,

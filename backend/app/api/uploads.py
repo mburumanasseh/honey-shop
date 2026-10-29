@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
-from app.api.deps import get_current_admin_user
+from app.api.deps import get_current_active_user
 from app.models.user import User
 from app.services.cloudinary_service import upload_image
 
@@ -19,10 +19,23 @@ MAX_BYTES = 5 * 1024 * 1024  # 5 MB
 
 @router.post("/image")
 async def upload_product_image(
-    _: Annotated[User, Depends(get_current_admin_user)],
+    current_user: Annotated[User, Depends(get_current_active_user)],
     file: UploadFile = File(...),
 ):
-    """Admin-only: upload an image to Cloudinary and return the secure URL."""
+    """Admin or active farmer: upload an image to Cloudinary and return the secure URL."""
+    is_admin = current_user.is_admin or current_user.role == "admin"
+    is_farmer = current_user.role == "farmer"
+    if not is_admin and not is_farmer:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admins and farmers can upload product images",
+        )
+    if is_farmer and not current_user.seller_active and not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your seller account is inactive",
+        )
+
     content_type = (file.content_type or "").lower()
     if content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(

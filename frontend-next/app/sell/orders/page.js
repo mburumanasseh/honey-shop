@@ -79,6 +79,16 @@ export default function SellOrdersPage() {
               <strong>Your subtotal:</strong> KSh{' '}
               {Number(o.my_subtotal).toLocaleString()}
             </p>
+            {o.payout_status && o.payout_status !== 'none' ? (
+              <p className="muted">
+                Payout: <strong>{o.payout_status}</strong>
+                {o.payout_status === 'ready'
+                  ? ' — Mercy Gold will pay you soon'
+                  : o.payout_status === 'paid'
+                    ? ' — Paid'
+                    : ''}
+              </p>
+            ) : null}
           </article>
         ))}
     </div>
