@@ -28,7 +28,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__brand">
             <BrandLockup light className="site-footer__logo" />
             <p className="site-footer__tagline">
-              Nature&apos;s sweetest gift, straight from the hive.
+              Farm products secured by Mercy Gold — honey, milk, and more.
             </p>
           </div>
 
@@ -41,7 +41,11 @@ export default function StoreChrome({ children }) {
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
-              <Link href="/shop">Shop Honey</Link>
+              <Link href="/shop">Shop</Link>
+              <span className="site-footer__dot" aria-hidden>
+                ·
+              </span>
+              <Link href="/sell/register">Sell</Link>
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
@@ -58,7 +62,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__divider" aria-hidden />
 
           <p className="site-footer__copy">
-            © {year} Mercy Gold Honey. All rights reserved.
+            © {year} Mercy Gold. All rights reserved.
           </p>
         </div>
       </footer>

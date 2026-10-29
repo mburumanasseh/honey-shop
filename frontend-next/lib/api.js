@@ -30,8 +30,12 @@ export async function apiFetch(path, options = {}) {
   return res.json()
 }
 
-export async function listProducts() {
-  return apiFetch('/api/v1/products')
+export async function listProducts(params = {}) {
+  const qs = new URLSearchParams()
+  if (params.category) qs.set('category', params.category)
+  if (params.seller_id != null) qs.set('seller_id', String(params.seller_id))
+  const q = qs.toString()
+  return apiFetch(`/api/v1/products${q ? `?${q}` : ''}`)
 }
 
 export async function getProduct(id) {
@@ -48,6 +52,8 @@ function normalizeImage(product) {
     image: image || '/honeyjar.jpg',
     stock: product.stock ?? 0,
     is_active: product.is_active !== false,
+    category: product.category || 'honey',
+    seller_id: product.seller_id ?? null,
   }
 }
 

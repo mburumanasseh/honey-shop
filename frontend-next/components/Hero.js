@@ -6,17 +6,17 @@ export default function Hero() {
       <div className="container hero-block__inner">
         <div className="hero-block__text">
           <span className="hero-block__eyebrow">Pure. Natural. Kenyan.</span>
-          <h1>Nature&apos;s sweetest gift, straight from the hive.</h1>
+          <h1>Farm goodness, secured by Mercy Gold.</h1>
           <p>
-            Discover naturally harvested honey made with care and delivered
-            straight to your doorstep.
+            Honey, milk, and more from trusted Kenyan farmers — we handle
+            checkout and only pay farmers after delivery is confirmed.
           </p>
           <div className="hero-block__actions">
             <Link href="/shop" className="btn-primary">
-              Shop Honey
+              Shop products
             </Link>
-            <Link href="/benefits" className="btn-secondary">
-              Benefits of honey
+            <Link href="/shop?category=honey" className="btn-secondary">
+              Shop honey
             </Link>
           </div>
         </div>

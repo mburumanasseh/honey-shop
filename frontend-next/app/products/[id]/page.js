@@ -12,13 +12,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const id = params?.id
+  const { id } = await params
   try {
     const product = await getProduct(id)
     return {
       title: product.name,
       description:
-        product.description || `${product.name} from Mercy Gold Honey`,
+        product.description || `${product.name} on Mercy Gold marketplace`,
     }
   } catch {
     return { title: 'Product' }
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
-  const id = params?.id
+  const { id } = await params
   let product
   let error = null
   try {
@@ -48,6 +48,14 @@ export default async function ProductPage({ params }) {
     <div className="container">
       <p style={{ paddingTop: '1.5rem' }}>
         <Link href="/shop">← Shop</Link>
+        {product.category ? (
+          <>
+            {' · '}
+            <Link href={`/shop?category=${product.category}`}>
+              {product.category}
+            </Link>
+          </>
+        ) : null}
       </p>
       <article className="product-detail">
         <div className="product-detail__image">
@@ -55,6 +63,9 @@ export default async function ProductPage({ params }) {
           <img src={product.image} alt={product.name} />
         </div>
         <div className="product-detail__info">
+          {product.category && (
+            <span className="product-card__cat">{product.category}</span>
+          )}
           <h1>{product.name}</h1>
           {product.size && <p className="muted">{product.size}</p>}
           <p className="price">KSh {Number(product.price).toLocaleString()}</p>
@@ -65,6 +76,11 @@ export default async function ProductPage({ params }) {
                 : 'Out of stock'}
             </p>
           )}
+          <p className="muted product-detail__secured">
+            {product.seller_id
+              ? 'Sold via Mercy Gold — we hold payment until delivery is confirmed.'
+              : 'Mercy Gold official listing — secured checkout.'}
+          </p>
           {product.description && (
             <p style={{ marginTop: '1rem', lineHeight: 1.7 }}>
               {product.description}
