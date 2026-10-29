@@ -86,3 +86,32 @@ def get_optional_user(
     if user is None or not user.is_active:
         return None
     return user
+
+
+def get_current_farmer_user(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+) -> User:
+    """Require an active farmer account (login allowed even if seller_active is False)."""
+    if current_user.is_admin or current_user.role == "admin":
+        return current_user
+    if current_user.role != "farmer":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Farmer account required",
+        )
+    return current_user
+
+
+def require_seller_can_list(
+    current_user: Annotated[User, Depends(get_current_farmer_user)],
+) -> User:
+    """Farmer must be seller_active to create new listings."""
+    if current_user.is_admin or current_user.role == "admin":
+        return current_user
+    if not current_user.seller_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your seller account is inactive. You cannot create new listings.",
+        )
+    return current_user
+

@@ -83,6 +83,10 @@ def register(
             detail="An account with this email already exists",
         )
 
+    role = (payload.role or "customer").strip().lower()
+    if role not in ("customer", "farmer"):
+        role = "customer"
+
     user = User(
         name=payload.name.strip(),
         email=payload.email.lower().strip(),
@@ -90,6 +94,11 @@ def register(
         hashed_password=get_password_hash(payload.password),
         is_active=True,
         is_admin=False,
+        role=role,
+        farm_name=payload.farm_name.strip() if payload.farm_name else None,
+        county=payload.county.strip() if payload.county else None,
+        mpesa_number=payload.mpesa_number.strip() if payload.mpesa_number else None,
+        seller_active=True,
     )
     db.add(user)
     db.commit()
