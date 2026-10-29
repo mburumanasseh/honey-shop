@@ -10,6 +10,7 @@ from app.api.uploads import router as uploads_router
 from app.api.customers import router as customers_router
 from app.api.settings import router as settings_router
 from app.api.presence import router as presence_router
+from app.api.seller_products import router as seller_products_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -35,6 +36,7 @@ app.include_router(uploads_router, prefix=settings.API_V1_PREFIX)
 app.include_router(customers_router, prefix=settings.API_V1_PREFIX)
 app.include_router(settings_router, prefix=settings.API_V1_PREFIX)
 app.include_router(presence_router, prefix=settings.API_V1_PREFIX)
+app.include_router(seller_products_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")

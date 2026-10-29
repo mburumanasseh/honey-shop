@@ -236,3 +236,30 @@ export async function updateStoreSettings(payload) {
 export async function getAdminPresence() {
   return apiRequest('/api/v1/admin/presence')
 }
+
+/* ——— Seller (farmer) products ——— */
+
+export async function listSellerProducts() {
+  return apiRequest('/api/v1/seller/products')
+}
+
+export async function createSellerProduct(payload) {
+  return apiRequest('/api/v1/seller/products', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function updateSellerProduct(id, payload) {
+  return apiRequest(`/api/v1/seller/products/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deleteSellerProduct(id) {
+  return apiRequest(`/api/v1/seller/products/${id}`, {
+    method: 'DELETE',
+  })
+}
+
