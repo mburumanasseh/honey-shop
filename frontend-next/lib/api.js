@@ -35,7 +35,10 @@ export async function listProducts(params = {}) {
   if (params.category) qs.set('category', params.category)
   if (params.seller_id != null) qs.set('seller_id', String(params.seller_id))
   const q = qs.toString()
-  return apiFetch(`/api/v1/products${q ? `?${q}` : ''}`)
+  return apiFetch(`/api/v1/products${q ? `?${q}` : ''}`, {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
 }
 
 export async function getProduct(id) {

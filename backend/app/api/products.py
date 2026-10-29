@@ -51,7 +51,8 @@ def list_products(
         query = _public_visible_query(db)
 
     if category:
-        query = query.filter(Product.category == category)
+        cat = category.strip().lower()
+        query = query.filter(Product.category == cat)
     if seller_id is not None:
         query = query.filter(Product.seller_id == seller_id)
 
