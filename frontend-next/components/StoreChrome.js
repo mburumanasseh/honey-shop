@@ -11,8 +11,9 @@ const WHATSAPP = 'https://wa.me/254700532298'
 export default function StoreChrome({ children }) {
   const pathname = usePathname() || ''
   const isNas = pathname === '/nas' || pathname.startsWith('/nas/')
+  const isSell = pathname === '/sell' || pathname.startsWith('/sell/')
 
-  if (isNas) {
+  if (isNas || isSell) {
     return <>{children}</>
   }
 
