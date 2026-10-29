@@ -6,10 +6,10 @@ import {
 } from './Icons'
 
 const ITEMS = [
-  { Icon: IconLeaf, label: 'Honey & farm products' },
+  { Icon: IconLeaf, label: 'Honey, milk & more' },
   { Icon: IconTruck, label: 'Delivery across Kenya' },
   { Icon: IconPhone, label: 'Pay with M-Pesa' },
-  { Icon: IconHive, label: 'Mercy Gold secured' },
+  { Icon: IconHive, label: 'Pay farmers after delivery' },
 ]
 
 export default function TrustStrip() {
