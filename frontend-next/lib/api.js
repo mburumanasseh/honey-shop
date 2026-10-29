@@ -1,6 +1,6 @@
-const API_URL = (
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-).replace(/\/$/, '')
+import { getApiBaseUrl } from './apiBase'
+
+const API_URL = getApiBaseUrl()
 
 export function getApiUrl() {
   return API_URL
