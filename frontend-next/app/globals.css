@@ -3167,6 +3167,12 @@ button.linkish {
   color: var(--color-text);
 }
 
+.about-story__h2 {
+  margin: 2rem 0 0.85rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
 .about-story__closing {
   margin-top: 1.75rem !important;
   padding-top: 1.25rem;
