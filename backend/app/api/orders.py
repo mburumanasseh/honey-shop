@@ -101,6 +101,7 @@ def create_order(
             OrderItem(
                 product_id=product.id,
                 product_name=product.name,
+                seller_id=product.seller_id,
                 unit_price=product.price,
                 quantity=item.quantity,
                 line_total=line_total,
