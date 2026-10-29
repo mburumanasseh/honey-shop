@@ -13,6 +13,7 @@ from app.api.presence import router as presence_router
 from app.api.seller_products import router as seller_products_router
 from app.api.admin_farmers import router as admin_farmers_router
 from app.api.admin_approvals import router as admin_approvals_router
+from app.api.seller_orders import router as seller_orders_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -41,6 +42,7 @@ app.include_router(presence_router, prefix=settings.API_V1_PREFIX)
 app.include_router(seller_products_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_farmers_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_approvals_router, prefix=settings.API_V1_PREFIX)
+app.include_router(seller_orders_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")

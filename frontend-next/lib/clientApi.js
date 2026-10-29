@@ -288,3 +288,7 @@ export async function setProductApproval(id, approval_status) {
   })
 }
 
+export async function listSellerOrders() {
+  return apiRequest('/api/v1/seller/orders')
+}
+

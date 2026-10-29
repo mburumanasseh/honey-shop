@@ -39,6 +39,7 @@ class OrderItemResponse(BaseModel):
     id: int
     product_id: Optional[int] = None
     product_name: str
+    seller_id: Optional[int] = None
     unit_price: Decimal
     quantity: int
     line_total: Decimal
