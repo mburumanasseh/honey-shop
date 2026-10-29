@@ -48,8 +48,9 @@ export default function NasFarmersPage() {
       <header className="admin-page__header">
         <h1>Farmers</h1>
         <p className="muted">
-          Registration details, location, and goods they want to sell. Deactivating
-          hides their products and blocks new listings.
+          Review registration details, reach out to confirm legitimacy, then{' '}
+          <strong>Activate</strong> to verify the seller. Inactive / pending
+          sellers cannot list products; their listings stay hidden.
         </p>
       </header>
 
@@ -113,7 +114,7 @@ export default function NasFarmersPage() {
                           : 'sell-badge sell-badge--bad'
                       }
                     >
-                      {f.seller_active ? 'Active' : 'Inactive'}
+                      {f.seller_active ? 'Verified' : 'Pending / inactive'}
                     </span>
                   </td>
                   <td>
@@ -126,8 +127,8 @@ export default function NasFarmersPage() {
                       {busyId === f.id
                         ? '…'
                         : f.seller_active
-                          ? 'Deactivate'
-                          : 'Activate'}
+                          ? 'Revoke verification'
+                          : 'Verify & activate'}
                     </button>
                   </td>
                 </tr>

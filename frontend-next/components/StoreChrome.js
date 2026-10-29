@@ -53,6 +53,10 @@ export default function StoreChrome({ children }) {
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
+              <Link href="/terms">Terms</Link>
+              <span className="site-footer__dot" aria-hidden>
+                ·
+              </span>
               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer">
                 Contact
               </a>

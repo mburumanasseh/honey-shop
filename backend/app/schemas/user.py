@@ -16,6 +16,7 @@ class UserRegister(BaseModel):
     farm_location: Optional[str] = Field(None, max_length=255)
     goods_to_sell: Optional[str] = Field(None, max_length=1000)
     mpesa_number: Optional[str] = Field(None, max_length=30)
+    accepted_terms: bool = False
 
 
 class UserLogin(BaseModel):
