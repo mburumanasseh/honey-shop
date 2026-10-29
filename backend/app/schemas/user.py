@@ -13,6 +13,8 @@ class UserRegister(BaseModel):
     role: Optional[str] = Field(None, pattern="^(customer|farmer)$")
     farm_name: Optional[str] = Field(None, max_length=200)
     county: Optional[str] = Field(None, max_length=100)
+    farm_location: Optional[str] = Field(None, max_length=255)
+    goods_to_sell: Optional[str] = Field(None, max_length=1000)
     mpesa_number: Optional[str] = Field(None, max_length=30)
 
 
@@ -31,6 +33,8 @@ class UserResponse(BaseModel):
     role: str = "customer"
     farm_name: Optional[str] = None
     county: Optional[str] = None
+    farm_location: Optional[str] = None
+    goods_to_sell: Optional[str] = None
     mpesa_number: Optional[str] = None
     seller_active: bool = True
     created_at: datetime
@@ -43,6 +47,8 @@ class UserProfileUpdate(BaseModel):
     phone: Optional[str] = Field(None, max_length=30)
     farm_name: Optional[str] = Field(None, max_length=200)
     county: Optional[str] = Field(None, max_length=100)
+    farm_location: Optional[str] = Field(None, max_length=255)
+    goods_to_sell: Optional[str] = Field(None, max_length=1000)
     mpesa_number: Optional[str] = Field(None, max_length=30)
 
 

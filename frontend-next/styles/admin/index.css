@@ -52,3 +52,9 @@ button.admin-sidebar__link {
 .sell-badge--pending { background: #fff3cd; color: #664d03; }
 .sell-badge--ok { background: #e8f5e9; color: #1b5e20; }
 .sell-badge--bad { background: #fdecea; color: #b71c1c; }
+
+.admin-farmers__goods {
+  max-width: 220px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}

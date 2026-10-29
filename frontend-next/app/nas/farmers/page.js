@@ -48,8 +48,8 @@ export default function NasFarmersPage() {
       <header className="admin-page__header">
         <h1>Farmers</h1>
         <p className="muted">
-          Deactivating a farmer hides their products from the shop and blocks new
-          listings. They can still log in to /sell.
+          Registration details, location, and goods they want to sell. Deactivating
+          hides their products and blocks new listings.
         </p>
       </header>
 
@@ -71,9 +71,9 @@ export default function NasFarmersPage() {
               <tr>
                 <th>Farmer</th>
                 <th>Farm</th>
-                <th>County</th>
+                <th>Location</th>
+                <th>Goods to sell</th>
                 <th>Products</th>
-                <th>Pending</th>
                 <th>Status</th>
                 <th />
               </tr>
@@ -85,11 +85,26 @@ export default function NasFarmersPage() {
                     <strong>{f.name}</strong>
                     <div className="muted">{f.email}</div>
                     {f.phone ? <div className="muted">{f.phone}</div> : null}
+                    {f.mpesa_number ? (
+                      <div className="muted">M-Pesa: {f.mpesa_number}</div>
+                    ) : null}
                   </td>
                   <td>{f.farm_name || '—'}</td>
-                  <td>{f.county || '—'}</td>
-                  <td>{f.products_count}</td>
-                  <td>{f.pending_count}</td>
+                  <td>
+                    {f.farm_location || '—'}
+                    {f.county ? (
+                      <div className="muted">{f.county}</div>
+                    ) : null}
+                  </td>
+                  <td className="admin-farmers__goods">
+                    {f.goods_to_sell || '—'}
+                  </td>
+                  <td>
+                    {f.products_count}
+                    {f.pending_count ? (
+                      <div className="muted">{f.pending_count} pending</div>
+                    ) : null}
+                  </td>
                   <td>
                     <span
                       className={
