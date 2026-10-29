@@ -9,6 +9,11 @@ class UserRegister(BaseModel):
     email: EmailStr
     phone: Optional[str] = Field(None, max_length=30)
     password: str = Field(..., min_length=6, max_length=128)
+    # Optional farmer signup fields (task 2 will use /sell register path)
+    role: Optional[str] = Field(None, pattern="^(customer|farmer)$")
+    farm_name: Optional[str] = Field(None, max_length=200)
+    county: Optional[str] = Field(None, max_length=100)
+    mpesa_number: Optional[str] = Field(None, max_length=30)
 
 
 class UserLogin(BaseModel):
@@ -23,6 +28,11 @@ class UserResponse(BaseModel):
     phone: Optional[str] = None
     is_active: bool
     is_admin: bool
+    role: str = "customer"
+    farm_name: Optional[str] = None
+    county: Optional[str] = None
+    mpesa_number: Optional[str] = None
+    seller_active: bool = True
     created_at: datetime
 
     model_config = {"from_attributes": True}

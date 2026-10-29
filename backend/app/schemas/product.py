@@ -13,6 +13,8 @@ class ProductCreate(BaseModel):
     image_url: Optional[str] = Field(None, max_length=2000)
     stock: int = Field(0, ge=0)
     is_active: bool = True
+    category: str = Field("honey", max_length=50)
+    # seller_id / approval_status set by API, not client for public create
 
 
 class ProductUpdate(BaseModel):
@@ -23,6 +25,10 @@ class ProductUpdate(BaseModel):
     image_url: Optional[str] = Field(None, max_length=2000)
     stock: Optional[int] = Field(None, ge=0)
     is_active: Optional[bool] = None
+    category: Optional[str] = Field(None, max_length=50)
+    approval_status: Optional[str] = Field(
+        None, pattern="^(pending|approved|rejected)$"
+    )
 
 
 class ProductResponse(BaseModel):
@@ -34,6 +40,9 @@ class ProductResponse(BaseModel):
     image_url: Optional[str] = None
     stock: int
     is_active: bool
+    seller_id: Optional[int] = None
+    category: str = "honey"
+    approval_status: str = "approved"
     created_at: datetime
     updated_at: datetime
 

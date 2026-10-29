@@ -2,10 +2,22 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Integer, Numeric, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
+
+# approval_status values
+APPROVAL_PENDING = "pending"
+APPROVAL_APPROVED = "approved"
+APPROVAL_REJECTED = "rejected"
+
+# Common categories (extensible string, not enum in DB)
+CATEGORY_HONEY = "honey"
+CATEGORY_MILK = "milk"
+CATEGORY_PRODUCE = "produce"
+CATEGORY_DAIRY = "dairy"
+CATEGORY_OTHER = "other"
 
 
 class Product(Base):
@@ -19,6 +31,20 @@ class Product(Base):
     image_url: Mapped[Optional[str]] = mapped_column(String(2000), nullable=True)
     stock: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # Marketplace: null seller_id = Mercy Gold platform listing
+    seller_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    category: Mapped[str] = mapped_column(
+        String(50), default=CATEGORY_HONEY, nullable=False, index=True
+    )
+    # pending | approved | rejected — public shop only shows approved
+    approval_status: Mapped[str] = mapped_column(
+        String(20), default=APPROVAL_APPROVED, nullable=False, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
