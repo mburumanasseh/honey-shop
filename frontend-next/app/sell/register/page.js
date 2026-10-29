@@ -7,6 +7,16 @@ import { useAuth } from '../../../context/AuthContext'
 import { IconEye, IconEyeOff } from '../../../components/Icons'
 import BrandLockup from '../../../components/BrandLockup'
 
+const GOODS_OPTIONS = [
+  'Honey',
+  'Milk',
+  'Eggs',
+  'Dairy (yoghurt, cheese, ghee)',
+  'Fresh produce',
+  'Poultry',
+  'Other farm products',
+]
+
 export default function SellRegisterPage() {
   const router = useRouter()
   const { register } = useAuth()
@@ -18,6 +28,9 @@ export default function SellRegisterPage() {
     confirmPassword: '',
     farm_name: '',
     county: '',
+    farm_location: '',
+    goods_to_sell: [],
+    goods_other: '',
     mpesa_number: '',
   })
   const [showPassword, setShowPassword] = useState(false)
@@ -27,6 +40,18 @@ export default function SellRegisterPage() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((f) => ({ ...f, [name]: value }))
+  }
+
+  const toggleGood = (label) => {
+    setForm((f) => {
+      const has = f.goods_to_sell.includes(label)
+      return {
+        ...f,
+        goods_to_sell: has
+          ? f.goods_to_sell.filter((g) => g !== label)
+          : [...f.goods_to_sell, label],
+      }
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -40,6 +65,17 @@ export default function SellRegisterPage() {
       setError('Password must be at least 6 characters')
       return
     }
+    if (!form.farm_location.trim()) {
+      setError('Please enter your farm or commodity location')
+      return
+    }
+    const goodsParts = [...form.goods_to_sell]
+    if (form.goods_other.trim()) goodsParts.push(form.goods_other.trim())
+    if (goodsParts.length === 0) {
+      setError('Select or describe the goods you want to sell')
+      return
+    }
+
     setSubmitting(true)
     const result = await register({
       name: form.name,
@@ -49,6 +85,8 @@ export default function SellRegisterPage() {
       role: 'farmer',
       farm_name: form.farm_name || undefined,
       county: form.county || undefined,
+      farm_location: form.farm_location.trim(),
+      goods_to_sell: goodsParts.join(', '),
       mpesa_number: form.mpesa_number || undefined,
     })
     setSubmitting(false)
@@ -66,8 +104,8 @@ export default function SellRegisterPage() {
         <span className="page-eyebrow">Sell on Mercy Gold</span>
         <h1>Register as a farmer</h1>
         <p className="muted">
-          Open signup. Your products will need Mercy Gold approval before they
-          appear in the shop.
+          Tell us where you farm and what you want to sell. Your listings still
+          need Mercy Gold approval before they appear in the shop.
         </p>
         {error && (
           <p className="error" role="alert">
@@ -113,6 +151,16 @@ export default function SellRegisterPage() {
               />
             </label>
             <label>
+              Farm / commodity location
+              <input
+                name="farm_location"
+                value={form.farm_location}
+                onChange={handleChange}
+                placeholder="Market, village, ward, or exact area"
+                required
+              />
+            </label>
+            <label>
               M-Pesa number
               <input
                 name="mpesa_number"
@@ -152,6 +200,33 @@ export default function SellRegisterPage() {
               />
             </label>
           </div>
+
+          <fieldset className="sell-goods">
+            <legend>Goods you want to sell</legend>
+            <p className="muted sell-goods__hint">Select all that apply</p>
+            <div className="sell-goods__list">
+              {GOODS_OPTIONS.map((label) => (
+                <label key={label} className="sell-goods__item">
+                  <input
+                    type="checkbox"
+                    checked={form.goods_to_sell.includes(label)}
+                    onChange={() => toggleGood(label)}
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+            <label>
+              Other (optional)
+              <input
+                name="goods_other"
+                value={form.goods_other}
+                onChange={handleChange}
+                placeholder="Anything not listed above"
+              />
+            </label>
+          </fieldset>
+
           <button type="submit" className="btn-primary" disabled={submitting}>
             {submitting ? 'Creating…' : 'Create seller account'}
           </button>

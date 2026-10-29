@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Integer, String
+from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
@@ -27,6 +27,10 @@ class User(Base):
     # Farmer profile (used when role == farmer)
     farm_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     county: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    # More specific place (market, village, ward, etc.)
+    farm_location: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    # What they plan to sell (e.g. honey, milk, eggs)
+    goods_to_sell: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     mpesa_number: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     # When False, farmer may log in but cannot create listings; their products are hidden.
     seller_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

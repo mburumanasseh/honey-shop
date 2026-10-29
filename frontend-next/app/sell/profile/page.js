@@ -11,6 +11,8 @@ export default function SellProfilePage() {
     phone: '',
     farm_name: '',
     county: '',
+    farm_location: '',
+    goods_to_sell: '',
     mpesa_number: '',
   })
   const [error, setError] = useState('')
@@ -24,6 +26,8 @@ export default function SellProfilePage() {
       phone: currentUser.phone || '',
       farm_name: currentUser.farm_name || '',
       county: currentUser.county || '',
+      farm_location: currentUser.farm_location || '',
+      goods_to_sell: currentUser.goods_to_sell || '',
       mpesa_number: currentUser.mpesa_number || '',
     })
   }, [currentUser])
@@ -44,6 +48,8 @@ export default function SellProfilePage() {
         phone: form.phone.trim() || null,
         farm_name: form.farm_name.trim() || null,
         county: form.county.trim() || null,
+        farm_location: form.farm_location.trim() || null,
+        goods_to_sell: form.goods_to_sell.trim() || null,
         mpesa_number: form.mpesa_number.trim() || null,
       })
       await refreshUser()
@@ -98,6 +104,24 @@ export default function SellProfilePage() {
           <label>
             County
             <input name="county" value={form.county} onChange={handleChange} />
+          </label>
+          <label>
+            Farm / commodity location
+            <input
+              name="farm_location"
+              value={form.farm_location}
+              onChange={handleChange}
+              placeholder="Market, village, ward…"
+            />
+          </label>
+          <label>
+            Goods you sell
+            <input
+              name="goods_to_sell"
+              value={form.goods_to_sell}
+              onChange={handleChange}
+              placeholder="Honey, milk, eggs…"
+            />
           </label>
           <label>
             M-Pesa number

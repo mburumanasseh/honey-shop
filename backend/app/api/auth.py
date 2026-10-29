@@ -98,6 +98,8 @@ def register(
         role=role,
         farm_name=payload.farm_name.strip() if payload.farm_name else None,
         county=payload.county.strip() if payload.county else None,
+        farm_location=payload.farm_location.strip() if getattr(payload, "farm_location", None) else None,
+        goods_to_sell=payload.goods_to_sell.strip() if getattr(payload, "goods_to_sell", None) else None,
         mpesa_number=payload.mpesa_number.strip() if payload.mpesa_number else None,
         seller_active=True,
     )
