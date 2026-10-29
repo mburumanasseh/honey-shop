@@ -5,11 +5,11 @@ import StoreChrome from '../components/StoreChrome'
 
 export const metadata = {
   title: {
-    default: 'Mercy Gold Honey',
-    template: '%s | Mercy Gold Honey',
+    default: 'Mercy Gold',
+    template: '%s | Mercy Gold',
   },
   description:
-    'Premium natural honey from Mercy Gold Honey. Shop pure forest and wildflower honey in Kenya.',
+    'Mercy Gold marketplace — honey, milk, and farm products from Kenyan farmers. Secure checkout; farmers paid after delivery.',
   metadataBase: new URL('https://mercygold.co.ke'),
   icons: {
     icon: [

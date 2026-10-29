@@ -40,7 +40,7 @@ export default function LoginForm() {
           <span className="page-eyebrow">Welcome Back</span>
           <h1>Login</h1>
           <p className="muted">
-            Sign in to your Mercy Gold Honey account. You can still checkout as
+            Sign in to your Mercy Gold account. You can still checkout as
             a guest without logging in.
           </p>
         </div>

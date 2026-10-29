@@ -5,7 +5,7 @@ import { getStoreSettings, updateStoreSettings } from '../../../lib/clientApi'
 
 export default function NasSettingsPage() {
   const [form, setForm] = useState({
-    storeName: 'Mercy Gold Honey',
+    storeName: 'Mercy Gold',
     email: '',
     phone: '',
     currency: 'KES',
@@ -25,7 +25,7 @@ export default function NasSettingsPage() {
         const data = await getStoreSettings()
         if (!cancelled) {
           setForm({
-            storeName: data.store_name || 'Mercy Gold Honey',
+            storeName: data.store_name || 'Mercy Gold',
             email: data.email || '',
             phone: data.phone || '',
             currency: data.currency || 'KES',

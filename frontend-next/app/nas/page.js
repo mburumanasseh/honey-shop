@@ -128,7 +128,7 @@ export default function NasDashboardPage() {
         <div>
           <span>Overview</span>
           <h2>Welcome back</h2>
-          <p>Here is what is happening with Mercy Gold Honey.</p>
+          <p>Here is what is happening with Mercy Gold.</p>
         </div>
         <button type="button" onClick={load} disabled={loading}>
           {loading ? 'Refreshing…' : 'Refresh'}

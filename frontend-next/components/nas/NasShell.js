@@ -115,12 +115,12 @@ export default function NasShell({ children }) {
           <Link
             href="/nas"
             className="admin-sidebar__brand-link"
-            aria-label="Mercy Gold Honey console"
+            aria-label="Mercy Gold console"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/mercy-gold-logo.jpg"
-              alt="Mercy Gold Honey"
+              alt="Mercy Gold"
               className="admin-sidebar__logo"
             />
           </Link>
@@ -146,12 +146,12 @@ export default function NasShell({ children }) {
             href="/nas"
             className="admin-sidebar__brand-link"
             onClick={closeMenu}
-            aria-label="Mercy Gold Honey console"
+            aria-label="Mercy Gold console"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/mercy-gold-logo.jpg"
-              alt="Mercy Gold Honey"
+              alt="Mercy Gold"
               className="admin-sidebar__logo"
             />
           </Link>
@@ -177,7 +177,7 @@ export default function NasShell({ children }) {
               </span>
             </button>
             <div className="admin-header__title">
-              <span>Mercy Gold Honey</span>
+              <span>Mercy Gold</span>
               <h1>Admin</h1>
             </div>
           </div>
