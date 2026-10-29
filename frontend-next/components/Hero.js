@@ -5,24 +5,24 @@ export default function Hero() {
     <section className="hero-block">
       <div className="container hero-block__inner">
         <div className="hero-block__text">
-          <span className="hero-block__eyebrow">Pure. Natural. Kenyan.</span>
-          <h1>Farm goodness, secured by Mercy Gold.</h1>
+          <span className="hero-block__eyebrow">Mercy Gold Marketplace</span>
+          <h1>Kenyan farm products, secured end to end.</h1>
           <p>
-            Honey, milk, and more from trusted Kenyan farmers — we handle
-            checkout and only pay farmers after delivery is confirmed.
+            Buy honey, milk, and more from trusted farmers. Mercy Gold handles
+            checkout and only pays the farmer after your delivery is confirmed.
           </p>
           <div className="hero-block__actions">
             <Link href="/shop" className="btn-primary">
               Shop products
             </Link>
-            <Link href="/shop?category=honey" className="btn-secondary">
-              Shop honey
+            <Link href="/sell/register" className="btn-secondary">
+              Register as a farmer
             </Link>
           </div>
         </div>
         <div className="hero-block__image">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/honeyjar.jpg" alt="Jar of natural Mercy Gold honey" />
+          <img src="/honeyjar.jpg" alt="Mercy Gold farm products" />
         </div>
       </div>
     </section>
