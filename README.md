@@ -1,154 +1,47 @@
-# Mercy Gold Honey
+# Mercy Gold marketplace
 
-Monorepo for **Mercy Gold Honey** — a Kenyan honey e-commerce platform.
+Monorepo: **Next.js** storefront (`frontend-next/`) + **FastAPI** backend (`backend/`).
 
-| Layer | Stack | Hosting |
-|-------|--------|---------|
-| **Frontend** | React 19 + Vite | [Vercel](https://frontend-snowy-two-50.vercel.app) |
-| **Backend** | FastAPI + SQLAlchemy + Alembic | [Render](https://honey-shop-260z.onrender.com) |
-| **Database** | PostgreSQL | Render Postgres |
-| **Images** | Cloudinary | Cloudinary |
-| **Auth** | JWT in httpOnly cookies | — |
-| **Payments** | M-Pesa Daraja | *Not integrated yet* |
+| Layer | Stack | Host |
+|-------|--------|------|
+| **Frontend** | Next.js (App Router) | Vercel |
+| **Backend** | FastAPI + SQLAlchemy + Alembic | Render |
 
-## Repository structure
+## Layout
 
-```text
-honey-shop/
-├── frontend/          # Production Vite storefront + admin
-├── frontend-next/     # WIP Next.js storefront (SEO)
-├── backend/           # REST API
-├── vercel.json        # Production: builds frontend/ (Vite)
-├── package.json       # Root metadata
-└── .trackers/         # Engineer Mode task state
+```
+├── frontend-next/   # Storefront, seller (/sell), admin (/nas)
+├── backend/         # API
+├── vercel.json      # Builds frontend-next
+└── package.json     # npm scripts → frontend-next
 ```
 
-## Live URLs
-
-| Service | URL |
-|---------|-----|
-| Storefront | https://frontend-snowy-two-50.vercel.app |
-| API | https://honey-shop-260z.onrender.com |
-| API docs | https://honey-shop-260z.onrender.com/api/v1/docs |
-| Health | https://honey-shop-260z.onrender.com/api/v1/health |
-
-## Features (current)
-
-### Customer
-- Browse products (shop + featured)
-- Cart (browser-side until checkout)
-- Register / login / logout
-- Profile page
-- Order history
-- Checkout creates a real order (logged-in users only)
-- Welcome email on register (when email is configured)
-
-### Admin (`/admin` — password gate + `is_admin`)
-- Dashboard (live stats: orders, revenue, products, customers)
-- Products (list, soft-delete, add with Cloudinary upload)
-- Orders (list + status updates)
-- Customers (registered users + spend)
-- Inventory (stock edit)
-- Payments view (from order status; pre–M-Pesa)
-- Store settings (persisted in DB)
-
-### Backend API
-- Auth with access + refresh httpOnly cookies (`SameSite=None` in production)
-- Products CRUD
-- Orders + admin order management
-- Image upload to Cloudinary
-- Admin customers + store settings
-- Pytest suite (SQLite in-memory)
-
 ## Local development
+
+### Backend
+
+```bash
+cd backend
+uvicorn app.main:app --reload --port 8000
+```
 
 ### Frontend
 
 ```bash
-cd frontend
+cd frontend-next
 npm install
-cp .env.example .env   # if present; or create .env
-# VITE_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Open http://localhost:5173
+Or from repo root: `npm run dev`
 
-### Backend
+## Production
 
-See [backend/README.md](./backend/README.md) for Postgres, migrations, and env vars.
+- **Vercel:** builds `frontend-next` (root `vercel.json`). Set `NEXT_PUBLIC_API_URL` to the Render API.
+- **Render:** FastAPI. Set `CORS_ORIGINS` to your live frontend origin(s).
+- Migrations: `alembic upgrade head`
 
-```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-alembic upgrade head
-uvicorn app.main:app --reload --port 8000
-```
+## Docs
 
-Docs: http://localhost:8000/api/v1/docs
-
-### Tests (backend)
-
-```bash
-cd backend
-pip install -r requirements-dev.txt
-PYTHONPATH=. pytest
-```
-
-## Deployment notes
-
-### Vercel (frontend)
-- Root build uses `vercel.json` (`frontend` install/build, SPA rewrites)
-- **Required env:** `VITE_API_URL=https://honey-shop-260z.onrender.com` for **Production** (and Preview)
-- Redeploy after changing `VITE_*` vars (baked at build time)
-
-### Render (backend)
-- **Root Directory:** `backend` (or monorepo path as configured)
-- **Start command (recommended):**
-  ```bash
-  alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
-  ```
-- **Python:** 3.12 (`runtime.txt`)
-- Free tier may sleep; use an external health ping every 5–10 minutes on `/api/v1/health`
-
-### Environment variables (names only — no secrets in git)
-
-Backend (Render): `DATABASE_URL`, `SECRET_KEY`, `CORS_ORIGINS`, `DEBUG`, `BOOTSTRAP_SECRET`, `CLOUDINARY_*`, `EMAIL_FROM`, `RESEND_API_KEY` or `SMTP_*`
-
-Frontend (Vercel): `VITE_API_URL`
-
-## Engineering
-
-This repo follows Engineer Mode (topic branches + PRs). See `.trackers/` when present.
-
-## Still planned
-- M-Pesa Daraja STK push + callbacks
-- Order confirmation emails
-- Custom domain
-- Frontend automated tests
-
-## Branch & frontend strategy
-
-| Path | Role |
-|------|------|
-| `frontend/` | **Production** React + Vite storefront (what Vercel deploys from `main`) |
-| `frontend-next/` | **WIP** Next.js App Router storefront (SEO) — develop on `dev` |
-| `backend/` | FastAPI API (Render) — shared by both frontends |
-
-### Branches
-
-| Branch | Purpose |
-|--------|---------|
-| `main` | Production. Vercel builds **`frontend/`** only (`vercel.json`). |
-| `dev` | Integration branch for Next.js work and experiments. |
-| `feat/*` | Feature branches → merge into **`dev`** first; promote to **`main`** when ready for production. |
-
-Until Next cutover: **`main` keeps deploying the Vite app.**  
-When Next is ready: change Vercel root/build to `frontend-next` (or swap `vercel.json`) and ship from `main`.
-
-### Vercel preview (Next.js WIP)
-
-Production stays on Vite. For a Next preview, create a **second** Vercel project with Root Directory \`frontend-next\` and Production Branch \`dev\`. Steps: \`frontend-next/VERCEL.md\`.
-
+- Backend: `backend/README.md`
+- Frontend deploy: `frontend-next/VERCEL.md`

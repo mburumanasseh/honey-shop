@@ -198,7 +198,7 @@ Uses in-memory SQLite; no Docker required for tests.
 
 ## Related
 
-- Frontend: [../frontend](../frontend)  
+- Frontend: [../frontend-next](../frontend-next)  
 - Monorepo root: [../README.md](../README.md)
 
 
