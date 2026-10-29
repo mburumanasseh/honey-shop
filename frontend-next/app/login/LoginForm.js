@@ -26,7 +26,10 @@ export default function LoginForm() {
       setError(result.message)
       return
     }
-    const next = searchParams.get('next') || '/account'
+    const user = result.user
+    const defaultNext =
+      user?.role === 'farmer' || user?.is_admin ? '/sell' : '/account'
+    const next = searchParams.get('next') || defaultNext
     router.push(next)
   }
 

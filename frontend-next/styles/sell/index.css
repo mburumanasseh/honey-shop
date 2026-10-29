@@ -1,0 +1,258 @@
+.sell-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: var(--color-background, #fffdf8);
+  color: var(--color-text, #2d241f);
+}
+
+.sell-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem;
+  background: #3b2415;
+  color: #f3e6d4;
+}
+
+.sell-sidebar__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sell-sidebar__badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(232, 197, 122, 0.2);
+  color: #e8c57a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sell-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.sell-sidebar__nav a {
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: rgba(243, 230, 212, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.sell-sidebar__nav a:hover,
+.sell-sidebar__nav a.is-active {
+  background: rgba(255, 253, 248, 0.1);
+  color: #fffdf8;
+}
+
+.sell-sidebar__foot {
+  border-top: 1px solid rgba(243, 230, 212, 0.15);
+  padding-top: 0.85rem;
+  font-size: 0.85rem;
+}
+
+.sell-sidebar__user {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.sell-sidebar__logout {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid rgba(243, 230, 212, 0.25);
+  border-radius: 8px;
+  background: transparent;
+  color: #f3e6d4;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.sell-sidebar__store {
+  color: rgba(243, 230, 212, 0.7);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.sell-main {
+  min-width: 0;
+}
+
+.sell-main__inner {
+  padding: 1.75rem 1.5rem 2.5rem;
+  max-width: 960px;
+}
+
+.sell-banner {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+.sell-banner--warn {
+  background: #fff3cd;
+  color: #664d03;
+  border-bottom: 1px solid #e6d59a;
+}
+
+.sell-page__header {
+  margin-bottom: 1.5rem;
+}
+
+.sell-page__header h1 {
+  margin: 0.35rem 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+.sell-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.sell-stat {
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #e8dfd2);
+  border-radius: 12px;
+}
+
+.sell-stat__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #6b625c);
+}
+
+.sell-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.sell-actions .is-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.sell-card {
+  padding: 1.25rem 1.35rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #e8dfd2);
+  border-radius: 14px;
+}
+
+.sell-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.sell-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--color-text-muted, #6b625c);
+  line-height: 1.55;
+}
+
+.sell-steps li {
+  margin-bottom: 0.4rem;
+}
+
+.sell-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, #f8f1e3, #fffdf8 50%, #f3e6d4);
+}
+
+.sell-auth__card {
+  width: min(100%, 420px);
+  padding: 1.75rem 1.5rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #e8dfd2);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(45, 36, 31, 0.08);
+}
+
+.sell-auth__card--wide {
+  width: min(100%, 640px);
+}
+
+.sell-auth__logo {
+  margin-bottom: 0.75rem;
+}
+
+.sell-auth h1 {
+  margin: 0.35rem 0 0.5rem;
+}
+
+.sell-auth__foot {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.sell-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.sell-gate {
+  min-height: 50vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .sell-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sell-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sell-sidebar__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .sell-sidebar__foot {
+    width: 100%;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .sell-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sell-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
