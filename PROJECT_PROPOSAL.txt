@@ -1,0 +1,156 @@
+Moringa Hackathon 2026 — Project Proposal
+Theme alignment: People First, AI Second
+Challenge: Human-Centered Technology: Building Trust in Communities
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+Project Name:     Mercy Gold Marketplace
+Team Name:        [Your team name]
+Challenge Area:   Livelihoods, agriculture & community commerce (trust in local trade)
+
+Team Members & Roles:
+  • Lead / Product Planner:     [Name] ([Track])
+  • User Researcher / Presenter: [Name] ([Track])
+  • Frontend / UI Designer:     [Name] ([Track])
+  • Backend / Developer:        [Name] ([Track])
+
+================================================================================
+2. PROBLEM STATEMENT
+================================================================================
+
+Template:
+[Target users] experience [specific problem] because [reason or barrier].
+This makes it difficult for them to [consequence or unmet need].
+We want to explore a solution that helps them [desired improvement].
+
+Project Statement:
+
+Kenyan smallholder farmers and everyday buyers experience a trust gap in farm
+trade because online or informal sales often lack reliable payment handling,
+seller verification, and clear delivery accountability. Farmers struggle to
+reach paying customers and get paid on time; buyers struggle to know who is
+legitimate and whether payment is safe. This makes it difficult for communities
+to scale fair, repeat trade beyond informal networks. We want to explore a
+solution that helps farmers list verified products and helps buyers purchase
+with confidence, while Mercy Gold holds payment until delivery is confirmed.
+
+================================================================================
+3. TARGET USERS & COMMUNITY INSIGHTS
+================================================================================
+
+Primary Users:
+  • Smallholder and small-scale farmers (honey, milk, eggs, produce, and related
+    farm goods) who need fair market access and predictable payouts.
+  • Household and small-business buyers seeking fresh, local farm products.
+
+Secondary Users:
+  • Platform operators / admins who verify sellers, approve listings, and
+    coordinate payment release after delivery.
+
+Key User Needs:
+  • Clear separation of customer vs farmer roles so tools match real intent.
+  • Admin verification of farmers after outreach (legitimacy before listing).
+  • Category-based shopping (honey, milk, dairy, produce, other) without
+    confusing empty categories with the wrong products.
+  • Platform-held payment and payout visibility after delivery confirmation.
+  • Transparent terms and consent for data use under Kenyan expectations
+    (including Data Protection Act 2019 principles).
+
+================================================================================
+4. PROPOSED SOLUTION & KEY FEATURES
+================================================================================
+
+Mercy Gold is a web marketplace where Mercy Gold acts as a trusted middleman:
+buyers shop farm products; farmers list after verification; the platform
+collects payment and aims to pay farmers only after delivery is confirmed.
+
+Core Feature 1 (Demonstrable prototype):
+  Multi-role marketplace — customer storefront, farmer console (/sell), and
+  admin console (/nas) with role gates so customers cannot access seller tools.
+
+Core Feature 2:
+  Trust workflow — farmer self-signup with location and goods → admin
+  verify/activate → product approval before public listing → order line items
+  tagged by seller → payout status after delivered.
+
+Core Feature 3:
+  Human-centered commerce UX — category filters with honest “no stock yet”
+  states, Our Story / FAQ / Terms, guest checkout option, and secured-checkout
+  messaging focused on people and process, not technology for its own sake.
+
+================================================================================
+5. ROLE OF TECHNOLOGY & AI (PEOPLE FIRST, AI SECOND)
+================================================================================
+
+Why this technology?
+  A practical web stack (Next.js storefront + FastAPI API + PostgreSQL) matches
+  how communities already use phones and browsers. The product value is the
+  trust process (verification, approval, payment-after-delivery), not novelty
+  infrastructure.
+
+Role of AI:
+  AI is not required for the core trust loop. If AI is used later, it should
+  remain optional and secondary (for example, draft listing descriptions or
+  help-desk replies) under human admin review. People—farmers, buyers, and
+  operators—remain the decision-makers for verification, approval, and payout.
+
+================================================================================
+6. TRUST, SAFETY, AND DATA PRIVACY
+================================================================================
+
+Source & role transparency:
+  Listings and flows distinguish platform products vs farmer products; status
+  badges show pending vs approved; seller accounts show pending verification.
+
+Verification & human oversight:
+  Admins verify farmers after contact, approve or reject products, and control
+  payout readiness only after delivery status is set.
+
+Data minimization & purpose:
+  Registration and seller fields collect what is needed to trade and verify
+  (contact, location, goods, M-Pesa details for payout). Terms require explicit
+  acceptance and describe use for verification, security, orders, and service
+  improvement, aligned with principles of Kenya’s Data Protection Act, 2019.
+
+Safety controls:
+  Inactive/unverified sellers cannot create listings; their products stay hidden
+  from the public shop.
+
+================================================================================
+7. FRIDAY BUILD PLAN & EXECUTION ROADMAP
+================================================================================
+
+Thursday (Orientation & Discovery):
+  Refine problem statement; map farmer and buyer journeys; confirm roles
+  (customer / farmer / admin); set up repo branches and environment variables.
+
+Friday Morning (10:00 AM – 12:15 PM):
+  Stabilize demo path: register roles, farmer pending verification, admin
+  verify + product approve, shop category filters, one full order flow.
+
+Friday Afternoon (12:15 PM – 1:30 PM):
+  Rehearse pitch (trust narrative first, tech second); fix critical bugs;
+  submit repository link and live demo URL before the deadline.
+
+================================================================================
+8. POTENTIAL LIMITATIONS & FUTURE SCOPE
+================================================================================
+
+Current Limitations:
+  • M-Pesa may be recorded as a payment method without full STK Push / webhook
+    automation in the prototype.
+  • SEO is basic (metadata, sitemap); not yet a full growth-SEO system.
+  • Payout to farmers is operational (status flags) rather than automated
+    disbursement rails.
+
+Future Roadmap:
+  • Full M-Pesa integration (STK Push / C2B, webhooks, auto status updates).
+  • Stronger SEO (structured data, OG tags, performance, category landing pages).
+  • Richer farmer tools (notifications, clearer payout statements) and deeper
+    dispute-handling workflows while keeping humans in control.
+
+================================================================================
+END OF PROPOSAL
+================================================================================
