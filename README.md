@@ -26,6 +26,7 @@
 10. [Frontend routes](#10-frontend-routes)
 11. [Branch workflow](#11-branch-workflow)
 12. [Security notes](#12-security-notes)
+13. [Future builds](#13-future-builds)
 
 ---
 
@@ -304,6 +305,24 @@ Interactive docs: `/api/v1/docs` when the API is running.
 - Farmer listing requires `seller_active` and product `approval_status`.  
 - Terms acceptance is required at registration; review `/terms` with a Kenyan lawyer for production use.  
 - Do not commit `.env` files or API secrets.
+
+---
+
+## 13. Future builds
+
+Planned enhancements for later releases (not required for the current prototype):
+
+### M-Pesa integration
+- End-to-end **M-Pesa STK Push / C2B** payment flows at checkout (beyond recording payment method manually).
+- Webhooks for payment confirmation and automatic order status updates (`pending` → `paid`).
+- Clear mapping from paid orders to farmer **payout readiness** after delivery confirmation.
+- Safer reconciliation for platform-held funds vs farmer payouts.
+
+### SEO
+- Stronger **metadata**, Open Graph, and structured data (Product, Organization, FAQ) across key routes.
+- Refined **sitemap** / `robots.txt` and canonical URLs for marketplace pages.
+- Performance and Core Web Vitals work for category and product pages.
+- Content and heading structure that supports discovery of categories (honey, milk, dairy, produce, other) and farmer trust messaging.
 
 ---
 
