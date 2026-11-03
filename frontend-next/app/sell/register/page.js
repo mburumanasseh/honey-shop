@@ -100,7 +100,7 @@ export default function SellRegisterPage() {
       setError(result.message)
       return
     }
-    router.push('/sell')
+    router.push('/sell?registered=1')
   }
 
   return (

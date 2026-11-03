@@ -58,3 +58,10 @@ button.admin-sidebar__link {
   font-size: 0.88rem;
   line-height: 1.4;
 }
+
+.admin-empty-card {
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px dashed var(--color-border, #e8dfd2);
+  border-radius: 12px;
+}

@@ -23,7 +23,7 @@ from app.schemas.user import (
     UserResponse,
 )
 from app.schemas.order import BootstrapAdminRequest
-from app.services.email_service import send_welcome_email
+from app.services.email_service import send_admin_new_farmer_email, send_welcome_email
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -116,6 +116,8 @@ def register(
 
     # Thank-you email (does not block registration if mail fails)
     background_tasks.add_task(send_welcome_email, user.email, user.name)
+    if role == "farmer":
+        background_tasks.add_task(send_admin_new_farmer_email, user)
 
     _set_auth_cookies(response, user.id)
     return user

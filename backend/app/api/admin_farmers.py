@@ -1,8 +1,8 @@
-"""Admin: list farmers, activate/deactivate seller accounts."""
+"""Admin: list farmers, activate/deactivate (verify) seller accounts."""
 
 from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -30,6 +30,7 @@ class FarmerListItem(BaseModel):
     products_count: int
     pending_count: int
     created_at: str
+    verification_status: str  # pending | verified
 
     model_config = {"from_attributes": True}
 
@@ -63,23 +64,42 @@ def _farmer_item(db: Session, user: User) -> FarmerListItem:
         products_count=int(products_count),
         pending_count=int(pending_count),
         created_at=user.created_at.isoformat() if user.created_at else "",
+        verification_status="verified" if user.seller_active else "pending",
     )
+
+
+@router.get("/pending-count")
+def pending_farmer_count(
+    db: Annotated[Session, Depends(get_db)],
+    _: Annotated[User, Depends(get_current_admin_user)],
+):
+    count = (
+        db.query(func.count(User.id))
+        .filter(User.role == ROLE_FARMER, User.seller_active.is_(False))
+        .scalar()
+        or 0
+    )
+    return {"pending_farmers": int(count)}
 
 
 @router.get("", response_model=List[FarmerListItem])
 def list_farmers(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
+    status_filter: Optional[str] = Query(
+        "all", alias="status", description="pending|verified|all"
+    ),
     skip: int = 0,
     limit: int = 100,
 ):
+    q = db.query(User).filter(User.role == ROLE_FARMER)
+    if status_filter == "pending":
+        q = q.filter(User.seller_active.is_(False))
+    elif status_filter == "verified":
+        q = q.filter(User.seller_active.is_(True))
+
     farmers = (
-        db.query(User)
-        .filter(User.role == ROLE_FARMER)
-        .order_by(User.id.desc())
-        .offset(skip)
-        .limit(min(limit, 200))
-        .all()
+        q.order_by(User.id.desc()).offset(skip).limit(min(limit, 200)).all()
     )
     return [_farmer_item(db, user) for user in farmers]
 
