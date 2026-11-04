@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
     return {
       title: product.name,
       description:
-        product.description || `${product.name} on Mercy Gold marketplace`,
+        product.description || `${product.name} on Mercy Gold Market Place`,
     }
   } catch {
     return { title: 'Product' }
@@ -78,8 +78,8 @@ export default async function ProductPage({ params }) {
           )}
           <p className="muted product-detail__secured">
             {product.seller_id
-              ? 'Sold via Mercy Gold — we hold payment until delivery is confirmed.'
-              : 'Mercy Gold official listing — secured checkout.'}
+              ? 'Sold via Mercy Gold Market Place — we hold payment until delivery is confirmed.'
+              : 'Mercy Gold Market Place official listing — secured checkout.'}
           </p>
           {product.description && (
             <p style={{ marginTop: '1rem', lineHeight: 1.7 }}>

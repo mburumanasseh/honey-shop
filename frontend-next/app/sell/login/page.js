@@ -45,10 +45,10 @@ function SellLoginForm() {
     <div className="sell-auth">
       <div className="sell-auth__card">
         <BrandLockup className="sell-auth__logo" />
-        <span className="page-eyebrow">Sell on Mercy Gold</span>
+        <span className="page-eyebrow">Sell on Mercy Gold Market Place</span>
         <h1>Farmer login</h1>
         <p className="muted">
-          Sign in to manage your listings. Mercy Gold handles checkout and pays
+          Sign in to manage your listings. Mercy Gold Market Place handles checkout and pays
           you after confirmed delivery.
         </p>
         {error && (

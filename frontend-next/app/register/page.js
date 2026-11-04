@@ -209,7 +209,7 @@ export default function RegisterPage() {
                 Terms and Conditions
               </Link>
               , including processing of my information for verification,
-              security, and improving Mercy Gold services under Kenyan law.
+              security, and improving Mercy Gold Market Place services under Kenyan law.
             </span>
           </label>
 

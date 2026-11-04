@@ -67,7 +67,7 @@ export default function SellProfilePage() {
         <span className="page-eyebrow">Seller profile</span>
         <h1>Your farm details</h1>
         <p className="muted">
-          Keep your contact and M-Pesa details up to date so Mercy Gold can pay
+          Keep your contact and M-Pesa details up to date so Mercy Gold Market Place can pay
           you after delivery.
         </p>
       </header>
