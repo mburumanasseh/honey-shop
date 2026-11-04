@@ -8,7 +8,7 @@ export default function BrandLockup({ href = '/', className = '', light = false 
     <Link
       href={href}
       className={`brand-lockup${light ? ' brand-lockup--light' : ''} ${className}`.trim()}
-      aria-label="Mercy Gold home"
+      aria-label="Mercy Gold Market Place home"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -19,8 +19,8 @@ export default function BrandLockup({ href = '/', className = '', light = false 
         height={40}
       />
       <span className="brand-lockup__text">
-        <strong>Mercy Gold</strong>
-        <span>Honey</span>
+        <strong>MERCY GOLD</strong>
+        <span>MARKET PLACE</span>
       </span>
     </Link>
   )
