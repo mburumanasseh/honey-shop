@@ -10,18 +10,18 @@ import {
 export const metadata = {
   title: 'FAQ',
   description:
-    'Frequently asked questions about Mercy Gold marketplace, delivery, farmers, and payment.',
+    'Frequently asked questions about Mercy Gold Market Place, delivery, farmers, and payment.',
 }
 
 const FAQS = [
   {
-    q: 'What is Mercy Gold?',
-    a: 'Mercy Gold is a Kenyan farm products marketplace. We connect buyers with farmers for honey, milk, and other farm goods. We collect payment and pay farmers after delivery is confirmed.',
+    q: 'What is Mercy Gold Market Place?',
+    a: 'Mercy Gold Market Place is a Kenyan farm products marketplace. We connect buyers with farmers for honey, milk, and other farm goods. We collect payment and pay farmers after delivery is confirmed.',
     icon: 'leaf',
   },
   {
     q: 'What can I buy?',
-    a: 'Browse honey, milk, dairy, produce, and more from Mercy Gold and approved farmers. Categories on the shop page show what is available.',
+    a: 'Browse honey, milk, dairy, produce, and more from Mercy Gold Market Place and approved farmers. Categories on the shop page show what is available.',
     icon: 'leaf',
   },
   {
@@ -36,12 +36,12 @@ const FAQS = [
   },
   {
     q: 'How do I pay?',
-    a: 'Payment is collected by Mercy Gold (including M-Pesa where available). We hold funds and release them to the farmer after delivery is confirmed.',
+    a: 'Payment is collected by Mercy Gold Market Place (including M-Pesa where available). We hold funds and release them to the farmer after delivery is confirmed.',
     icon: 'phone',
   },
   {
-    q: 'How can farmers sell on Mercy Gold?',
-    a: 'Register at Sell on Mercy Gold, complete your farm profile, and list products. Listings go live after our approval. You get paid after the buyer receives the order.',
+    q: 'How can farmers sell on Mercy Gold Market Place?',
+    a: 'Register at Sell on Mercy Gold Market Place, complete your farm profile, and list products. Listings go live after our approval. You get paid after the buyer receives the order.',
     icon: 'leaf',
   },
   {
@@ -75,7 +75,7 @@ export default function FaqPage() {
           <div className="faq-v2__hero-copy">
             <span className="faq-v2__eyebrow">Help</span>
             <h1>Frequently asked questions</h1>
-            <p>Orders, delivery, payments, and selling on Mercy Gold.</p>
+            <p>Orders, delivery, payments, and selling on Mercy Gold Market Place.</p>
           </div>
         </div>
       </section>

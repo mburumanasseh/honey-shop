@@ -65,7 +65,7 @@ export default function SellShell({ children }) {
           <div className="sell-banner sell-banner--warn" role="status">
             Your seller account is <strong>pending verification</strong> or has
             been deactivated. You can log in, but you cannot list products until
-            Mercy Gold verifies your account after contacting you.
+            Mercy Gold Market Place verifies your account after contacting you.
           </div>
         )}
         <div className="sell-main__inner">{children}</div>

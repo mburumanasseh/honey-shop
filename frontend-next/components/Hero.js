@@ -5,10 +5,10 @@ export default function Hero() {
     <section className="hero-block">
       <div className="container hero-block__inner">
         <div className="hero-block__text">
-          <span className="hero-block__eyebrow">Mercy Gold Marketplace</span>
+          <span className="hero-block__eyebrow">Mercy Gold Market Place</span>
           <h1>Kenyan farm products, secured end to end.</h1>
           <p>
-            Buy honey, milk, and more from trusted farmers. Mercy Gold handles
+            Buy honey, milk, and more from trusted farmers. Mercy Gold Market Place handles
             checkout and only pays the farmer after your delivery is confirmed.
           </p>
           <div className="hero-block__actions">

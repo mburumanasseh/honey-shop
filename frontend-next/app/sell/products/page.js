@@ -65,7 +65,7 @@ export default function SellProductsPage() {
           <span className="page-eyebrow">Your catalogue</span>
           <h1>My products</h1>
           <p className="muted">
-            New and edited listings stay <strong>pending</strong> until Mercy Gold
+            New and edited listings stay <strong>pending</strong> until Mercy Gold Market Place
             approves them for the shop.
           </p>
         </div>

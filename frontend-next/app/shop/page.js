@@ -5,7 +5,7 @@ import AddToCartButton from '../../components/AddToCartButton'
 export const metadata = {
   title: 'Shop',
   description:
-    'Shop honey, milk, dairy, produce, and other farm products on Mercy Gold.',
+    'Shop honey, milk, dairy, produce, and other farm products on Mercy Gold Market Place.',
 }
 
 /** Always respect ?category= — do not serve a cached “all products” page. */
@@ -60,7 +60,7 @@ export default async function ShopPage({ searchParams }) {
       <span className="page-eyebrow">Marketplace</span>
       <h1>Shop</h1>
       <p className="muted">
-        Farm products from Mercy Gold and approved farmers. Filter by category —
+        Farm products from Mercy Gold Market Place and approved farmers. Filter by category —
         each list only shows that type of product.
       </p>
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Terms and Conditions',
   description:
-    'Terms and Conditions and privacy notice for Mercy Gold marketplace (Kenya).',
+    'Terms and Conditions and privacy notice for Mercy Gold Market Place (Kenya).',
 }
 
 export default function TermsPage() {
@@ -12,14 +12,14 @@ export default function TermsPage() {
       <span className="page-eyebrow">Legal</span>
       <h1>Terms and Conditions</h1>
       <p className="muted">
-        Last updated: 29 October 2026 · Applies to Mercy Gold marketplace
+        Last updated: 29 October 2026 · Applies to Mercy Gold Market Place
         services in Kenya.
       </p>
 
       <div className="terms-page__body">
         <h2>1. Who we are</h2>
         <p>
-          Mercy Gold operates an online marketplace that connects buyers with
+          Mercy Gold Market Place operates an online marketplace that connects buyers with
           farmers and other sellers of farm products in Kenya. We act as an
           intermediary: we facilitate listing, ordering, payment collection, and
           coordination of delivery. We are not the producer of every product
@@ -31,7 +31,7 @@ export default function TermsPage() {
         <p>
           You may register as a <strong>customer</strong> (buyer) or as a{' '}
           <strong>farmer / seller</strong>. Seller accounts are subject to
-          verification by Mercy Gold before you may list products or receive
+          verification by Mercy Gold Market Place before you may list products or receive
           payouts. Providing false information, or using a seller account when
           you are only a buyer (or the reverse), may result in suspension or
           termination of your account.
@@ -49,7 +49,7 @@ export default function TermsPage() {
 
         <h2>4. Orders, payment, and delivery</h2>
         <p>
-          Buyers pay Mercy Gold (including via M-Pesa where available). We hold
+          Buyers pay Mercy Gold Market Place (including via M-Pesa where available). We hold
           funds and aim to release payment to the seller after delivery is
           confirmed, subject to disputes, cancellations, and applicable law.
           Delivery timelines depend on location and product type and will be
@@ -62,7 +62,7 @@ export default function TermsPage() {
         <p>
           Sellers are responsible for the accuracy of their listings and the
           condition of goods they supply. Buyers should inspect goods on receipt
-          where practical and report issues promptly. Mercy Gold may mediate in
+          where practical and report issues promptly. Mercy Gold Market Place may mediate in
           good faith but does not guarantee every third-party product. Nothing
           in these terms limits rights you cannot waive under Kenyan consumer
           law.
@@ -100,7 +100,7 @@ export default function TermsPage() {
 
         <h2>8. Limitation of liability</h2>
         <p>
-          To the fullest extent permitted by Kenyan law, Mercy Gold is not
+          To the fullest extent permitted by Kenyan law, Mercy Gold Market Place is not
           liable for indirect or consequential loss arising from use of the
           marketplace. We remain responsible for our own negligence and for
           obligations we cannot exclude by law.

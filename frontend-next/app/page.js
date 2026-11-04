@@ -7,7 +7,7 @@ import { listProducts, normalizeProduct } from '../lib/api'
 export const metadata = {
   title: 'Home',
   description:
-    'Mercy Gold marketplace — honey, milk, and farm products from Kenyan farmers. Secure checkout; farmers paid after delivery.',
+    'Mercy Gold Market Place — honey, milk, and farm products from Kenyan farmers. Secure checkout; farmers paid after delivery.',
 }
 
 const CATEGORIES = [
@@ -20,10 +20,10 @@ const CATEGORIES = [
 const STEPS_BUYERS = [
   {
     title: 'Browse & order',
-    text: 'Choose honey, milk, and other farm goods from Mercy Gold and approved farmers.',
+    text: 'Choose honey, milk, and other farm goods from Mercy Gold Market Place and approved farmers.',
   },
   {
-    title: 'Pay Mercy Gold',
+    title: 'Pay Mercy Gold Market Place',
     text: 'Checkout with M-Pesa or cash arrangements — we hold the payment safely.',
   },
   {
@@ -39,7 +39,7 @@ const STEPS_FARMERS = [
   },
   {
     title: 'List products',
-    text: 'Add honey, milk, and more — listings go live after Mercy Gold approval.',
+    text: 'Add honey, milk, and more — listings go live after Mercy Gold Market Place approval.',
   },
   {
     title: 'Deliver & get paid',
@@ -67,10 +67,10 @@ export default async function HomePage() {
       <section className="home-how">
         <div className="container">
           <div className="featured-section__header">
-            <span>How Mercy Gold works</span>
+            <span>How Mercy Gold Market Place works</span>
             <h2>A marketplace you can trust</h2>
             <p>
-              We connect buyers and farmers. Mercy Gold is the middleman —
+              We connect buyers and farmers. Mercy Gold Market Place is the middleman —
               securing payment for both sides.
             </p>
           </div>
@@ -145,7 +145,7 @@ export default async function HomePage() {
             <span>Our Selection</span>
             <h2>Featured products</h2>
             <p>
-              Approved listings from Mercy Gold and farmers across Kenya.
+              Approved listings from Mercy Gold Market Place and farmers across Kenya.
             </p>
           </div>
 
@@ -189,7 +189,7 @@ export default async function HomePage() {
       <section className="home-farmer-cta">
         <div className="container home-farmer-cta__inner">
           <div>
-            <span className="page-eyebrow">Sell on Mercy Gold</span>
+            <span className="page-eyebrow">Sell on Mercy Gold Market Place</span>
             <h2>Are you a farmer?</h2>
             <p>
               List honey, milk, and other farm products. We approve listings,

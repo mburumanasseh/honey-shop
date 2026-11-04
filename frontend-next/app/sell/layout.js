@@ -3,7 +3,7 @@ import SellGate from '../../components/sell/SellGate'
 import SellShellWrapper from '../../components/sell/SellShellWrapper'
 
 export const metadata = {
-  title: 'Sell on Mercy Gold',
+  title: 'Sell on Mercy Gold Market Place',
   robots: { index: false, follow: false },
 }
 
