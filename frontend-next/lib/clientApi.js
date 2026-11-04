@@ -265,8 +265,13 @@ export async function deleteSellerProduct(id) {
 
 /* ——— Admin farmers & approvals ——— */
 
-export async function listAdminFarmers() {
-  return apiRequest('/api/v1/admin/farmers')
+export async function listAdminFarmers(status = 'all') {
+  const q = status && status !== 'all' ? `?status=${encodeURIComponent(status)}` : ''
+  return apiRequest(`/api/v1/admin/farmers${q}`)
+}
+
+export async function getPendingFarmerCount() {
+  return apiRequest('/api/v1/admin/farmers/pending-count')
 }
 
 export async function setFarmerSellerActive(id, seller_active) {

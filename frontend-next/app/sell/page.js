@@ -1,15 +1,27 @@
 'use client'
 
+import { Suspense } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useAuth } from '../../context/AuthContext'
 
-export default function SellDashboardPage() {
+function SellDashboardInner() {
   const { currentUser } = useAuth()
+  const searchParams = useSearchParams()
+  const justRegistered = searchParams.get('registered') === '1'
   const name = currentUser?.farm_name || currentUser?.name || 'Farmer'
   const canList = currentUser?.seller_active !== false
 
   return (
     <div className="sell-page">
+      {justRegistered && !canList && (
+        <div className="sell-banner sell-banner--warn" role="status">
+          Registration received. Your account is <strong>pending verification</strong>.
+          Mercy Gold will review your details and contact you. You can explore the
+          console, but you cannot list products until you are verified.
+        </div>
+      )}
+
       <header className="sell-page__header">
         <span className="page-eyebrow">Seller console</span>
         <h1>Welcome, {name}</h1>
@@ -60,5 +72,13 @@ export default function SellDashboardPage() {
         </ol>
       </section>
     </div>
+  )
+}
+
+export default function SellDashboardPage() {
+  return (
+    <Suspense fallback={<p className="muted">Loading…</p>}>
+      <SellDashboardInner />
+    </Suspense>
   )
 }

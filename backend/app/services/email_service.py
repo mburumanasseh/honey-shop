@@ -299,3 +299,56 @@ def notify_order_placed(order) -> None:
         send_admin_new_order_email(order)
     except Exception:
         logger.exception("Admin order email failed for #%s", getattr(order, "id", "?"))
+
+
+def send_admin_new_farmer_email(user) -> bool:
+    """Alert admins that a farmer account is waiting for verification."""
+    raw = (settings.ADMIN_NOTIFY_EMAIL or "").strip()
+    if not raw:
+        logger.info("ADMIN_NOTIFY_EMAIL not set — skip farmer verification alert")
+        return False
+
+    name = getattr(user, "name", "") or "Farmer"
+    email = getattr(user, "email", "") or ""
+    farm = getattr(user, "farm_name", None) or "—"
+    county = getattr(user, "county", None) or "—"
+    location = getattr(user, "farm_location", None) or "—"
+    goods = getattr(user, "goods_to_sell", None) or "—"
+    phone = getattr(user, "phone", None) or "—"
+
+    subject = f"New farmer verification request — {name}"
+    text_body = (
+        f"A new farmer registered and is waiting for verification.\n\n"
+        f"Name: {name}\n"
+        f"Email: {email}\n"
+        f"Phone: {phone}\n"
+        f"Farm: {farm}\n"
+        f"County: {county}\n"
+        f"Location: {location}\n"
+        f"Goods: {goods}\n\n"
+        f"Review and verify in the admin console: /nas/farmers?status=pending\n"
+    )
+    html_body = f"""\
+<!DOCTYPE html>
+<html><body style="font-family: Georgia, serif; color: #2c1a00;">
+  <div style="max-width:560px;margin:0 auto;padding:24px;">
+    <p style="color:#b8860b;text-transform:uppercase;font-size:12px;">Mercy Gold</p>
+    <h1 style="font-size:22px;">New farmer verification request</h1>
+    <p><strong>{name}</strong> registered as a farmer and is pending verification.</p>
+    <ul>
+      <li>Email: {email}</li>
+      <li>Phone: {phone}</li>
+      <li>Farm: {farm}</li>
+      <li>County: {county}</li>
+      <li>Location: {location}</li>
+      <li>Goods: {goods}</li>
+    </ul>
+    <p>Open <strong>/nas/farmers</strong> (filter: Pending) to verify after outreach.</p>
+  </div>
+</body></html>
+"""
+    ok = False
+    for to in [x.strip() for x in raw.split(",") if x.strip()]:
+        if send_email(to, subject, text_body, html_body):
+            ok = True
+    return ok
