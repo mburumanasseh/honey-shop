@@ -31,16 +31,24 @@ COOKIE_ACCESS = "access_token"
 COOKIE_REFRESH = "refresh_token"
 
 
+def _is_production_cookies() -> bool:
+    """Cross-site market.mercygold.co.ke → Render needs SameSite=None; Secure."""
+    env = (settings.APP_ENV or "").strip().lower()
+    if env in ("production", "prod", "staging"):
+        return True
+    return not bool(settings.DEBUG)
+
+
 def _cookie_samesite() -> str:
-    # Cross-site frontend (Vercel) + API (Render) needs None; local dev can use Lax
-    return "lax" if settings.DEBUG else "none"
+    # Cross-site frontend + API needs None; pure local dev can use Lax
+    return "none" if _is_production_cookies() else "lax"
 
 
 def _set_auth_cookies(response: Response, user_id: int) -> None:
     access_token = create_access_token(user_id)
     refresh_token = create_refresh_token(user_id)
     samesite = _cookie_samesite()
-    secure = not settings.DEBUG  # Required when SameSite=None
+    secure = _is_production_cookies()  # Required when SameSite=None
 
     # Access token – short lived
     response.set_cookie(
@@ -230,6 +238,8 @@ def bootstrap_admin(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     user.is_admin = True
+    if hasattr(user, "role"):
+        user.role = "admin"
     db.commit()
     db.refresh(user)
     return user
