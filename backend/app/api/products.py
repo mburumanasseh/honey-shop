@@ -17,21 +17,41 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 
 def _public_visible_query(db: Session):
-    """Active + approved products whose seller is active (or platform-owned)."""
-    q = db.query(Product).filter(
-        Product.is_active.is_(True),
-        Product.approval_status == APPROVAL_APPROVED,
-    )
-    # Exclude products from deactivated sellers (seller_active = false)
+    """
+    Public shop visibility:
+    - Product must be active (is_active)
+    - Platform products (seller_id is null) are visible
+    - Farmer products are visible when the farmer is verified & seller_active
+
+    Product approval_status is not required for public display once the seller
+    is verified; admins can still hide a product via is_active.
+    """
     inactive_seller_ids = (
         db.query(User.id)
         .filter(User.role == "farmer", User.seller_active.is_(False))
         .subquery()
     )
-    q = q.filter(
-        (Product.seller_id.is_(None)) | (~Product.seller_id.in_(inactive_seller_ids))
+    return (
+        db.query(Product)
+        .filter(Product.is_active.is_(True))
+        .filter(
+            (Product.seller_id.is_(None))
+            | (~Product.seller_id.in_(inactive_seller_ids))
+        )
     )
-    return q
+
+
+def _is_publicly_visible(db: Session, product: Product) -> bool:
+    if not product.is_active:
+        return False
+    if product.seller_id is None:
+        return True
+    seller = db.get(User, product.seller_id)
+    if seller is None:
+        return False
+    if seller.role == "farmer" and not seller.seller_active:
+        return False
+    return True
 
 
 @router.get("", response_model=list[ProductResponse])
@@ -43,9 +63,8 @@ def list_products(
     category: Optional[str] = Query(None),
     seller_id: Optional[int] = Query(None),
 ):
-    """List products. Public shop: only active, approved, seller-active listings."""
+    """List products. Public shop: active listings from platform or verified farmers."""
     if include_inactive:
-        # Admin-style listing (auth checked by admin routes later if needed)
         query = db.query(Product)
     else:
         query = _public_visible_query(db)
@@ -69,17 +88,8 @@ def get_product(
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
 
-    # Public detail: same visibility rules
-    if not product.is_active or product.approval_status != APPROVAL_APPROVED:
+    if not _is_publicly_visible(db, product):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-
-    if product.seller_id is not None:
-        seller = db.get(User, product.seller_id)
-        if seller is not None and seller.role == "farmer" and not seller.seller_active:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
-            )
-
     return product
 
 
@@ -89,17 +99,16 @@ def create_product(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
 ):
-    """Admin creates platform (Mercy Gold) products — auto-approved."""
     product = Product(
         name=payload.name,
         description=payload.description,
         price=payload.price,
         size=payload.size,
         image_url=payload.image_url,
-        stock=payload.stock,
-        is_active=payload.is_active,
-        category=payload.category or "honey",
+        stock=payload.stock if payload.stock is not None else 0,
+        is_active=payload.is_active if payload.is_active is not None else True,
         seller_id=None,
+        category=payload.category or "honey",
         approval_status=APPROVAL_APPROVED,
     )
     db.add(product)
@@ -134,11 +143,7 @@ def delete_product(
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[User, Depends(get_current_admin_user)],
 ):
-    """Permanently delete a product from the database.
-
-    Historical order line items keep product_name / price snapshots;
-    order_items.product_id is set to NULL via ON DELETE SET NULL.
-    """
+    """Permanently delete a product from the database."""
     product = db.get(Product, product_id)
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
