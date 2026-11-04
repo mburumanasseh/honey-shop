@@ -107,11 +107,11 @@ export default function SellRegisterPage() {
     <div className="sell-auth">
       <div className="sell-auth__card sell-auth__card--wide">
         <BrandLockup className="sell-auth__logo" />
-        <span className="page-eyebrow">Sell on Mercy Gold</span>
+        <span className="page-eyebrow">Sell on Mercy Gold Market Place</span>
         <h1>Register as a farmer</h1>
         <p className="muted">
           Tell us where you farm and what you want to sell. Your account stays
-          pending until Mercy Gold verifies you are a legitimate seller. Product
+          pending until Mercy Gold Market Place verifies you are a legitimate seller. Product
           listings also need approval before they appear in the shop.
         </p>
         {error && (
@@ -246,7 +246,7 @@ export default function SellRegisterPage() {
                 Terms and Conditions
               </Link>
               . I understand my seller account needs admin verification before I
-              can list products, and that Mercy Gold may use my details for
+              can list products, and that Mercy Gold Market Place may use my details for
               verification, security, and service improvement under Kenyan law.
             </span>
           </label>

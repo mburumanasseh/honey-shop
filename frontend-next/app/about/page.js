@@ -3,7 +3,7 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Our Story',
   description:
-    'Mercy Gold connects Kenyan farmers with buyers — a trusted marketplace for farm products, with clarity from order to delivery.',
+    'Mercy Gold Market Place connects Kenyan farmers with buyers — a trusted marketplace for farm products, with clarity from order to delivery.',
 }
 
 export default function AboutPage() {
@@ -35,7 +35,7 @@ export default function AboutPage() {
             farm products from people they can trust.
           </p>
           <p>
-            Mercy Gold was created to help bring these two sides closer
+            Mercy Gold Market Place was created to help bring these two sides closer
             together.
           </p>
           <p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
 
           <h2 className="about-story__h2">More than just a marketplace</h2>
           <p>
-            At Mercy Gold, trust is not just a word we put on our website. It is
+            At Mercy Gold Market Place, trust is not just a word we put on our website. It is
             something we want to build through every order.
           </p>
           <p>
@@ -76,19 +76,19 @@ export default function AboutPage() {
             We know trust takes time. It is earned through honest communication,
             consistent service, responsible handling of orders, and a willingness
             to do better whenever we can. That is the kind of business we want
-            Mercy Gold to become.
+            Mercy Gold Market Place to become.
           </p>
 
           <h2 className="about-story__h2">A better connection between farm and home</h2>
           <p>
-            We are building Mercy Gold one step at a time, with a simple belief
+            We are building Mercy Gold Market Place one step at a time, with a simple belief
             at the heart of it all: the people who grow our food deserve
             opportunities to thrive, and the people who buy it deserve an
             experience they can trust.
           </p>
 
           <p className="about-story__closing">
-            <strong>Mercy Gold — Pure. Natural. Kenyan.</strong>
+            <strong>Mercy Gold Market Place — Pure. Natural. Kenyan.</strong>
             <br />
             Connecting Kenyan farms to the homes, families, and businesses they
             serve.

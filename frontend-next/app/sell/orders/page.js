@@ -31,7 +31,7 @@ export default function SellOrdersPage() {
         <span className="page-eyebrow">Fulfillment</span>
         <h1>Orders</h1>
         <p className="muted">
-          Orders that include your products. Mercy Gold collects payment and pays
+          Orders that include your products. Mercy Gold Market Place collects payment and pays
           you after delivery is confirmed.
         </p>
       </header>
@@ -83,7 +83,7 @@ export default function SellOrdersPage() {
               <p className="muted">
                 Payout: <strong>{o.payout_status}</strong>
                 {o.payout_status === 'ready'
-                  ? ' — Mercy Gold will pay you soon'
+                  ? ' — Mercy Gold Market Place will pay you soon'
                   : o.payout_status === 'paid'
                     ? ' — Paid'
                     : ''}

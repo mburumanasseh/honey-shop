@@ -28,7 +28,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__brand">
             <BrandLockup light className="site-footer__logo" />
             <p className="site-footer__tagline">
-              Farm products secured by Mercy Gold — honey, milk, and more.
+              Farm products secured by Mercy Gold Market Place — honey, milk, and more.
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__divider" aria-hidden />
 
           <p className="site-footer__copy">
-            © {year} Mercy Gold. All rights reserved.
+            © {year} Mercy Gold Market Place. All rights reserved.
           </p>
         </div>
       </footer>

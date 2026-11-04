@@ -1,13 +1,17 @@
-"""Farmer (seller) product CRUD — listings require admin approval."""
+"""Farmer (seller) product CRUD.
 
-from typing import Annotated, Optional
+Verified (seller_active) farmers publish to the public shop immediately.
+Unverified farmers cannot list (require_seller_can_list).
+"""
+
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_farmer_user, require_seller_can_list
 from app.db.session import get_db
-from app.models.product import APPROVAL_PENDING, Product
+from app.models.product import APPROVAL_APPROVED, APPROVAL_PENDING, Product
 from app.models.user import User
 from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
 
@@ -21,14 +25,8 @@ def list_my_products(
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
 ):
-    """List all products owned by the current farmer (any approval status)."""
-    if current_user.is_admin or current_user.role == "admin":
-        # Admins see platform products (seller_id is null) in this endpoint only if needed;
-        # farmers only see their own.
-        query = db.query(Product).filter(Product.seller_id == current_user.id)
-    else:
-        query = db.query(Product).filter(Product.seller_id == current_user.id)
-
+    """List all products owned by the current farmer."""
+    query = db.query(Product).filter(Product.seller_id == current_user.id)
     return query.order_by(Product.id.desc()).offset(skip).limit(limit).all()
 
 
@@ -38,7 +36,7 @@ def create_my_product(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(require_seller_can_list)],
 ):
-    """Create a product as pending until Mercy Gold approves it."""
+    """Create a product. Verified farmers go live on the public shop immediately."""
     product = Product(
         name=payload.name.strip(),
         description=payload.description,
@@ -49,7 +47,9 @@ def create_my_product(
         is_active=True,
         category=(payload.category or "honey").strip().lower(),
         seller_id=current_user.id,
-        approval_status=APPROVAL_PENDING,
+        approval_status=(
+            APPROVAL_APPROVED if current_user.seller_active else APPROVAL_PENDING
+        ),
     )
     db.add(product)
     db.commit()
@@ -76,22 +76,21 @@ def update_my_product(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_farmer_user)],
 ):
-    """Farmers may edit their own products. Material changes reset approval to pending."""
     product = db.get(Product, product_id)
     if product is None or product.seller_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
 
-    # Inactive sellers may update stock/description of existing items but not "publish" new ones
     data = payload.model_dump(exclude_unset=True)
-    # Farmers cannot self-approve
     data.pop("approval_status", None)
-
-    material_fields = {"name", "description", "price", "size", "image_url", "category"}
-    if material_fields.intersection(data.keys()):
-        product.approval_status = APPROVAL_PENDING
 
     for field, value in data.items():
         setattr(product, field, value)
+
+    # Keep public if farmer is verified; otherwise leave pending
+    if current_user.seller_active:
+        product.approval_status = APPROVAL_APPROVED
+    else:
+        product.approval_status = APPROVAL_PENDING
 
     db.commit()
     db.refresh(product)

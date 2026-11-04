@@ -52,7 +52,7 @@ export default function SellGate({ children }) {
       <div className="sell-gate sell-gate--denied">
         <h1>Seller access only</h1>
         <p className="muted">
-          This area is for Mercy Gold farmers. Customer accounts use{' '}
+          This area is for Mercy Gold Market Place farmers. Customer accounts use{' '}
           <Link href="/account">My account</Link>.
         </p>
         <p>

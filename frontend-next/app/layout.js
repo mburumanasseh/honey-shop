@@ -5,11 +5,11 @@ import StoreChrome from '../components/StoreChrome'
 
 export const metadata = {
   title: {
-    default: 'Mercy Gold',
-    template: '%s | Mercy Gold',
+    default: 'Mercy Gold Market Place',
+    template: '%s | Mercy Gold Market Place',
   },
   description:
-    'Mercy Gold marketplace — honey, milk, and farm products from Kenyan farmers. Secure checkout; farmers paid after delivery.',
+    'Mercy Gold Market Place — honey, milk, and farm products from Kenyan farmers. Secure checkout; farmers paid after delivery.',
   metadataBase: new URL('https://mercygold.co.ke'),
   icons: {
     icon: [
