@@ -1,11 +1,11 @@
-# Mercy Gold Marketplace
+# Mercy Gold Market Place
 
-**Mercy Gold** is a Kenyan farm-products marketplace. Buyers order honey, milk, dairy, produce, and other goods from approved farmers. Mercy Gold acts as the middleman: payment is collected on the platform and released to farmers after delivery is confirmed.
+**Mercy Gold Market Place** is a Kenyan farm-products marketplace. Buyers order honey, milk, dairy, produce, and other goods from verified farmers. Mercy Gold is the middleman: payment is collected on the platform and released to farmers after delivery is confirmed.
 
 | Layer | Stack | Typical host |
 |-------|--------|----------------|
-| Storefront & consoles | **Next.js 15** (App Router) | Vercel |
-| API | **FastAPI** + SQLAlchemy + Alembic | Render |
+| Storefront, seller & admin | **Next.js 15** (App Router) in `frontend-next/` | Vercel |
+| API | **FastAPI** + SQLAlchemy + Alembic in `backend/` | Render |
 | Database | **PostgreSQL** | Render / managed Postgres |
 | Images | **Cloudinary** | — |
 | Email (optional) | **Resend** / SMTP | — |
@@ -14,334 +14,267 @@
 
 ## Table of contents
 
-1. [Product model](#1-product-model)
-2. [Repository layout](#2-repository-layout)
-3. [Roles & access](#3-roles--access)
-4. [Features](#4-features)
-5. [Local development](#5-local-development)
-6. [Environment variables](#6-environment-variables)
-7. [Database migrations](#7-database-migrations)
-8. [Deployment](#8-deployment)
-9. [API overview](#9-api-overview)
-10. [Frontend routes](#10-frontend-routes)
-11. [Branch workflow](#11-branch-workflow)
+1. [Branch roles](#1-branch-roles)
+2. [Product model](#2-product-model)
+3. [Repository layout](#3-repository-layout)
+4. [Roles & access](#4-roles--access)
+5. [Features](#5-features)
+6. [Local development](#6-local-development)
+7. [Environment variables](#7-environment-variables)
+8. [Database migrations](#8-database-migrations)
+9. [Deployment](#9-deployment)
+10. [API overview](#10-api-overview)
+11. [Frontend routes](#11-frontend-routes)
 12. [Security notes](#12-security-notes)
 13. [Future builds](#13-future-builds)
 
 ---
 
-## 1. Product model
+## 1. Branch roles
 
-- **Brand:** Mercy Gold (not a single-product honey shop).
-- **Sellers:** Mercy Gold platform listings **and** independent farmers.
-- **Farmer onboarding:** Open self-signup → **admin verification** before listing → product **approval** before public shop.
-- **Payments:** Platform collects (e.g. M-Pesa / cash recorded by admin). Farmers are paid after delivery is confirmed (`payout_status`: `none` → `ready` → `paid`).
-- **Categories:** `honey` · `milk` · `dairy` · `produce` · `other` — the shop filters strictly; empty categories show **No stock yet**.
+| Branch | Role |
+|--------|------|
+| **`main`** | Market Place app (frontend + backend). **Render API deploys from `main`.** |
+| **`marketplace`** | Same Market Place line — keep in sync with `main` and `marketplacedev`. |
+| **`marketplacedev`** | Integration / preview — keep in sync with `marketplace` and `main`. |
+| **`dev`** | Legacy honey site line. **Do not change unless explicitly requested.** |
+
+**Rule:** `main`, `marketplace`, and `marketplacedev` stay aligned on Market Place product code. Work on a feature branch → merge to `marketplacedev` → PR to `marketplace` → keep `main` in sync.
 
 ---
 
-## 2. Repository layout
+## 2. Product model
+
+- **Brand:** Mercy Gold Market Place (farm products, not honey-only).
+- **Sellers:** Platform listings and independent farmers.
+- **Farmer onboarding:** Self-signup at `/sell/register` → account **pending** → admin **Verify & activate** on `/nas/farmers` or `/nas/approvals`.
+- **Public product visibility:** Active products from the **platform** or from a **verified active farmer** (`seller_active = true`) appear in the shop for all visitors. Deactivating a farmer hides their listings.
+- **Payments:** Platform collects (M-Pesa / cash recorded by admin). Farmer payouts tracked as `payout_status`: `none` → `ready` → `paid` (after delivery).
+- **Categories:** `honey` · `milk` · `dairy` · `produce` · `other` — strict filters; empty categories show **No stock yet**.
+
+---
+
+## 3. Repository layout
 
 ```
 honey-shop/
-├── frontend-next/          # Only frontend (Next.js)
-│   ├── app/                # App Router pages
+├── frontend-next/     # Next.js storefront, /sell, /nas
+│   ├── app/
 │   ├── components/
-│   ├── context/            # Auth, cart
-│   ├── lib/                # API clients (api.js, clientApi.js, apiBase.js)
+│   ├── context/
+│   ├── lib/           # api.js, clientApi.js, apiBase.js
 │   ├── public/
 │   └── styles/
-├── backend/                # FastAPI API
-│   ├── app/
-│   │   ├── api/            # Route modules
-│   │   ├── core/           # Config, security
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   └── services/       # Cloudinary, email, …
-│   ├── alembic/            # Migrations 001–013+
+├── backend/           # Shared FastAPI API
+│   ├── app/api/       # auth, products, orders, admin_*, seller_*
+│   ├── alembic/       # Migrations through 013+
 │   └── requirements.txt
-├── package.json            # Scripts → frontend-next
-├── vercel.json             # Builds frontend-next
-└── README.md               # This file
+├── package.json       # Scripts → frontend-next
+├── vercel.json        # Builds frontend-next
+├── PROJECT_PROPOSAL.txt
+└── README.md
 ```
 
-> The legacy Vite app (`frontend/`) was **removed**. Do not point Vercel at a `frontend` root directory.
+There is **no** Vite `frontend/` on this line. Deploy the Next app only.
 
 ---
 
-## 3. Roles & access
+## 4. Roles & access
 
-| Role | How they sign up | What they can do |
-|------|------------------|------------------|
-| **Customer** | `/register` (role = customer) | Browse, cart, guest or account checkout, account orders |
-| **Farmer / seller** | `/sell/register` (or register → farmer) | After **admin verification**: list products (pending approval), see their order lines, edit profile |
-| **Admin** | Promoted via bootstrap / DB (`is_admin`) | `/nas` console: products, approvals, farmers, orders, customers, inventory, payments, settings |
+| Role | Signup | Capabilities |
+|------|--------|----------------|
+| **Customer** | `/register` | Browse, cart, guest or account checkout, account area |
+| **Farmer** | `/sell/register` | After verification: list products, orders for their lines, profile |
+| **Admin** | Bootstrap / DB (`is_admin`) | `/nas`: products, farmer verification, orders, customers, inventory, payments, settings |
 
 **Guards**
 
-- Seller UI (`/sell/*`) requires `role === farmer` (or admin).
-- New farmers start with `seller_active = false` until an admin **Verify & activate**s them on `/nas/farmers`.
-- Public shop only shows products that are `is_active`, `approval_status = approved`, and whose seller is active (or platform-owned `seller_id = null`).
+- `/sell/*` requires farmer (or admin).
+- New farmers start with `seller_active = false` until admin verifies.
+- Public shop only shows active products whose seller is active (or platform-owned).
 
 ---
 
-## 4. Features
+## 5. Features
 
-### Buyers (storefront)
-
-- Home marketplace narrative, category entry points, featured products  
-- Shop with category chips: All / Honey / Milk / Dairy / Produce / Other  
-- Product detail, cart, guest checkout, optional accounts  
-- Order tracking / guest lookup  
-- FAQ, Our Story, Terms & Conditions (Kenya-oriented, Data Protection Act 2019 notes)  
-- WhatsApp contact entry point  
+### Buyers
+- Home, shop with category filters, product detail, cart, guest checkout  
+- Account, orders, track order  
+- FAQ, Our Story, Terms  
+- WhatsApp contact  
 
 ### Farmers (`/sell`)
-
-- Register with farm name, county, **farm/commodity location**, **goods to sell**, M-Pesa  
-- Required acceptance of Terms  
-- Dashboard, profile edit, product CRUD (create → **pending** approval)  
-- Image upload via Cloudinary (when configured)  
-- Orders list (line items for their `seller_id` only) + payout status visibility  
+- Register with location and goods to sell + Terms consent  
+- Pending banner until verified  
+- Products, orders, profile, image upload (Cloudinary when configured)  
 
 ### Admin (`/nas`)
-
-- Dashboard stats  
-- Products (platform catalog)  
-- **Approvals** — approve / reject farmer listings  
-- **Farmers** — location, goods, verify/activate or revoke  
-- Orders — status, payment method, **payout_status** (ready/paid only after **delivered**)  
-- Customers, inventory, payments, settings  
-
-### Platform mechanics
-
-- Cookie-based JWT auth (`access_token` / refresh)  
-- Hard product delete (order lines keep name/price snapshots)  
-- Manual payment method on orders (cash / mpesa / other)  
-- Presence heartbeat for “online” style admin awareness (optional)  
+- Dashboard (including pending farmer / product counts)  
+- **Approvals** — farmer verifications + product listing review  
+- **Farmers** — pending / verified filters, verify or revoke  
+- Products, orders (payment method, payout status), customers, inventory, payments, settings  
 
 ---
 
-## 5. Local development
-
-### Prerequisites
-
-- Node.js 20+  
-- Python 3.11+  
-- PostgreSQL  
+## 6. Local development
 
 ### Backend
 
 ```bash
 cd backend
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
-
-# Set DATABASE_URL and SECRET_KEY in .env (see below)
+# Set DATABASE_URL, SECRET_KEY in .env
 alembic upgrade head
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-- Health: http://localhost:8000/api/v1/health  
-- Docs: http://localhost:8000/api/v1/docs  
+- Health: `http://localhost:8000/api/v1/health`  
+- Docs: `http://localhost:8000/api/v1/docs`  
 
 ### Frontend
 
 ```bash
 cd frontend-next
 npm install
-# .env.local:
-# NEXT_PUBLIC_API_URL=http://localhost:8000
+# .env.local: NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Or from repo root:
-
-```bash
-npm install --prefix frontend-next
-npm run dev
-```
-
-Open http://localhost:3000  
+Or from repo root: `npm run dev`
 
 ---
 
-## 6. Environment variables
+## 7. Environment variables
 
-### Backend (Render / `.env`)
+### Backend (Render)
 
 | Variable | Purpose |
 |----------|---------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `SECRET_KEY` | JWT signing secret |
-| `CORS_ORIGINS` | Comma-separated frontend origins (**must include** your live domain, e.g. `https://market.mercygold.co.ke`) |
-| `CLOUDINARY_CLOUD_NAME` / `API_KEY` / `API_SECRET` | Product image uploads |
-| `CLOUDINARY_FOLDER` | Optional folder name |
-| `RESEND_API_KEY` / `EMAIL_FROM` | Transactional email (optional) |
-| `SMTP_*` | Alternative email (optional) |
-| `ADMIN_NOTIFY_EMAIL` | New-order alerts (optional) |
-| `STOREFRONT_URL` | Links in emails |
-| `BOOTSTRAP_SECRET` | One-time admin promotion endpoint |
+| `DATABASE_URL` | PostgreSQL |
+| `SECRET_KEY` | JWT signing |
+| `DEBUG` | Set **`false`** in production |
+| `APP_ENV` | Set **`production`** so auth cookies use `SameSite=None; Secure` |
+| `CORS_ORIGINS` | Comma-separated frontend origins (must include live Market Place domain) |
+| `BOOTSTRAP_SECRET` | Promote admin via `POST /api/v1/auth/bootstrap-admin` |
+| `CLOUDINARY_*` | Product images |
+| `RESEND_API_KEY` / `EMAIL_FROM` | Optional email |
+| `ADMIN_NOTIFY_EMAIL` | New order / new farmer alerts |
 
 **Example `CORS_ORIGINS`:**
 
 ```text
-http://localhost:3000,https://market.mercygold.co.ke,https://www.mercygold.co.ke,https://mercygold.co.ke,https://honey-shop-chi.vercel.app,https://frontend-snowy-two-50.vercel.app
+http://localhost:3000,https://market.mercygold.co.ke,https://www.mercygold.co.ke,https://mercygold.co.ke
 ```
-
-### Frontend (Vercel / `.env.local`)
-
-| Variable | Purpose |
-|----------|---------|
-| `NEXT_PUBLIC_API_URL` | API base, **no trailing slash** — e.g. `https://honey-shop-260z.onrender.com` |
-
-`NEXT_PUBLIC_*` is baked in at **build time**. After changing it on Vercel, **redeploy**.
-
-Production code falls back to the Render API URL if the env var is missing, but you should still set it explicitly.
-
----
-
-## 7. Database migrations
-
-From `backend/` with the same `DATABASE_URL` as production:
-
-```bash
-alembic upgrade head
-```
-
-Notable marketplace migrations:
-
-| Revision | Change |
-|----------|--------|
-| `010` | User roles, farmer profile, product `seller_id` / `category` / `approval_status` |
-| `011` | `order_items.seller_id` |
-| `012` | `orders.payout_status` |
-| `013` | `farm_location`, `goods_to_sell` on users |
-
----
-
-## 8. Deployment
-
-### API (Render)
-
-1. Web service from `backend/` (or Docker if configured).  
-2. Set env vars, especially `DATABASE_URL`, `SECRET_KEY`, `CORS_ORIGINS`.  
-3. Release command or shell: `alembic upgrade head`.  
-4. Confirm `GET /api/v1/health` returns OK.
 
 ### Frontend (Vercel)
 
-1. Root directory: repository root **or** `frontend-next` (match `vercel.json`).  
-2. Framework: Next.js.  
-3. Set `NEXT_PUBLIC_API_URL` for Production **and** Preview.  
-4. Deploy.  
-5. Ensure the deployed origin is listed in backend `CORS_ORIGINS`.
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_API_URL` | API base **without** trailing slash (e.g. `https://honey-shop-260z.onrender.com`) |
 
-### Common failure modes
-
-| Symptom | Cause |
-|---------|--------|
-| `localhost:8000` / `ERR_CONNECTION_REFUSED` | Missing `NEXT_PUBLIC_API_URL` at build time |
-| CORS blocked from `market.mercygold.co.ke` | Origin not in `CORS_ORIGINS` on Render |
-| 500 on register/products after pull | Migrations not applied |
+`NEXT_PUBLIC_*` is baked in at **build** time — change it and **redeploy**.
 
 ---
 
-## 9. API overview
+## 8. Database migrations
 
-Base path: `/api/v1`
+```bash
+cd backend && alembic upgrade head
+```
 
-| Area | Prefix | Notes |
-|------|--------|--------|
-| Health | `/health` | Liveness |
-| Auth | `/auth` | register, login, logout, refresh, `GET/PATCH /me` |
-| Products | `/products` | Public list/detail; admin create/update/delete |
-| Seller products | `/seller/products` | Farmer CRUD; creates as `pending` |
-| Seller orders | `/seller/orders` | Orders containing the farmer’s lines |
-| Orders | `/orders` | Create (guest OK), my orders, lookup, admin list/patch |
-| Admin farmers | `/admin/farmers` | List; patch `seller-active` |
-| Admin approvals | `/admin/product-approvals` | List/filter; approve/reject |
-| Uploads | `/uploads/image` | Admin or active farmer |
-| Customers | `/admin/customers` | Admin |
-| Settings / presence | `/settings`, `/presence` | Store settings; heartbeat |
-
-Interactive docs: `/api/v1/docs` when the API is running.
+| Revision | Change |
+|----------|--------|
+| `010` | Roles, farmer profile, product seller/category/approval |
+| `011` | `order_items.seller_id` |
+| `012` | `orders.payout_status` |
+| `013` | `farm_location`, `goods_to_sell` |
 
 ---
 
-## 10. Frontend routes
+## 9. Deployment
+
+### API (Render) — branch **`main`**
+1. Deploy service from `backend/` (or monorepo root as configured).  
+2. Env: `DATABASE_URL`, `SECRET_KEY`, `DEBUG=false`, `APP_ENV=production`, `CORS_ORIGINS`.  
+3. Release: `alembic upgrade head`.  
+4. Confirm `/api/v1/health` and that OpenAPI lists admin farmers / product-approvals.
+
+### Frontend (Vercel) — **`marketplace`** (or `main` if that project deploys Market Place)
+1. Root: repo root or `frontend-next`.  
+2. `NEXT_PUBLIC_API_URL` for Production and Preview.  
+3. Redeploy after env changes.
+
+### Common issues
+
+| Symptom | Fix |
+|---------|-----|
+| Calls go to `localhost:8000` | Set `NEXT_PUBLIC_API_URL` and redeploy |
+| CORS errors | Add exact origin to Render `CORS_ORIGINS` and restart |
+| Admin **403** | User must have `is_admin=true`; set `DEBUG=false`; re-login; optional `bootstrap-admin` |
+| Admin **404** on new routes | Backend on Render is stale — redeploy **`main`** |
+
+---
+
+## 10. API overview
+
+Base: `/api/v1`
+
+| Area | Prefix |
+|------|--------|
+| Health | `/health` |
+| Auth | `/auth` (register, login, refresh, me, bootstrap-admin) |
+| Products | `/products` |
+| Seller products | `/seller/products` |
+| Seller orders | `/seller/orders` |
+| Orders | `/orders` |
+| Admin farmers | `/admin/farmers` |
+| Admin product approvals | `/admin/product-approvals` |
+| Admin customers / settings / presence | `/admin/customers`, `/admin/settings`, `/admin/presence` |
+| Uploads | `/uploads/image` |
+
+Interactive docs: `/api/v1/docs`.
+
+---
+
+## 11. Frontend routes
 
 | Path | Audience |
 |------|----------|
-| `/` | Public home |
-| `/shop`, `/shop?category=…` | Catalog |
-| `/products/[id]` | Product detail |
-| `/cart`, `/checkout` | Cart & checkout |
-| `/login`, `/register` | Customer auth (+ role choice) |
-| `/account`, `/orders`, `/profile`, `/track` | Customer account |
+| `/`, `/shop`, `/products/[id]` | Public |
+| `/cart`, `/checkout` | Buyers |
+| `/login`, `/register` | Auth (role choice on register) |
+| `/account`, `/orders`, `/profile`, `/track` | Customers |
 | `/about`, `/faq`, `/terms` | Content |
-| `/sell/*` | Farmer console (login, register, products, orders, profile) |
-| `/nas/*` | Admin console (obscured path name) |
-| `/benefits` | Redirects to `/shop` (legacy URL) |
-
----
-
-## 11. Branch workflow
-
-| Branch | Role |
-|--------|------|
-| `marketplace` | Production default (merge via PR) |
-| `marketplacedev` | Integration branch for features |
-| `feat/…`, `fix/…`, `chore/…` | Short-lived branches → merge to `marketplacedev` → PR to `marketplace` |
+| `/sell/*` | Farmers |
+| `/nas/*` | Admins |
 
 ---
 
 ## 12. Security notes
 
-- Prefer long random `SECRET_KEY` in production.  
-- CORS must be an explicit allowlist (credentials are used with cookies).  
-- Admin routes require `is_admin` (and active user).  
-- Farmer listing requires `seller_active` and product `approval_status`.  
-- Terms acceptance is required at registration; review `/terms` with a Kenyan lawyer for production use.  
-- Do not commit `.env` files or API secrets.
+- Strong `SECRET_KEY` in production.  
+- Explicit CORS allowlist with credentials.  
+- Admin routes require `is_admin` (or `role === admin`).  
+- Farmer listing requires verified `seller_active`.  
+- Terms acceptance required at registration.  
+- Never commit `.env` or secrets.
 
 ---
 
 ## 13. Future builds
 
-Planned enhancements for later releases (not required for the current prototype):
-
-### M-Pesa integration
-- End-to-end **M-Pesa STK Push / C2B** payment flows at checkout (beyond recording payment method manually).
-- Webhooks for payment confirmation and automatic order status updates (`pending` → `paid`).
-- Clear mapping from paid orders to farmer **payout readiness** after delivery confirmation.
-- Safer reconciliation for platform-held funds vs farmer payouts.
+### M-Pesa
+- STK Push / C2B, webhooks, auto payment status, payout reconciliation.
 
 ### SEO
-- Stronger **metadata**, Open Graph, and structured data (Product, Organization, FAQ) across key routes.
-- Refined **sitemap** / `robots.txt` and canonical URLs for marketplace pages.
-- Performance and Core Web Vitals work for category and product pages.
-- Content and heading structure that supports discovery of categories (honey, milk, dairy, produce, other) and farmer trust messaging.
+- Metadata, Open Graph, structured data, sitemap/canonicals, Core Web Vitals, category discovery.
 
 ---
 
 ## License & contact
 
-Proprietary — Mercy Gold. For operational contact, use the channels on the live site (e.g. WhatsApp).
+Proprietary — Mercy Gold Market Place. Contact channels are listed on the live site (e.g. WhatsApp).
 
----
-
-*Single source of documentation for this monorepo. Previous `backend/README.md` and `frontend-next/README.md` files were removed in favour of this file.*
-
-## Branch roles
-
-| Branch | Role |
-|--------|------|
-| **`main`** | Mercy Gold **Market Place** (frontend + shared backend). Render API deploys from here. |
-| **`marketplace`** | Same Market Place line (keep in sync with `main` / `marketplacedev`). |
-| **`marketplacedev`** | Marketplace integration / preview — keep in sync with `marketplace` and `main`. |
-| **`dev`** | Legacy honey site line — **do not change** unless explicitly requested. |
-
-`main`, `marketplace`, and `marketplacedev` should stay aligned on marketplace product code.
-
+See also `PROJECT_PROPOSAL.txt` (Moringa Hackathon–style proposal text).
