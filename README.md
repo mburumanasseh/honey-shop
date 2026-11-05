@@ -336,12 +336,12 @@ Proprietary — Mercy Gold. For operational contact, use the channels on the liv
 
 ## Branch roles
 
-| Branch | Frontend | Backend |
-|--------|----------|---------|
-| **`main`** | **Honey website only** (aligned with `dev`) | **Shared** API (farmers, marketplace, honey) — Render deploys from here |
-| **`marketplace`** | **Mercy Gold Market Place** (production marketplace UI) | Same shared backend features in repo |
-| **`marketplacedev`** | Marketplace integration / preview | Same |
-| **`dev`** | Honey site development | Older or parallel API work as needed |
+| Branch | Role |
+|--------|------|
+| **`main`** | Mercy Gold **Market Place** (frontend + shared backend). Render API deploys from here. |
+| **`marketplace`** | Same Market Place line (keep in sync with `main` / `marketplacedev`). |
+| **`marketplacedev`** | Marketplace integration / preview — keep in sync with `marketplace` and `main`. |
+| **`dev`** | Legacy honey site line — **do not change** unless explicitly requested. |
 
-One Render backend on **`main`** serves both the honey storefront and the marketplace storefront.
+`main`, `marketplace`, and `marketplacedev` should stay aligned on marketplace product code.
 
