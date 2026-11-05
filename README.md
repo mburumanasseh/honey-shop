@@ -333,3 +333,15 @@ Proprietary — Mercy Gold. For operational contact, use the channels on the liv
 ---
 
 *Single source of documentation for this monorepo. Previous `backend/README.md` and `frontend-next/README.md` files were removed in favour of this file.*
+
+## Branch roles
+
+| Branch | Frontend | Backend |
+|--------|----------|---------|
+| **`main`** | **Honey website only** (aligned with `dev`) | **Shared** API (farmers, marketplace, honey) — Render deploys from here |
+| **`marketplace`** | **Mercy Gold Market Place** (production marketplace UI) | Same shared backend features in repo |
+| **`marketplacedev`** | Marketplace integration / preview | Same |
+| **`dev`** | Honey site development | Older or parallel API work as needed |
+
+One Render backend on **`main`** serves both the honey storefront and the marketplace storefront.
+
