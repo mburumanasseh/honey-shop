@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_admin_user
 from app.db.session import get_db
-from app.models.product import Product
+from app.models.product import APPROVAL_APPROVED, APPROVAL_PENDING, Product
 from app.models.user import ROLE_FARMER, User
 
 router = APIRouter(prefix="/admin/farmers", tags=["Admin Farmers"])
@@ -116,6 +116,16 @@ def set_seller_active(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Farmer not found")
 
     user.seller_active = payload.seller_active
+    # When verifying a farmer, publish any pending listings they already submitted
+    if payload.seller_active:
+        (
+            db.query(Product)
+            .filter(
+                Product.seller_id == user.id,
+                Product.approval_status == APPROVAL_PENDING,
+            )
+            .update({"approval_status": APPROVAL_APPROVED}, synchronize_session=False)
+        )
     db.commit()
     db.refresh(user)
     return _farmer_item(db, user)
