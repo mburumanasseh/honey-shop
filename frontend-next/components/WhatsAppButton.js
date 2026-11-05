@@ -2,7 +2,7 @@
 
 const WHATSAPP_NUMBER = '254700532298'
 const DEFAULT_MESSAGE = encodeURIComponent(
-  'Hi Mercy Gold Market Place — I have a question about the marketplace.'
+  'Hi Mercy Gold Honey — I have a question about your honey.'
 )
 
 export default function WhatsAppButton() {

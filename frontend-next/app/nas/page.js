@@ -5,9 +5,7 @@ import Link from 'next/link'
 import {
   adminListOrders,
   getAdminPresence,
-  listAdminFarmers,
   listCustomers,
-  listProductApprovals,
   listProducts,
 } from '../../lib/clientApi'
 import {
@@ -61,8 +59,6 @@ export default function NasDashboardPage() {
   const [products, setProducts] = useState([])
   const [customers, setCustomers] = useState([])
   const [presence, setPresence] = useState(null)
-  const [pendingFarmers, setPendingFarmers] = useState(0)
-  const [pendingProducts, setPendingProducts] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -70,21 +66,17 @@ export default function NasDashboardPage() {
     setLoading(true)
     setError('')
     try {
-      const [ordersData, productsData, customersData, presenceData, pendingFarmerList, pendingProductList] =
+      const [ordersData, productsData, customersData, presenceData] =
         await Promise.all([
           adminListOrders({ limit: 100 }),
           listProducts({ includeInactive: true, limit: 100 }),
           listCustomers({ limit: 200 }),
           getAdminPresence().catch(() => null),
-          listAdminFarmers('pending').catch(() => []),
-          listProductApprovals('pending').catch(() => []),
         ])
       setOrders(ordersData || [])
       setProducts(productsData || [])
       setCustomers(customersData || [])
       setPresence(presenceData)
-      setPendingFarmers(Array.isArray(pendingFarmerList) ? pendingFarmerList.length : 0)
-      setPendingProducts(Array.isArray(pendingProductList) ? pendingProductList.length : 0)
     } catch (err) {
       setError(err.message || 'Failed to load dashboard')
     } finally {
@@ -136,7 +128,7 @@ export default function NasDashboardPage() {
         <div>
           <span>Overview</span>
           <h2>Welcome back</h2>
-          <p>Here is what is happening with Mercy Gold.</p>
+          <p>Here is what is happening with Mercy Gold Honey.</p>
         </div>
         <button type="button" onClick={load} disabled={loading}>
           {loading ? 'Refreshing…' : 'Refresh'}
@@ -188,20 +180,6 @@ export default function NasDashboardPage() {
           value={loading ? '…' : String(stats.customerCount)}
           description="Registered customers"
           icon={<IconUsers size={18} />}
-        />
-        <StatCard
-          title="Farmer requests"
-          href="/nas/approvals"
-          value={loading ? '…' : String(pendingFarmers)}
-          description="Pending farmer verifications"
-          icon={<IconUsers size={18} />}
-        />
-        <StatCard
-          title="Product approvals"
-          href="/nas/approvals"
-          value={loading ? '…' : String(pendingProducts)}
-          description="Listings waiting for approval"
-          icon={<IconHoney size={18} />}
         />
       </div>
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { getApiBaseUrl } from './apiBase'
-
-const API_URL = getApiBaseUrl()
+const API_URL = (
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+).replace(/\/$/, '')
 
 let refreshInFlight = null
 
@@ -236,71 +236,3 @@ export async function updateStoreSettings(payload) {
 export async function getAdminPresence() {
   return apiRequest('/api/v1/admin/presence')
 }
-
-/* ——— Seller (farmer) products ——— */
-
-export async function listSellerProducts() {
-  return apiRequest('/api/v1/seller/products')
-}
-
-export async function createSellerProduct(payload) {
-  return apiRequest('/api/v1/seller/products', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
-}
-
-export async function updateSellerProduct(id, payload) {
-  return apiRequest(`/api/v1/seller/products/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(payload),
-  })
-}
-
-export async function deleteSellerProduct(id) {
-  return apiRequest(`/api/v1/seller/products/${id}`, {
-    method: 'DELETE',
-  })
-}
-
-/* ——— Admin farmers & approvals ——— */
-
-export async function listAdminFarmers(status = 'all') {
-  const q = status && status !== 'all' ? `?status=${encodeURIComponent(status)}` : ''
-  return apiRequest(`/api/v1/admin/farmers${q}`)
-}
-
-export async function getPendingFarmerCount() {
-  return apiRequest('/api/v1/admin/farmers/pending-count')
-}
-
-export async function setFarmerSellerActive(id, seller_active) {
-  return apiRequest(`/api/v1/admin/farmers/${id}/seller-active`, {
-    method: 'PATCH',
-    body: JSON.stringify({ seller_active }),
-  })
-}
-
-export async function listProductApprovals(status = 'pending') {
-  const q = status ? `?status=${encodeURIComponent(status)}` : ''
-  return apiRequest(`/api/v1/admin/product-approvals${q}`)
-}
-
-export async function setProductApproval(id, approval_status) {
-  return apiRequest(`/api/v1/admin/product-approvals/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ approval_status }),
-  })
-}
-
-export async function listSellerOrders() {
-  return apiRequest('/api/v1/seller/orders')
-}
-
-export async function updateMyProfile(payload) {
-  return apiRequest('/api/v1/auth/me', {
-    method: 'PATCH',
-    body: JSON.stringify(payload),
-  })
-}
-

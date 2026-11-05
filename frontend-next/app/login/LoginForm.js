@@ -26,10 +26,7 @@ export default function LoginForm() {
       setError(result.message)
       return
     }
-    const user = result.user
-    const defaultNext =
-      user?.role === 'farmer' || user?.is_admin ? '/sell' : '/account'
-    const next = searchParams.get('next') || defaultNext
+    const next = searchParams.get('next') || '/account'
     router.push(next)
   }
 
@@ -40,7 +37,7 @@ export default function LoginForm() {
           <span className="page-eyebrow">Welcome Back</span>
           <h1>Login</h1>
           <p className="muted">
-            Sign in to your Mercy Gold Market Place account. You can still checkout as
+            Sign in to your Mercy Gold Honey account. You can still checkout as
             a guest without logging in.
           </p>
         </div>

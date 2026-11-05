@@ -11,9 +11,8 @@ const WHATSAPP = 'https://wa.me/254700532298'
 export default function StoreChrome({ children }) {
   const pathname = usePathname() || ''
   const isNas = pathname === '/nas' || pathname.startsWith('/nas/')
-  const isSell = pathname === '/sell' || pathname.startsWith('/sell/')
 
-  if (isNas || isSell) {
+  if (isNas) {
     return <>{children}</>
   }
 
@@ -28,7 +27,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__brand">
             <BrandLockup light className="site-footer__logo" />
             <p className="site-footer__tagline">
-              Farm products secured by Mercy Gold Market Place — honey, milk, and more.
+              Nature&apos;s sweetest gift, straight from the hive.
             </p>
           </div>
 
@@ -41,19 +40,11 @@ export default function StoreChrome({ children }) {
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
-              <Link href="/shop">Shop</Link>
-              <span className="site-footer__dot" aria-hidden>
-                ·
-              </span>
-              <Link href="/sell/register">Sell</Link>
+              <Link href="/shop">Shop Honey</Link>
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
               <Link href="/about">Our Story</Link>
-              <span className="site-footer__dot" aria-hidden>
-                ·
-              </span>
-              <Link href="/terms">Terms</Link>
               <span className="site-footer__dot" aria-hidden>
                 ·
               </span>
@@ -66,7 +57,7 @@ export default function StoreChrome({ children }) {
           <div className="site-footer__divider" aria-hidden />
 
           <p className="site-footer__copy">
-            © {year} Mercy Gold Market Place. All rights reserved.
+            © {year} Mercy Gold Honey. All rights reserved.
           </p>
         </div>
       </footer>

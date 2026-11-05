@@ -1,0 +1,208 @@
+.admin-settings {
+  padding: 2rem;
+  min-height: 100%;
+}
+
+.admin-settings__header {
+  margin-bottom: 2rem;
+}
+
+.admin-settings__eyebrow {
+  display: block;
+  margin-bottom: 0.4rem;
+
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-settings__header h1 {
+  margin: 0;
+
+  color: var(--color-text-dark);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.admin-settings__header p {
+  margin: 0.4rem 0 0;
+
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Form */
+
+.admin-settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-settings__card {
+  padding: 1.5rem;
+
+  background: var(--color-surface-warm);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.admin-settings__card-header {
+  margin-bottom: 1.5rem;
+}
+
+.admin-settings__card-header > span {
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-settings__card-header h2 {
+  margin: 0.3rem 0 0;
+
+  color: var(--color-text-dark);
+  font-size: 1.2rem;
+}
+
+.admin-settings__card-header p {
+  margin: 0.4rem 0 0;
+
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* Fields */
+
+.admin-settings__fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.admin-settings__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.admin-settings__field label {
+  color: var(--color-text-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.admin-settings__field input,
+.admin-settings__field select {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 0.8rem 0.9rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+
+  background: #fff;
+  color: var(--color-text-dark);
+
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.admin-settings__field input:focus,
+.admin-settings__field select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+}
+
+/* Notification options */
+
+.admin-settings__options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-settings__toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+
+  padding: 1rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.admin-settings__toggle input {
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary);
+}
+
+.admin-settings__toggle span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-settings__toggle strong {
+  color: var(--color-text-dark);
+  font-size: 0.9rem;
+}
+
+.admin-settings__toggle small {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+/* Actions */
+
+.admin-settings__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-settings__save {
+  padding: 0.8rem 1.5rem;
+
+  border: none;
+  border-radius: 9px;
+
+  background: var(--color-primary);
+  color: #fff;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.admin-settings__save:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .admin-settings {
+    padding: 1.25rem;
+  }
+
+  .admin-settings__header h1 {
+    font-size: 1.6rem;
+  }
+
+  .admin-settings__fields {
+    grid-template-columns: 1fr;
+  }
+}

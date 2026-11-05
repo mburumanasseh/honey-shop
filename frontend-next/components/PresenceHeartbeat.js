@@ -3,9 +3,9 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { getApiBaseUrl } from '../lib/apiBase'
-
-const API_URL = getApiBaseUrl()
+const API_URL = (
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+).replace(/\/$/, '')
 const VISITOR_KEY = 'mercy_gold_visitor_id'
 const INTERVAL_MS = 30_000
 

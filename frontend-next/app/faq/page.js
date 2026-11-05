@@ -1,7 +1,12 @@
 import Link from 'next/link'
 import {
+  IconCart,
   IconChat,
+  IconCheck,
+  IconHive,
+  IconHoney,
   IconLeaf,
+  IconPackage,
   IconPhone,
   IconTruck,
   IconUser,
@@ -10,43 +15,38 @@ import {
 export const metadata = {
   title: 'FAQ',
   description:
-    'Frequently asked questions about Mercy Gold Market Place, delivery, farmers, and payment.',
+    'Frequently asked questions about Mercy Gold Honey, delivery, guest orders, and payment.',
 }
 
 const FAQS = [
   {
-    q: 'What is Mercy Gold Market Place?',
-    a: 'Mercy Gold Market Place is a Kenyan farm products marketplace. We connect buyers with farmers for honey, milk, and other farm goods. We collect payment and pay farmers after delivery is confirmed.',
-    icon: 'leaf',
+    q: 'Is your honey pure and natural?',
+    a: 'Yes. Our honey is naturally harvested and selected for quality, aroma, and flavour — no shortcuts.',
+    icon: 'hive',
   },
   {
-    q: 'What can I buy?',
-    a: 'Browse honey, milk, dairy, produce, and more from Mercy Gold Market Place and approved farmers. Categories on the shop page show what is available.',
-    icon: 'leaf',
-  },
-  {
-    q: 'Where do you deliver?',
-    a: 'We arrange delivery across Kenya. Exact timing depends on your location and the product — we will confirm details when you order.',
+    q: 'Do you deliver across Kenya?',
+    a: 'Yes. Delivery fees depend on your town or area and are calculated at checkout.',
     icon: 'truck',
   },
   {
     q: 'Do I need an account to order?',
-    a: 'No. You can checkout as a guest. An account makes tracking orders and reordering easier.',
+    a: 'No. You can place an order as a guest. Creating an account is optional and makes reordering easier.',
     icon: 'user',
   },
   {
     q: 'How do I pay?',
-    a: 'Payment is collected by Mercy Gold Market Place (including M-Pesa where available). We hold funds and release them to the farmer after delivery is confirmed.',
+    a: 'You can place your order first. We will confirm payment details with you, including M-Pesa when available.',
     icon: 'phone',
   },
   {
-    q: 'How can farmers sell on Mercy Gold Market Place?',
-    a: 'Register at Sell on Mercy Gold Market Place, complete your farm profile, and list products. Listings go live after our approval. You get paid after the buyer receives the order.',
-    icon: 'leaf',
+    q: 'My honey looks solid — is it still good?',
+    a: 'Yes. Natural honey can crystallize over time. Gently warm the jar in clean warm water to return it to a liquid state.',
+    icon: 'honey',
   },
   {
     q: 'How can I contact you?',
-    a: 'Use the WhatsApp button on the site or the contact options on Our Story.',
+    a: 'Use the WhatsApp button on the site or reach us through the contact details on Our Story page.',
     icon: 'chat',
   },
 ]
@@ -60,8 +60,12 @@ function FaqIcon({ name }) {
       return <IconUser {...p} />
     case 'phone':
       return <IconPhone {...p} />
+    case 'honey':
+      return <IconHoney {...p} />
     case 'chat':
       return <IconChat {...p} />
+    case 'hive':
+      return <IconHive {...p} />
     default:
       return <IconLeaf {...p} />
   }
@@ -75,36 +79,65 @@ export default function FaqPage() {
           <div className="faq-v2__hero-copy">
             <span className="faq-v2__eyebrow">Help</span>
             <h1>Frequently asked questions</h1>
-            <p>Orders, delivery, payments, and selling on Mercy Gold Market Place.</p>
+            <p>Quick answers about our honey, delivery, and ordering.</p>
+            <div className="faq-v2__rule" aria-hidden />
+          </div>
+          <div className="faq-v2__hero-visual">
+            <p className="faq-v2__script" aria-hidden>
+              Real honey.
+              <br />
+              Real answers.
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/faq/hero.jpg" alt="Jar of Mercy Gold honey with honeycomb" />
           </div>
         </div>
       </section>
 
-      <section className="faq-v2__list">
-        <div className="container">
-          <div className="faq-v2__grid">
-            {FAQS.map((item) => (
-              <article key={item.q} className="faq-v2__card">
-                <div className="faq-v2__icon">
+      <section className="faq-v2__grid-wrap">
+        <div className="container faq-v2__grid">
+          {FAQS.map((item) => (
+            <details key={item.q} className="faq-v2__card">
+              <summary>
+                <span className="faq-v2__icon" aria-hidden>
                   <FaqIcon name={item.icon} />
-                </div>
-                <h2>{item.q}</h2>
-                <p>{item.a}</p>
-              </article>
-            ))}
-          </div>
+                </span>
+                <span className="faq-v2__q">{item.q}</span>
+                <span className="faq-v2__chev" aria-hidden />
+              </summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
-          <div className="faq-v2__actions">
-            <Link href="/shop" className="faq-v2__action">
-              Shop products <span aria-hidden>→</span>
-            </Link>
-            <Link href="/sell/register" className="faq-v2__action">
-              Register as a farmer <span aria-hidden>→</span>
-            </Link>
-            <Link href="/about" className="faq-v2__action">
+      <section className="faq-v2__actions-band">
+        <div className="container faq-v2__actions">
+          <Link href="/shop" className="faq-v2__action">
+            <span className="faq-v2__action-icon" aria-hidden>
+              <IconCart size={22} />
+            </span>
+            <span>
+              Shop honey <span aria-hidden>→</span>
+            </span>
+          </Link>
+          <Link href="/benefits" className="faq-v2__action">
+            <span className="faq-v2__action-icon" aria-hidden>
+              <IconCheck size={22} />
+            </span>
+            <span>
+              Benefits of honey <span aria-hidden>→</span>
+            </span>
+          </Link>
+          <Link href="/about" className="faq-v2__action">
+            <span className="faq-v2__action-icon" aria-hidden>
+              <IconPackage size={22} />
+            </span>
+            <span>
               Our Story <span aria-hidden>→</span>
-            </Link>
-          </div>
+            </span>
+          </Link>
+          <p className="faq-v2__tagline">Pure. Natural. Kenyan.</p>
         </div>
       </section>
     </div>

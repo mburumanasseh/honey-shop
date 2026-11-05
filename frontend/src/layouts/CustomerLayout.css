@@ -1,0 +1,25 @@
+.customer-layout {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  overflow: hidden;
+  background-image: var(--honeycomb-background);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.customer-layout::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 253, 248, 0.55);
+  pointer-events: none;
+}
+
+.customer-layout__overlay {
+  position: relative;
+  z-index: 1;
+  min-height: inherit;
+}
